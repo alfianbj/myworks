@@ -871,7 +871,7 @@
                 <div id="adm-port-list" style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem;"></div>
                 <button class="admin-btn admin-btn-add" onclick="window.openPortEditor()" style="border-style: solid; background: rgba(16, 185, 129, 0.1);">+ Create New Project</button>
                 
-                <div id="adm-port-editor" style="display:none; padding: 2rem; margin-top: 2rem; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(0,0,0,0.2);">
+                <div id="adm-port-editor" style="display:none; padding: 2rem; margin-top: 2rem; border: 1px solid var(--glass-border); border-radius: 12px; background-color: rgba(0,0,0,0.2);">
                     <h3 id="adm-port-ed-title" style="margin-bottom: 1.5rem;">Edit Project</h3>
                     <input type="hidden" id="adm-port-id">
                     <div class="admin-form-group"><label>Project Title (EN)</label><input type="text" id="adm-port-title-en" class="admin-input"></div>
@@ -879,7 +879,7 @@
                     <div class="admin-form-group">
                         <label>Category (Select from list or type custom)</label>
                         <input type="text" id="adm-port-cat" class="admin-input" list="cat-options" placeholder="Select or type a category">
-                        <datalist id="cat-options"><option value="KLHS"><option value="GIS Mapping"><option value="Spatial Plan (RTRW/RDTR)"><option value="Feasibility Study"></datalist>
+                        <datalist id="cat-options"></datalist>
                     </div>
                     
                     <div class="admin-form-group">
@@ -916,12 +916,12 @@
                 <div id="adm-writings-list" style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem;"></div>
                 <button class="admin-btn admin-btn-add" onclick="window.openWritingEditor()" style="border-style: solid; background: rgba(16, 185, 129, 0.1);">+ Create New Article</button>
                 
-                <div id="adm-writing-editor" style="display:none; padding: 2rem; margin-top: 2rem; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(0,0,0,0.2);">
+                <div id="adm-writing-editor" style="display:none; padding: 2rem; margin-top: 2rem; border: 1px solid var(--glass-border); border-radius: 12px; background-color: rgba(0,0,0,0.2);">
                     <h3 id="adm-writing-ed-title" style="margin-bottom: 1.5rem;">Edit Article</h3>
                     <input type="hidden" id="adm-writing-id">
                     <div class="admin-form-group"><label>Title (EN)</label><input type="text" id="adm-writing-title-en" class="admin-input"></div>
                     <div class="admin-form-group"><label>Title (ID)</label><input type="text" id="adm-writing-title-id" class="admin-input"></div>
-                    <div class="admin-form-group"><label>Date / Category</label><input type="text" id="adm-writing-date" class="admin-input" placeholder="e.g. October 24, 2023 or Tips & Tricks"></div>
+                    <div class="admin-form-group"><label>Date / Category</label><input type="text" id="adm-writing-date" class="admin-input" placeholder="e.g. October 24, 2023 or Tips & Tricks" list="writing-cat-options"><datalist id="writing-cat-options"></datalist></div>
                     
                     <div class="admin-form-group">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -1758,6 +1758,10 @@
 
         window.openPortEditor = function(id = null) {
             document.getElementById('adm-port-list').style.display = 'none'; document.getElementById('adm-port-editor').style.display = 'block'; document.querySelector('#tab-portfolio > .admin-btn-add').style.display = 'none'; document.getElementById('adm-port-media-list').innerHTML = '';
+            
+            const uniqueCats = [...new Set(window.db.portfolio.map(p => p.cat).filter(c => c))];
+            document.getElementById('cat-options').innerHTML = uniqueCats.map(c => `<option value="${c}">`).join('');
+
             if (id) { const p = window.db.portfolio.find(x => x.id === id); document.getElementById('adm-port-id').value = p.id; document.getElementById('adm-port-title-en').value = p.titleEN || p.title || ''; document.getElementById('adm-port-title-id').value = p.titleID || p.title || ''; document.getElementById('adm-port-cat').value = p.cat; document.getElementById('adm-port-desc-en').innerHTML = p.descEN || ''; document.getElementById('adm-port-desc-id').innerHTML = p.descID || ''; if(p.media) { p.media.forEach(m => window.addPortMediaRow(m)); }
             } else { document.getElementById('adm-port-id').value = ""; document.getElementById('adm-port-title-en').value = ""; document.getElementById('adm-port-title-id').value = ""; document.getElementById('adm-port-cat').value = ""; document.getElementById('adm-port-desc-en').innerHTML = ""; document.getElementById('adm-port-desc-id').innerHTML = ""; window.addPortMediaRow(); }
         }
@@ -1824,6 +1828,10 @@
 
         window.openWritingEditor = function(id = null) {
             document.getElementById('adm-writings-list').style.display = 'none'; document.getElementById('adm-writing-editor').style.display = 'block'; document.querySelector('#tab-writings > .admin-btn-add').style.display = 'none'; document.getElementById('adm-writing-media-list').innerHTML = '';
+            
+            const uniqueDates = [...new Set(window.db.writings.map(w => w.date).filter(d => d))];
+            document.getElementById('writing-cat-options').innerHTML = uniqueDates.map(d => `<option value="${d}">`).join('');
+
             if (id) { 
                 const w = window.db.writings.find(x => x.id === id); 
                 document.getElementById('adm-writing-id').value = w.id; 
