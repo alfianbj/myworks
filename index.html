@@ -325,8 +325,8 @@
                 <li><a href="#contact" data-i18n="navContact">Contact</a></li>
             </ul>
             <div class="controls">
-                <button class="icon-btn" onclick="toggleLang()" id="langBtn">ID</button>
-                <button class="icon-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
+                <button class="icon-btn" onclick="window.toggleLang()" id="langBtn">ID</button>
+                <button class="icon-btn" onclick="window.toggleTheme()" id="themeBtn">☀️</button>
             </div>
         </div>
     </nav>
@@ -421,11 +421,11 @@
                     <div class="form-group">
                         <div style="display:flex; justify-content:space-between; margin-bottom: 0.5rem; align-items:center;">
                             <label data-i18n="formMessage" style="margin-bottom:0;">Message</label>
-                            <button id="draft-btn" type="button" class="ai-btn" onclick="autoDraftMessage()" title="Use AI to write a professional message based on your short prompt">✨ Auto-Draft with AI</button>
+                            <button id="draft-btn" type="button" class="ai-btn" onclick="window.autoDraftMessage()" title="Use AI to write a professional message based on your short prompt">✨ Auto-Draft with AI</button>
                         </div>
                         <textarea class="form-control" id="chat-message" rows="4" placeholder="Tuliskan sedikit maksud kolaborasi Anda (misal: 'Ingin diskusi soal proyek Master Plan di Medan'), lalu klik ✨ Auto-Draft dengan AI..."></textarea>
                     </div>
-                    <button class="btn-primary" style="width: 100%;" onclick="submitChat()" data-i18n="formBtn">Send Message</button>
+                    <button class="btn-primary" style="width: 100%;" onclick="window.submitChat()" data-i18n="formBtn">Send Message</button>
                     <div id="chat-status" style="margin-top: 1rem; text-align: center; color: var(--accent); display:none;">Message sent successfully!</div>
                 </div>
             </div>
@@ -440,8 +440,8 @@
     <div class="modal" id="portfolio-modal">
         <div class="modal-content glass">
             <div class="modal-controls">
-                <button class="modal-btn" onclick="toggleMaximizeModal()" title="Maximize/Minimize">🗖</button>
-                <button class="modal-btn modal-close" onclick="closePortfolioModal()" title="Close">×</button>
+                <button class="modal-btn" onclick="window.toggleMaximizeModal()" title="Maximize/Minimize">🗖</button>
+                <button class="modal-btn modal-close" onclick="window.closePortfolioModal()" title="Close">×</button>
             </div>
             <div class="modal-body">
                 <h2 id="modal-title" style="margin-bottom: 0.5rem;">Project Title</h2>
@@ -455,30 +455,30 @@
     </div>
 
     <!-- ADMIN TRIGGER & PIN -->
-    <button class="icon-btn admin-trigger glass" onclick="openPin()">⚙️</button>
+    <button class="icon-btn admin-trigger glass" onclick="window.openPin()">⚙️</button>
     <div class="pin-overlay" id="pin-overlay">
         <div class="pin-box glass">
             <h2 style="margin-bottom: 1rem;">Admin Access</h2>
             <p style="color: var(--text-muted); font-size: 0.9rem;">Enter PIN to edit portfolio</p>
-            <input type="password" class="pin-input" id="pin-input" maxlength="6" onkeyup="checkPin(event)">
+            <input type="password" class="pin-input" id="pin-input" maxlength="6" onkeyup="window.checkPin(event)">
             <p id="pin-error" style="color: #ef4444; margin-top: 1rem; display: none;">Incorrect PIN</p>
-            <button class="btn-secondary" style="margin-top: 1rem;" onclick="closePin()">Cancel</button>
+            <button class="btn-secondary" style="margin-top: 1rem;" onclick="window.closePin()">Cancel</button>
         </div>
     </div>
 
     <!-- ADMIN DASHBOARD -->
     <div class="admin-dashboard" id="admin-dashboard">
-        <button class="admin-close" onclick="closeAdmin()">×</button>
+        <button class="admin-close" onclick="window.closeAdmin()">×</button>
         <div class="admin-sidebar">
             <div class="admin-header"><h2>ABJ. Admin Panel</h2></div>
             <div class="admin-nav">
-                <div class="admin-tab active" onclick="switchAdminTab('tab-hero', this)">👤 Profile & Hero</div>
-                <div class="admin-tab" onclick="switchAdminTab('tab-about', this)">📝 About & Education</div>
-                <div class="admin-tab" onclick="switchAdminTab('tab-skills', this)">🛠️ Expertise & Tools</div>
-                <div class="admin-tab" onclick="switchAdminTab('tab-exp', this)">💼 Experience</div>
-                <div class="admin-tab" onclick="switchAdminTab('tab-portfolio', this)">📂 Portfolio Manager</div>
-                <div class="admin-tab" onclick="switchAdminTab('tab-inbox', this)">✉️ Inbox (<span id="inbox-count">0</span>)</div>
-                <div class="admin-tab" onclick="switchAdminTab('tab-settings', this)">🔐 Settings</div>
+                <div class="admin-tab active" onclick="window.switchAdminTab('tab-hero', this)">👤 Profile & Hero</div>
+                <div class="admin-tab" onclick="window.switchAdminTab('tab-about', this)">📝 About & Education</div>
+                <div class="admin-tab" onclick="window.switchAdminTab('tab-skills', this)">🛠️ Expertise & Tools</div>
+                <div class="admin-tab" onclick="window.switchAdminTab('tab-exp', this)">💼 Experience</div>
+                <div class="admin-tab" onclick="window.switchAdminTab('tab-portfolio', this)">📂 Portfolio Manager</div>
+                <div class="admin-tab" onclick="window.switchAdminTab('tab-inbox', this)">✉️ Inbox (<span id="inbox-count">0</span>)</div>
+                <div class="admin-tab" onclick="window.switchAdminTab('tab-settings', this)">🔐 Settings</div>
             </div>
         </div>
         
@@ -500,19 +500,19 @@
                 <div class="admin-form-group">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <label style="margin:0;">Description (EN)</label>
-                        <button class="ai-btn" id="btn-adm-hero-desc-en" onclick="enhanceAdminText('adm-hero-desc-en', 'en')">✨ Enhance (AI)</button>
+                        <button class="ai-btn" id="btn-adm-hero-desc-en" onclick="window.enhanceAdminText('adm-hero-desc-en', 'en')">✨ Enhance (AI)</button>
                     </div>
                     <div class="rt-container"><div class="rt-toolbar-placeholder"></div><div class="rt-editor" id="adm-hero-desc-en" contenteditable="true"></div></div>
                 </div>
                 <div class="admin-form-group">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <label style="margin:0;">Description (ID)</label>
-                        <button class="ai-btn" id="btn-adm-hero-desc-id" onclick="enhanceAdminText('adm-hero-desc-id', 'id')">✨ Enhance (AI)</button>
+                        <button class="ai-btn" id="btn-adm-hero-desc-id" onclick="window.enhanceAdminText('adm-hero-desc-id', 'id')">✨ Enhance (AI)</button>
                     </div>
                     <div class="rt-container"><div class="rt-toolbar-placeholder"></div><div class="rt-editor" id="adm-hero-desc-id" contenteditable="true"></div></div>
                 </div>
                 <div class="admin-form-group"><label>Status Badge</label><input type="text" id="adm-hero-status" class="admin-input"></div>
-                <button class="admin-btn admin-btn-save" onclick="saveHero()">💾 Save Profile & Hero</button>
+                <button class="admin-btn admin-btn-save" onclick="window.saveHero()">💾 Save Profile & Hero</button>
             </div>
 
             <div class="admin-section" id="tab-about">
@@ -520,47 +520,47 @@
                 <div class="admin-form-group">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <label style="margin:0;">About Text (EN)</label>
-                        <button class="ai-btn" id="btn-adm-about-en" onclick="enhanceAdminText('adm-about-en', 'en')">✨ Enhance (AI)</button>
+                        <button class="ai-btn" id="btn-adm-about-en" onclick="window.enhanceAdminText('adm-about-en', 'en')">✨ Enhance (AI)</button>
                     </div>
                     <div class="rt-container"><div class="rt-toolbar-placeholder"></div><div class="rt-editor" id="adm-about-en" contenteditable="true"></div></div>
                 </div>
                 <div class="admin-form-group">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <label style="margin:0;">About Text (ID)</label>
-                        <button class="ai-btn" id="btn-adm-about-id" onclick="enhanceAdminText('adm-about-id', 'id')">✨ Enhance (AI)</button>
+                        <button class="ai-btn" id="btn-adm-about-id" onclick="window.enhanceAdminText('adm-about-id', 'id')">✨ Enhance (AI)</button>
                     </div>
                     <div class="rt-container"><div class="rt-toolbar-placeholder"></div><div class="rt-editor" id="adm-about-id" contenteditable="true"></div></div>
                 </div>
                 <h3 style="margin: 2rem 0 1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;">Education List</h3>
                 <div id="adm-edu-list"></div>
-                <button class="admin-btn admin-btn-add" onclick="addEduRow()">+ Add Education</button>
-                <button class="admin-btn admin-btn-save" onclick="saveAboutEdu()">💾 Save About & Education</button>
+                <button class="admin-btn admin-btn-add" onclick="window.addEduRow()">+ Add Education</button>
+                <button class="admin-btn admin-btn-save" onclick="window.saveAboutEdu()">💾 Save About & Education</button>
             </div>
 
             <div class="admin-section" id="tab-skills">
                 <h2 style="margin-bottom: 2rem;">Expertise & Tools</h2>
                 <h3 style="margin-bottom: 1rem;">Expertise Area (Text items)</h3>
                 <div id="adm-expertise-list"></div>
-                <button class="admin-btn admin-btn-add" onclick="addExpertiseRow()">+ Add Expertise</button>
+                <button class="admin-btn admin-btn-add" onclick="window.addExpertiseRow()">+ Add Expertise</button>
 
                 <h3 style="margin: 2rem 0 1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;">Software & Tools</h3>
                 <div id="adm-tools-list"></div>
-                <button class="admin-btn admin-btn-add" onclick="addToolRow()">+ Add Tool</button>
-                <button class="admin-btn admin-btn-save" onclick="saveSkills()">💾 Save Expertise & Tools</button>
+                <button class="admin-btn admin-btn-add" onclick="window.addToolRow()">+ Add Tool</button>
+                <button class="admin-btn admin-btn-save" onclick="window.saveSkills()">💾 Save Expertise & Tools</button>
             </div>
 
             <div class="admin-section" id="tab-exp">
                 <h2 style="margin-bottom: 2rem;">Work Experience</h2>
                 <div id="adm-exp-list"></div>
-                <button class="admin-btn admin-btn-add" onclick="addExpRow()">+ Add Experience</button>
-                <button class="admin-btn admin-btn-save" onclick="saveExp()">💾 Save Experience</button>
+                <button class="admin-btn admin-btn-add" onclick="window.addExpRow()">+ Add Experience</button>
+                <button class="admin-btn admin-btn-save" onclick="window.saveExp()">💾 Save Experience</button>
             </div>
 
             <div class="admin-section" id="tab-portfolio">
                 <h2 style="margin-bottom: 1rem;">Portfolio Manager</h2>
                 <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 2rem;">Manage your projects. Each project can have multiple media files (Images, Videos, Documents).</p>
                 <div id="adm-port-list" style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem;"></div>
-                <button class="admin-btn admin-btn-add" onclick="openPortEditor()" style="border-style: solid; background: rgba(16, 185, 129, 0.1);">+ Create New Project</button>
+                <button class="admin-btn admin-btn-add" onclick="window.openPortEditor()" style="border-style: solid; background: rgba(16, 185, 129, 0.1);">+ Create New Project</button>
                 
                 <div id="adm-port-editor" style="display:none; padding: 2rem; margin-top: 2rem; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(0,0,0,0.2);">
                     <h3 id="adm-port-ed-title" style="margin-bottom: 1.5rem;">Edit Project</h3>
@@ -575,14 +575,14 @@
                     <div class="admin-form-group">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <label style="margin:0;">Description (EN)</label>
-                            <button class="ai-btn" id="btn-adm-port-desc-en" onclick="enhanceAdminText('adm-port-desc-en', 'en')">✨ Enhance (AI)</button>
+                            <button class="ai-btn" id="btn-adm-port-desc-en" onclick="window.enhanceAdminText('adm-port-desc-en', 'en')">✨ Enhance (AI)</button>
                         </div>
                         <div class="rt-container"><div class="rt-toolbar-placeholder"></div><div class="rt-editor" id="adm-port-desc-en" contenteditable="true"></div></div>
                     </div>
                     <div class="admin-form-group">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <label style="margin:0;">Description (ID)</label>
-                            <button class="ai-btn" id="btn-adm-port-desc-id" onclick="enhanceAdminText('adm-port-desc-id', 'id')">✨ Enhance (AI)</button>
+                            <button class="ai-btn" id="btn-adm-port-desc-id" onclick="window.enhanceAdminText('adm-port-desc-id', 'id')">✨ Enhance (AI)</button>
                         </div>
                         <div class="rt-container"><div class="rt-toolbar-placeholder"></div><div class="rt-editor" id="adm-port-desc-id" contenteditable="true"></div></div>
                     </div>
@@ -590,11 +590,11 @@
                     <div style="margin: 2rem 0; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed var(--glass-border);">
                         <h4 style="margin-bottom: 0.5rem;">Media Files for this Project</h4>
                         <div id="adm-port-media-list"></div>
-                        <button class="admin-btn admin-btn-add" onclick="addPortMediaRow()" style="margin-top:1rem; margin-bottom:0;">+ Add Media (Image/Video/Doc)</button>
+                        <button class="admin-btn admin-btn-add" onclick="window.addPortMediaRow()" style="margin-top:1rem; margin-bottom:0;">+ Add Media (Image/Video/Doc)</button>
                     </div>
                     <div style="display:flex; gap:1rem;">
-                        <button class="admin-btn admin-btn-save" style="margin-top:0;" onclick="savePortProject()">💾 Save Project</button>
-                        <button class="admin-btn" style="background:var(--glass-bg); border: 1px solid var(--glass-border); color:var(--text-main); width:50%; margin-top:0;" onclick="closePortEditor()">Cancel</button>
+                        <button class="admin-btn admin-btn-save" style="margin-top:0;" onclick="window.savePortProject()">💾 Save Project</button>
+                        <button class="admin-btn" style="background:var(--glass-bg); border: 1px solid var(--glass-border); color:var(--text-main); width:50%; margin-top:0;" onclick="window.closePortEditor()">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -602,7 +602,7 @@
             <div class="admin-section" id="tab-inbox">
                 <h2 style="margin-bottom: 2rem;">Visitor Messages</h2>
                 <div id="adm-inbox-list" style="display: flex; flex-direction: column; gap: 1rem;"></div>
-                <button class="admin-btn admin-btn-del" style="margin-top: 2rem;" onclick="clearInbox()">🗑️ Clear All Messages</button>
+                <button class="admin-btn admin-btn-del" style="margin-top: 2rem;" onclick="window.clearInbox()">🗑️ Clear All Messages</button>
             </div>
 
             <div class="admin-section" id="tab-settings">
@@ -611,18 +611,18 @@
                 <h3 style="margin-bottom: 1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;">Contact Links</h3>
                 <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Kelola tautan kontak dan profil sosial Anda (Email, Telepon, LinkedIn, GitHub, dsb).</p>
                 <div id="adm-contact-list"></div>
-                <button class="admin-btn admin-btn-add" onclick="addContactRow()">+ Add Contact</button>
+                <button class="admin-btn admin-btn-add" onclick="window.addContactRow()">+ Add Contact</button>
 
                 <h3 style="margin: 2rem 0 1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;">Security</h3>
                 <div class="admin-form-group"><label>Change PIN (6 digits)</label><input type="password" id="adm-set-pin" class="admin-input" maxlength="6" placeholder="Leave blank to keep current"></div>
                 
                 <h3 style="margin: 2rem 0 1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;">Backup & Restore</h3>
                 <div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
-                    <button class="admin-btn" style="flex:1; background: transparent; border: 1px solid var(--accent); color: var(--accent);" onclick="exportBackup()">📥 Download Backup (.json)</button>
-                    <label class="admin-btn" style="flex:1; background: var(--accent); color: white; cursor: pointer; text-align: center;">📤 Upload Backup (.json)<input type="file" accept=".json" style="display: none;" onchange="importBackup(event)"></label>
+                    <button class="admin-btn" style="flex:1; background: transparent; border: 1px solid var(--accent); color: var(--accent);" onclick="window.exportBackup()">📥 Download Backup (.json)</button>
+                    <label class="admin-btn" style="flex:1; background: var(--accent); color: white; cursor: pointer; text-align: center;">📤 Upload Backup (.json)<input type="file" accept=".json" style="display: none;" onchange="window.importBackup(event)"></label>
                 </div>
-                <button class="admin-btn admin-btn-save" onclick="saveSettings()">💾 Save Settings</button>
-                <button class="admin-btn admin-btn-del" style="margin-top: 1rem; width:100%; padding:1rem;" onclick="resetToFactory()">⚠️ Hard Reset (Restore Default Data)</button>
+                <button class="admin-btn admin-btn-save" onclick="window.saveSettings()">💾 Save Settings</button>
+                <button class="admin-btn admin-btn-del" style="margin-top: 1rem; width:100%; padding:1rem;" onclick="window.resetToFactory()">⚠️ Hard Reset (Restore Default Data)</button>
             </div>
         </div>
     </div>
@@ -630,7 +630,7 @@
     <!-- MAIN SCRIPT AREA -->
     <script>
         // ========================== UTILITIES (Fungsi Global agar tidak ReferenceError) ==========================
-        function getToolbarStr() {
+        window.getToolbarStr = function() {
             return `
             <div class="rt-toolbar" contenteditable="false">
                 <button type="button" onmousedown="event.preventDefault();" onclick="document.execCommand('bold',false,null)"><b>B</b></button>
@@ -648,7 +648,7 @@
         }
 
         // Otomatis kompres gambar jika ukurannya besar agar Firebase tidak Crash
-        function getBase64(file) {
+        window.getBase64 = function(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader(); 
                 reader.readAsDataURL(file);
@@ -678,20 +678,20 @@
             });
         }
 
-        function makeDriveLink(url, type) {
+        window.makeDriveLink = function(url, type) {
             if (!url || !url.includes('drive.google.com')) return url;
             const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
             if (!idMatch) return url; const id = idMatch[1];
             if (type === 'image') return `https://drive.google.com/uc?export=view&id=${id}`; else return `https://drive.google.com/file/d/${id}/preview`;
         }
 
-        function stripHtml(html) { let tmp = document.createElement("DIV"); tmp.innerHTML = html; return tmp.textContent || tmp.innerText || ""; }
+        window.stripHtml = function(html) { let tmp = document.createElement("DIV"); tmp.innerHTML = html; return tmp.textContent || tmp.innerText || ""; }
 
-        function addEduRowHtml(e = {degree:'', uni:'', year:'', link:''}) { return `<div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><input type="text" class="admin-input edu-deg" placeholder="Degree / Certificate" value="${e.degree}"><input type="text" class="admin-input edu-uni" placeholder="University" value="${e.uni}"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input edu-year" placeholder="Year | GPA/Reg" value="${e.year}"><input type="text" class="admin-input edu-link" placeholder="Publication URL (Optional)" value="${e.link}"></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
-        function addExpertiseRowHtml(x = {en:'', id:''}) { return `<div style="flex:1; display:flex; gap:0.5rem;"><input type="text" class="admin-input exp-en" placeholder="Expertise (EN)" value="${x.en}"><input type="text" class="admin-input exp-id" placeholder="Expertise (ID)" value="${x.id}"></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
-        function addToolRowHtml(t = {name:'', icon:''}) { return `<input type="hidden" class="tool-hidden-src" value="${t.icon || ''}"><div style="flex:1; display:flex; gap:0.5rem; align-items:center;"><input type="text" class="admin-input tool-name" placeholder="Tool Name (e.g. QGIS)" value="${t.name || ''}"><input type="text" class="admin-input tool-url" placeholder="Icon URL" value="${(t.icon||'').startsWith('data:') ? '' : t.icon}"><span>OR</span><input type="file" class="admin-input tool-file" accept="image/*" style="padding:0.4rem;"></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
-        function addExpRowHtml(e = {role:'', org:'', date:'', descEN:'', descID:''}) { return `<div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input exp-role" placeholder="Role" value="${e.role}"><input type="text" class="admin-input exp-org" placeholder="Organization" value="${e.org}"><input type="text" class="admin-input exp-date" placeholder="Date" value="${e.date}"></div><div class="rt-container">${getToolbarStr()}<div class="rt-editor exp-den" contenteditable="true">${e.descEN || ''}</div></div><div class="rt-container">${getToolbarStr()}<div class="rt-editor exp-did" contenteditable="true">${e.descID || ''}</div></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
-        function addContactRowHtml(c = {label:'', link:'', icon:''}) { return `<input type="hidden" class="contact-hidden-src" value="${c.icon || ''}"><div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input contact-label" placeholder="Label (e.g. GitHub)" value="${c.label || ''}"><input type="text" class="admin-input contact-link" placeholder="Link (e.g. https://github.com/...)" value="${c.link || ''}"></div><div style="display:flex; align-items:center; gap:0.5rem;"><input type="text" class="admin-input contact-url" placeholder="Icon URL" value="${(c.icon||'').startsWith('data:') ? '' : c.icon}"><span style="font-size:0.8rem; color:var(--text-muted);">OR</span><input type="file" class="admin-input contact-file" accept="image/*" style="padding:0.4rem;"></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
+        window.addEduRowHtml = function(e = {degree:'', uni:'', year:'', link:''}) { return `<div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><input type="text" class="admin-input edu-deg" placeholder="Degree / Certificate" value="${e.degree}"><input type="text" class="admin-input edu-uni" placeholder="University" value="${e.uni}"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input edu-year" placeholder="Year | GPA/Reg" value="${e.year}"><input type="text" class="admin-input edu-link" placeholder="Publication URL (Optional)" value="${e.link}"></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
+        window.addExpertiseRowHtml = function(x = {en:'', id:''}) { return `<div style="flex:1; display:flex; gap:0.5rem;"><input type="text" class="admin-input exp-en" placeholder="Expertise (EN)" value="${x.en}"><input type="text" class="admin-input exp-id" placeholder="Expertise (ID)" value="${x.id}"></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
+        window.addToolRowHtml = function(t = {name:'', icon:''}) { return `<input type="hidden" class="tool-hidden-src" value="${t.icon || ''}"><div style="flex:1; display:flex; gap:0.5rem; align-items:center;"><input type="text" class="admin-input tool-name" placeholder="Tool Name (e.g. QGIS)" value="${t.name || ''}"><input type="text" class="admin-input tool-url" placeholder="Icon URL" value="${(t.icon||'').startsWith('data:') ? '' : t.icon}"><span>OR</span><input type="file" class="admin-input tool-file" accept="image/*" style="padding:0.4rem;"></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
+        window.addExpRowHtml = function(e = {role:'', org:'', date:'', descEN:'', descID:''}) { return `<div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input exp-role" placeholder="Role" value="${e.role}"><input type="text" class="admin-input exp-org" placeholder="Organization" value="${e.org}"><input type="text" class="admin-input exp-date" placeholder="Date" value="${e.date}"></div><div class="rt-container">${window.getToolbarStr()}<div class="rt-editor exp-den" contenteditable="true">${e.descEN || ''}</div></div><div class="rt-container">${window.getToolbarStr()}<div class="rt-editor exp-did" contenteditable="true">${e.descID || ''}</div></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
+        window.addContactRowHtml = function(c = {label:'', link:'', icon:''}) { return `<input type="hidden" class="contact-hidden-src" value="${c.icon || ''}"><div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input contact-label" placeholder="Label (e.g. GitHub)" value="${c.label || ''}"><input type="text" class="admin-input contact-link" placeholder="Link (e.g. https://github.com/...)" value="${c.link || ''}"></div><div style="display:flex; align-items:center; gap:0.5rem;"><input type="text" class="admin-input contact-url" placeholder="Icon URL" value="${(c.icon||'').startsWith('data:') ? '' : c.icon}"><span style="font-size:0.8rem; color:var(--text-muted);">OR</span><input type="file" class="admin-input contact-file" accept="image/*" style="padding:0.4rem;"></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
 
         // ========================== DATA & CONFIGURATION ==========================
         const FACTORY_DATA = {
@@ -782,37 +782,43 @@
             }
         };
 
-        let currentLang = 'en', currentTheme = 'dark', db = null; 
+        let currentLang = 'en';
+        let currentTheme = 'dark';
+        window.db = null; 
         
         // ========================== FIREBASE LIVE SINKRONISASI ==========================
         let firestoreDb = null;
         let currentUser = null;
+        // App ID unik untuk mencegah bentrok data di server
         const appId = 'alfian-portfolio-live-v3';
 
         async function initApp() {
-            document.querySelectorAll('.rt-toolbar-placeholder').forEach(el => { el.outerHTML = getToolbarStr(); });
+            document.querySelectorAll('.rt-toolbar-placeholder').forEach(el => { el.outerHTML = window.getToolbarStr(); });
             
-            // 1. Ambil data dari Local Storage terlebih dahulu
+            // 1. Ambil data lokal terlebih dahulu (Fallback)
             const localRaw = localStorage.getItem('abj_db_live_final');
             if (localRaw) {
-                db = JSON.parse(localRaw);
+                window.db = JSON.parse(localRaw);
             } else {
-                db = JSON.parse(JSON.stringify(FACTORY_DATA));
+                window.db = JSON.parse(JSON.stringify(FACTORY_DATA));
             }
 
-            if(!db.contacts) db.contacts = JSON.parse(JSON.stringify(FACTORY_DATA.contacts));
+            // Pastikan contacts ada (kompatibilitas mundur)
+            if(!window.db.contacts) {
+                window.db.contacts = JSON.parse(JSON.stringify(FACTORY_DATA.contacts));
+            }
 
-            // Smart Patcher untuk memastikan Motto dan Posisi Anda selalu yang paling update di memori
-            if (db && db.hero) {
-                if (db.hero.roles === "Urban Planner | GIS & Spatial Data Specialist" || db.hero.roles === "Urban Planner | GIS Specialist") {
-                    db.hero.roles = "Urban Planner | GIS & Spatial Data Specialist | Sustainable Development Enthusiast";
+            // SMART PATCH: Paksa update Posisi & Motto jika masih versi lama (agar tidak perlu hard reset)
+            if (window.db && window.db.hero) {
+                if (window.db.hero.roles === "Urban Planner | GIS & Spatial Data Specialist" || window.db.hero.roles === "Urban Planner | GIS Specialist") {
+                    window.db.hero.roles = "Urban Planner | GIS & Spatial Data Specialist | Sustainable Development Enthusiast";
                 }
-                if (db.hero.motto === `"Building Better Cities Through Spatial Insight"` || db.hero.motto === "Building Better Cities Through Spatial Insight") {
-                    db.hero.motto = `"Building Better Cities Through Spatial Insight and Sustainable Vision"`;
+                if (window.db.hero.motto === `"Building Better Cities Through Spatial Insight"` || window.db.hero.motto === "Building Better Cities Through Spatial Insight") {
+                    window.db.hero.motto = `"Building Better Cities Through Spatial Insight and Sustainable Vision"`;
                 }
             }
 
-            renderAll();
+            window.renderAll();
 
             // 2. Hubungkan ke Firebase secara asinkron
             try {
@@ -858,14 +864,14 @@
                                     }
                                 }
 
-                                if (JSON.stringify(incomingData) !== JSON.stringify(db)) {
-                                    db = incomingData;
-                                    try { localStorage.setItem('abj_db_live_final', JSON.stringify(db)); } catch(e){}
-                                    renderAll();
+                                if (JSON.stringify(incomingData) !== JSON.stringify(window.db)) {
+                                    window.db = incomingData;
+                                    try { localStorage.setItem('abj_db_live_final', JSON.stringify(window.db)); } catch(e){}
+                                    window.renderAll();
                                 }
                             } else {
                                 // Jika di Firebase kosong
-                                if(window.firebaseSetDoc) window.firebaseSetDoc(docRef, db).catch(e => console.warn(e));
+                                if(window.firebaseSetDoc) window.firebaseSetDoc(docRef, window.db).catch(e => console.warn(e));
                             }
                         });
                     }
@@ -873,25 +879,25 @@
             } catch (e) { console.warn("Info Firebase:", e); }
         }
 
-        async function saveDb() { 
+        window.saveDb = async function() { 
             // 1. Bersihkan Data dari undefined agar Firestore tidak Error "Invalid nested entity"
             const safeDb = {
-                pin: db.pin || "010217",
+                pin: window.db.pin || "010217",
                 hero: {
-                    name: db.hero?.name || "", roles: db.hero?.roles || "", motto: db.hero?.motto || "", descEN: db.hero?.descEN || "", descID: db.hero?.descID || "", status: db.hero?.status || "", img: db.hero?.img || ""
+                    name: window.db.hero?.name || "", roles: window.db.hero?.roles || "", motto: window.db.hero?.motto || "", descEN: window.db.hero?.descEN || "", descID: window.db.hero?.descID || "", status: window.db.hero?.status || "", img: window.db.hero?.img || ""
                 },
-                about: { en: db.about?.en || "", id: db.about?.id || "" },
-                education: Array.isArray(db.education) ? db.education : [],
-                expertise: Array.isArray(db.expertise) ? db.expertise : [],
-                tools: Array.isArray(db.tools) ? db.tools : [],
-                experience: Array.isArray(db.experience) ? db.experience : [],
-                portfolio: Array.isArray(db.portfolio) ? db.portfolio : [],
-                contacts: Array.isArray(db.contacts) ? db.contacts : [],
-                inbox: Array.isArray(db.inbox) ? db.inbox : []
+                about: { en: window.db.about?.en || "", id: window.db.about?.id || "" },
+                education: Array.isArray(window.db.education) ? window.db.education : [],
+                expertise: Array.isArray(window.db.expertise) ? window.db.expertise : [],
+                tools: Array.isArray(window.db.tools) ? window.db.tools : [],
+                experience: Array.isArray(window.db.experience) ? window.db.experience : [],
+                portfolio: Array.isArray(window.db.portfolio) ? window.db.portfolio : [],
+                contacts: Array.isArray(window.db.contacts) ? window.db.contacts : [],
+                inbox: Array.isArray(window.db.inbox) ? window.db.inbox : []
             };
 
-            db = safeDb;
-            renderAll(); 
+            window.db = safeDb;
+            window.renderAll(); 
 
             // Coba simpan ke LocalStorage komputer
             try { localStorage.setItem('abj_db_live_final', JSON.stringify(safeDb)); } catch (errLocal) {}
@@ -912,33 +918,33 @@
             }
         }
 
-        async function resetToFactory() {
-            if(confirm("Hapus semua editan dan kembalikan ke bawaan?")) { db = JSON.parse(JSON.stringify(FACTORY_DATA)); await saveDb(); location.reload(); }
+        window.resetToFactory = async function() {
+            if(confirm("Hapus semua editan dan kembalikan ke bawaan?")) { window.db = JSON.parse(JSON.stringify(FACTORY_DATA)); await window.saveDb(); location.reload(); }
         }
 
         // ========================== UI & RENDERING LOGIC ==========================
-        function toggleLang() { currentLang = currentLang === 'en' ? 'id' : 'en'; document.getElementById('langBtn').innerText = currentLang === 'en' ? 'ID' : 'EN'; applyTranslations(); renderAll(); }
-        function toggleTheme() { currentTheme = currentTheme === 'dark' ? 'light' : 'dark'; document.body.setAttribute('data-theme', currentTheme); document.getElementById('themeBtn').innerText = currentTheme === 'dark' ? '☀️' : '🌙'; }
+        window.toggleLang = function() { currentLang = currentLang === 'en' ? 'id' : 'en'; document.getElementById('langBtn').innerText = currentLang === 'en' ? 'ID' : 'EN'; window.applyTranslations(); window.renderAll(); }
+        window.toggleTheme = function() { currentTheme = currentTheme === 'dark' ? 'light' : 'dark'; document.body.setAttribute('data-theme', currentTheme); document.getElementById('themeBtn').innerText = currentTheme === 'dark' ? '☀️' : '🌙'; }
 
-        function applyTranslations() {
+        window.applyTranslations = function() {
             document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if(dict[currentLang][key]) el.innerText = dict[currentLang][key]; });
             const draftBtn = document.getElementById('draft-btn');
             if (draftBtn) draftBtn.innerText = currentLang === 'en' ? '✨ Auto-Draft with AI' : '✨ Draf Otomatis dengan AI';
         }
 
-        function renderAll() {
-            applyTranslations(); document.getElementById('currentYear').innerText = new Date().getFullYear();
-            document.getElementById('ui-hero-name').innerText = db.hero.name; document.getElementById('ui-hero-roles').innerText = db.hero.roles; document.getElementById('ui-hero-motto').innerText = db.hero.motto; document.getElementById('ui-hero-desc').innerHTML = currentLang === 'en' ? db.hero.descEN : db.hero.descID; document.getElementById('ui-hero-status').innerText = db.hero.status; document.getElementById('ui-hero-img').src = db.hero.img;
-            document.getElementById('ui-about-text').innerHTML = currentLang === 'en' ? db.about.en : db.about.id;
-            document.getElementById('ui-edu-container').innerHTML = db.education.map(e => `<div class="glass" style="padding: 1.5rem;"><h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.2rem;">${e.degree}</h4><p style="font-weight: 500;">${e.uni}</p><p style="font-size: 0.85rem; color: var(--text-muted);">${e.year}</p>${e.link ? `<a href="${e.link}" target="_blank" style="font-size: 0.8rem; color: var(--accent);">View Publication ↗</a>` : ''}</div>`).join('');
-            document.getElementById('ui-expertise-list').innerHTML = db.expertise.map(x => `<div class="expertise-item"><span class="bullet">▹</span><span>${currentLang === 'en' ? x.en : x.id}</span></div>`).join('');
-            document.getElementById('ui-tools-grid').innerHTML = db.tools.map(t => `<div class="tool-item"><img src="${t.icon}" alt="${t.name}" class="tool-icon"><span>${t.name}</span></div>`).join('');
-            document.getElementById('ui-exp-container').innerHTML = db.experience.map(e => `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">${e.date}</div><div class="timeline-content glass"><h4>${e.role}</h4><div class="timeline-org">${e.org}</div><div class="timeline-desc rich-content">${currentLang === 'en' ? e.descEN : e.descID}</div></div></div>`).join('');
-            const categories = [...new Set(db.portfolio.map(p => p.cat))];
-            document.getElementById('ui-portfolio-filters').innerHTML = `<button class="filter-btn active" onclick="filterPortfolio('all', this)">${dict[currentLang].catAll}</button>${categories.map(c => `<button class="filter-btn" onclick="filterPortfolio('${c}', this)">${c}</button>`).join('')}`;
-            renderPortfolioGrid(db.portfolio);
+        window.renderAll = function() {
+            window.applyTranslations(); document.getElementById('currentYear').innerText = new Date().getFullYear();
+            document.getElementById('ui-hero-name').innerText = window.db.hero.name; document.getElementById('ui-hero-roles').innerText = window.db.hero.roles; document.getElementById('ui-hero-motto').innerText = window.db.hero.motto; document.getElementById('ui-hero-desc').innerHTML = currentLang === 'en' ? window.db.hero.descEN : window.db.hero.descID; document.getElementById('ui-hero-status').innerText = window.db.hero.status; document.getElementById('ui-hero-img').src = window.db.hero.img;
+            document.getElementById('ui-about-text').innerHTML = currentLang === 'en' ? window.db.about.en : window.db.about.id;
+            document.getElementById('ui-edu-container').innerHTML = window.db.education.map(e => `<div class="glass" style="padding: 1.5rem;"><h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.2rem;">${e.degree}</h4><p style="font-weight: 500;">${e.uni}</p><p style="font-size: 0.85rem; color: var(--text-muted);">${e.year}</p>${e.link ? `<a href="${e.link}" target="_blank" style="font-size: 0.8rem; color: var(--accent);">View Publication ↗</a>` : ''}</div>`).join('');
+            document.getElementById('ui-expertise-list').innerHTML = window.db.expertise.map(x => `<div class="expertise-item"><span class="bullet">▹</span><span>${currentLang === 'en' ? x.en : x.id}</span></div>`).join('');
+            document.getElementById('ui-tools-grid').innerHTML = window.db.tools.map(t => `<div class="tool-item"><img src="${t.icon}" alt="${t.name}" class="tool-icon"><span>${t.name}</span></div>`).join('');
+            document.getElementById('ui-exp-container').innerHTML = window.db.experience.map(e => `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">${e.date}</div><div class="timeline-content glass"><h4>${e.role}</h4><div class="timeline-org">${e.org}</div><div class="timeline-desc rich-content">${currentLang === 'en' ? e.descEN : e.descID}</div></div></div>`).join('');
+            const categories = [...new Set(window.db.portfolio.map(p => p.cat))];
+            document.getElementById('ui-portfolio-filters').innerHTML = `<button class="filter-btn active" onclick="window.filterPortfolio('all', this)">${dict[currentLang].catAll}</button>${categories.map(c => `<button class="filter-btn" onclick="window.filterPortfolio('${c}', this)">${c}</button>`).join('')}`;
+            window.renderPortfolioGrid(window.db.portfolio);
             
-            document.getElementById('ui-contact-list').innerHTML = (db.contacts || []).map(c => `
+            document.getElementById('ui-contact-list').innerHTML = (window.db.contacts || []).map(c => `
                 <a href="${c.link}" target="_blank" class="contact-link-item">
                     <img src="${c.icon || 'https://placehold.co/28x28?text=' + c.label.charAt(0)}" alt="${c.label}" class="contact-icon-img">
                     <span>${c.label}</span>
@@ -946,23 +952,23 @@
             `).join('');
         }
 
-        function renderPortfolioGrid(items) {
+        window.renderPortfolioGrid = function(items) {
             document.getElementById('ui-portfolio-grid').innerHTML = items.map(p => {
                 let thumbSrc = "https://placehold.co/600x400?text=No+Media";
                 if(p.media && p.media.length > 0) { if(p.media[0].type === 'image') thumbSrc = p.media[0].src; else if(p.media[0].type === 'video') thumbSrc = "https://placehold.co/600x400?text=Video"; else if(p.media[0].type === 'document') thumbSrc = "https://placehold.co/600x400?text=Document"; }
                 const descStr = currentLang === 'en' ? p.descEN : p.descID;
-                return `<div class="portfolio-card glass" onclick="openPortfolioModal('${p.id}')"><img src="${thumbSrc}" alt="${p.title}" class="portfolio-thumb"><div class="portfolio-info"><div class="portfolio-cat">${p.cat}</div><h3 class="portfolio-title">${p.title}</h3><p style="font-size: 0.85rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${stripHtml(descStr)}</p></div></div>`
+                return `<div class="portfolio-card glass" onclick="window.openPortfolioModal('${p.id}')"><img src="${thumbSrc}" alt="${p.title}" class="portfolio-thumb"><div class="portfolio-info"><div class="portfolio-cat">${p.cat}</div><h3 class="portfolio-title">${p.title}</h3><p style="font-size: 0.85rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${window.stripHtml(descStr)}</p></div></div>`
             }).join('');
         }
 
-        function filterPortfolio(cat, btnElement) {
+        window.filterPortfolio = function(cat, btnElement) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active')); btnElement.classList.add('active');
-            if (cat === 'all') renderPortfolioGrid(db.portfolio); else renderPortfolioGrid(db.portfolio.filter(p => p.cat === cat));
+            if (cat === 'all') window.renderPortfolioGrid(window.db.portfolio); else window.renderPortfolioGrid(window.db.portfolio.filter(p => p.cat === cat));
         }
 
         /* ================= PDF VIEWER (Dilengkapi Maximize & Toolbar) ================= */
-        function openPortfolioModal(id) {
-            const p = db.portfolio.find(x => x.id === id); if(!p) return;
+        window.openPortfolioModal = function(id) {
+            const p = window.db.portfolio.find(x => x.id === id); if(!p) return;
             document.getElementById('modal-title').innerText = p.title; document.getElementById('modal-cat').innerText = p.cat; document.getElementById('modal-desc').innerHTML = currentLang === 'en' ? p.descEN : p.descID;
             const slider = document.getElementById('modal-slider'), dots = document.getElementById('modal-dots'), downloads = document.getElementById('modal-downloads');
             slider.innerHTML = ''; dots.innerHTML = ''; downloads.innerHTML = '';
@@ -992,82 +998,81 @@
                 slider.onscroll = () => { let index = Math.round(slider.scrollLeft / slider.offsetWidth); document.querySelectorAll('.media-dot').forEach((d, i) => { d.classList.toggle('active', i === index); }); };
             } else { slider.innerHTML = `<div class="media-item"><p>No media available.</p></div>`; }
             
-            // Pastikan tidak dalam mode fullscreen saat pertama kali dibuka
             document.querySelector('.modal-content').classList.remove('fullscreen');
             document.getElementById('portfolio-modal').classList.add('active');
         }
 
-        // Tombol toggle untuk Maximize/Minimize layar Modal PDF
-        function toggleMaximizeModal() { 
+        window.toggleMaximizeModal = function() { 
             document.querySelector('.modal-content').classList.toggle('fullscreen'); 
         }
 
-        function closePortfolioModal() { document.getElementById('portfolio-modal').classList.remove('active'); document.getElementById('modal-slider').innerHTML = ''; }
+        window.closePortfolioModal = function() { document.getElementById('portfolio-modal').classList.remove('active'); document.getElementById('modal-slider').innerHTML = ''; }
         
-        async function submitChat() { const name = document.getElementById('chat-name').value, contact = document.getElementById('chat-contact').value, msg = document.getElementById('chat-message').value; if(!name || !msg) { alert('Please enter name and message.'); return; } db.inbox.push({ date: new Date().toLocaleString(), name, contact, msg }); await saveDb(); document.getElementById('chat-name').value = ''; document.getElementById('chat-contact').value = ''; document.getElementById('chat-message').value = ''; document.getElementById('chat-status').style.display = 'block'; setTimeout(() => document.getElementById('chat-status').style.display = 'none', 3000); populateAdminInbox(); }
-        function openPin() { document.getElementById('pin-overlay').classList.add('active'); document.getElementById('pin-input').focus(); }
-        function closePin() { document.getElementById('pin-overlay').classList.remove('active'); document.getElementById('pin-input').value = ''; document.getElementById('pin-error').style.display = 'none'; }
-        function checkPin(e) { if(e.key === 'Enter' || e.target.value.length === 6) { if(e.target.value === db.pin) { closePin(); openAdmin(); } else { document.getElementById('pin-error').style.display = 'block'; e.target.value = ''; } } }
-        function openAdmin() { document.getElementById('admin-dashboard').classList.add('active'); populateAdminForms(); }
-        function closeAdmin() { document.getElementById('admin-dashboard').classList.remove('active'); }
-        function switchAdminTab(tabId, element) { document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active')); document.getElementById(tabId).classList.add('active'); }
+        window.submitChat = async function() { const name = document.getElementById('chat-name').value, contact = document.getElementById('chat-contact').value, msg = document.getElementById('chat-message').value; if(!name || !msg) { alert('Please enter name and message.'); return; } window.db.inbox.push({ date: new Date().toLocaleString(), name, contact, msg }); await window.saveDb(); document.getElementById('chat-name').value = ''; document.getElementById('chat-contact').value = ''; document.getElementById('chat-message').value = ''; document.getElementById('chat-status').style.display = 'block'; setTimeout(() => document.getElementById('chat-status').style.display = 'none', 3000); window.populateAdminInbox(); }
+        window.openPin = function() { document.getElementById('pin-overlay').classList.add('active'); document.getElementById('pin-input').focus(); }
+        window.closePin = function() { document.getElementById('pin-overlay').classList.remove('active'); document.getElementById('pin-input').value = ''; document.getElementById('pin-error').style.display = 'none'; }
+        window.checkPin = function(e) { if(e.key === 'Enter' || e.target.value.length === 6) { if(e.target.value === window.db.pin) { window.closePin(); window.openAdmin(); } else { document.getElementById('pin-error').style.display = 'block'; e.target.value = ''; } } }
+        window.openAdmin = function() { document.getElementById('admin-dashboard').classList.add('active'); window.populateAdminForms(); }
+        window.closeAdmin = function() { document.getElementById('admin-dashboard').classList.remove('active'); }
+        window.switchAdminTab = function(tabId, element) { document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active')); document.getElementById(tabId).classList.add('active'); }
 
-        function populateAdminForms() {
-            const heroImgStr = db.hero.img || ''; document.getElementById('adm-hero-hidden-img').value = heroImgStr; document.getElementById('adm-hero-img-url').value = heroImgStr.startsWith('data:') ? '' : heroImgStr;
-            document.getElementById('adm-hero-name').value = db.hero.name; document.getElementById('adm-hero-roles').value = db.hero.roles; document.getElementById('adm-hero-motto').value = db.hero.motto; document.getElementById('adm-hero-desc-en').innerHTML = db.hero.descEN || ''; document.getElementById('adm-hero-desc-id').innerHTML = db.hero.descID || ''; document.getElementById('adm-hero-status').value = db.hero.status;
-            document.getElementById('adm-about-en').innerHTML = db.about.en || ''; document.getElementById('adm-about-id').innerHTML = db.about.id || '';
+        window.populateAdminForms = function() {
+            const heroImgStr = window.db.hero.img || ''; document.getElementById('adm-hero-hidden-img').value = heroImgStr; document.getElementById('adm-hero-img-url').value = heroImgStr.startsWith('data:') ? '' : heroImgStr;
+            document.getElementById('adm-hero-name').value = window.db.hero.name; document.getElementById('adm-hero-roles').value = window.db.hero.roles; document.getElementById('adm-hero-motto').value = window.db.hero.motto; document.getElementById('adm-hero-desc-en').innerHTML = window.db.hero.descEN || ''; document.getElementById('adm-hero-desc-id').innerHTML = window.db.hero.descID || ''; document.getElementById('adm-hero-status').value = window.db.hero.status;
+            document.getElementById('adm-about-en').innerHTML = window.db.about.en || ''; document.getElementById('adm-about-id').innerHTML = window.db.about.id || '';
             
-            renderAdminList('adm-edu-list', db.education, addEduRowHtml); 
-            renderAdminList('adm-expertise-list', db.expertise, addExpertiseRowHtml); 
-            renderAdminList('adm-tools-list', db.tools, addToolRowHtml); 
-            renderAdminList('adm-exp-list', db.experience, addExpRowHtml);
-            renderAdminList('adm-contact-list', db.contacts || [], addContactRowHtml);
+            window.renderAdminList('adm-edu-list', window.db.education, window.addEduRowHtml); 
+            window.renderAdminList('adm-expertise-list', window.db.expertise, window.addExpertiseRowHtml); 
+            window.renderAdminList('adm-tools-list', window.db.tools, window.addToolRowHtml); 
+            window.renderAdminList('adm-exp-list', window.db.experience, window.addExpRowHtml);
+            window.renderAdminList('adm-contact-list', window.db.contacts || [], window.addContactRowHtml);
 
-            populateAdminPortfolioList(); 
-            populateAdminInbox();
+            window.populateAdminPortfolioList(); 
+            window.populateAdminInbox();
         }
-        function renderAdminList(containerId, dataArray, htmlGenerator) { const container = document.getElementById(containerId); container.innerHTML = ''; dataArray.forEach(item => { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = htmlGenerator(item); container.appendChild(div); }); }
         
-        async function saveHero() { const fileInput = document.getElementById('adm-hero-img-file'); let newImg = document.getElementById('adm-hero-img-url').value; const hiddenImg = document.getElementById('adm-hero-hidden-img').value; if (fileInput.files.length > 0) { try { newImg = await getBase64(fileInput.files[0]); } catch (e) { return;} } else if (!newImg && hiddenImg.startsWith('data:')) { newImg = hiddenImg; } if(newImg) db.hero.img = newImg; db.hero.name = document.getElementById('adm-hero-name').value; db.hero.roles = document.getElementById('adm-hero-roles').value; db.hero.motto = document.getElementById('adm-hero-motto').value; db.hero.descEN = document.getElementById('adm-hero-desc-en').innerHTML; db.hero.descID = document.getElementById('adm-hero-desc-id').innerHTML; db.hero.status = document.getElementById('adm-hero-status').value; await saveDb(); populateAdminForms(); alert("Hero saved!"); }
+        window.renderAdminList = function(containerId, dataArray, htmlGenerator) { const container = document.getElementById(containerId); container.innerHTML = ''; dataArray.forEach(item => { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = htmlGenerator(item); container.appendChild(div); }); }
         
-        function addEduRow() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = addEduRowHtml(); document.getElementById('adm-edu-list').appendChild(div); }
-        async function saveAboutEdu() { db.about.en = document.getElementById('adm-about-en').innerHTML; db.about.id = document.getElementById('adm-about-id').innerHTML; db.education = Array.from(document.getElementById('adm-edu-list').children).map(row => ({ id: 'e' + Date.now() + Math.random(), degree: row.querySelector('.edu-deg').value, uni: row.querySelector('.edu-uni').value, year: row.querySelector('.edu-year').value, link: row.querySelector('.edu-link').value })).filter(e => e.degree !== ''); await saveDb(); populateAdminForms(); alert("About & Education saved!"); }
-
-        function addExpertiseRow() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = addExpertiseRowHtml(); document.getElementById('adm-expertise-list').appendChild(div); }
-
-        function addToolRow() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = addToolRowHtml(); document.getElementById('adm-tools-list').appendChild(div); }
+        window.saveHero = async function() { const fileInput = document.getElementById('adm-hero-img-file'); let newImg = document.getElementById('adm-hero-img-url').value; const hiddenImg = document.getElementById('adm-hero-hidden-img').value; if (fileInput.files.length > 0) { try { newImg = await window.getBase64(fileInput.files[0]); } catch (e) { return;} } else if (!newImg && hiddenImg.startsWith('data:')) { newImg = hiddenImg; } if(newImg) window.db.hero.img = newImg; window.db.hero.name = document.getElementById('adm-hero-name').value; window.db.hero.roles = document.getElementById('adm-hero-roles').value; window.db.hero.motto = document.getElementById('adm-hero-motto').value; window.db.hero.descEN = document.getElementById('adm-hero-desc-en').innerHTML; window.db.hero.descID = document.getElementById('adm-hero-desc-id').innerHTML; window.db.hero.status = document.getElementById('adm-hero-status').value; await window.saveDb(); window.populateAdminForms(); alert("Hero saved!"); }
         
-        async function saveSkills() { db.expertise = Array.from(document.getElementById('adm-expertise-list').children).map(row => ({ id: 'x' + Date.now() + Math.random(), en: row.querySelector('.exp-en').value, id: row.querySelector('.exp-id').value })).filter(x => x.en !== ''); const toolRows = Array.from(document.getElementById('adm-tools-list').children); let newTools = []; for (let row of toolRows) { let name = row.querySelector('.tool-name').value; if (!name) continue; let iconUrl = row.querySelector('.tool-url').value; const hiddenSrc = row.querySelector('.tool-hidden-src').value; const fileInput = row.querySelector('.tool-file'); if (fileInput.files.length > 0) { try { iconUrl = await getBase64(fileInput.files[0]); } catch(e){} } else if (!iconUrl && hiddenSrc.startsWith('data:')) { iconUrl = hiddenSrc; } newTools.push({ id: 't' + Date.now() + Math.random(), name, icon: iconUrl }); } db.tools = newTools; await saveDb(); populateAdminForms(); alert("Skills & Tools saved!"); }
+        window.addEduRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addEduRowHtml(); document.getElementById('adm-edu-list').appendChild(div); }
+        window.saveAboutEdu = async function() { window.db.about.en = document.getElementById('adm-about-en').innerHTML; window.db.about.id = document.getElementById('adm-about-id').innerHTML; window.db.education = Array.from(document.getElementById('adm-edu-list').children).map(row => ({ id: 'e' + Date.now() + Math.random(), degree: row.querySelector('.edu-deg').value, uni: row.querySelector('.edu-uni').value, year: row.querySelector('.edu-year').value, link: row.querySelector('.edu-link').value })).filter(e => e.degree !== ''); await window.saveDb(); window.populateAdminForms(); alert("About & Education saved!"); }
 
-        function addExpRow() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = addExpRowHtml(); document.getElementById('adm-exp-list').appendChild(div); }
-        async function saveExp() { db.experience = Array.from(document.getElementById('adm-exp-list').children).map(row => ({ id: 'exp' + Date.now() + Math.random(), role: row.querySelector('.exp-role').value, org: row.querySelector('.exp-org').value, date: row.querySelector('.exp-date').value, descEN: row.querySelector('.exp-den').innerHTML, descID: row.querySelector('.exp-did').innerHTML })).filter(e => e.role !== ''); await saveDb(); populateAdminForms(); alert("Experience saved!"); }
+        window.addExpertiseRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addExpertiseRowHtml(); document.getElementById('adm-expertise-list').appendChild(div); }
 
-        function populateAdminPortfolioList() { document.getElementById('adm-port-list').innerHTML = db.portfolio.map(p => `<div class="glass" style="padding:1rem; display:flex; justify-content:space-between; align-items:center;"><div><strong>${p.title}</strong> <span style="font-size:0.8rem; color:var(--accent);">(${p.cat})</span></div><div style="display:flex; gap:0.5rem;"><button class="admin-btn" style="background:var(--accent); color:#fff;" onclick="editPortProject('${p.id}')">Edit</button><button class="admin-btn admin-btn-del" onclick="deletePortProject('${p.id}')">Delete</button></div></div>`).join(''); }
-        async function deletePortProject(id) { if(confirm('Delete this project?')) { db.portfolio = db.portfolio.filter(p => p.id !== id); await saveDb(); populateAdminPortfolioList(); } }
+        window.addToolRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addToolRowHtml(); document.getElementById('adm-tools-list').appendChild(div); }
+        
+        window.saveSkills = async function() { window.db.expertise = Array.from(document.getElementById('adm-expertise-list').children).map(row => ({ id: 'x' + Date.now() + Math.random(), en: row.querySelector('.exp-en').value, id: row.querySelector('.exp-id').value })).filter(x => x.en !== ''); const toolRows = Array.from(document.getElementById('adm-tools-list').children); let newTools = []; for (let row of toolRows) { let name = row.querySelector('.tool-name').value; if (!name) continue; let iconUrl = row.querySelector('.tool-url').value; const hiddenSrc = row.querySelector('.tool-hidden-src').value; const fileInput = row.querySelector('.tool-file'); if (fileInput.files.length > 0) { try { iconUrl = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!iconUrl && hiddenSrc.startsWith('data:')) { iconUrl = hiddenSrc; } newTools.push({ id: 't' + Date.now() + Math.random(), name, icon: iconUrl }); } window.db.tools = newTools; await window.saveDb(); window.populateAdminForms(); alert("Skills & Tools saved!"); }
 
-        function openPortEditor(id = null) {
+        window.addExpRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addExpRowHtml(); document.getElementById('adm-exp-list').appendChild(div); }
+        window.saveExp = async function() { window.db.experience = Array.from(document.getElementById('adm-exp-list').children).map(row => ({ id: 'exp' + Date.now() + Math.random(), role: row.querySelector('.exp-role').value, org: row.querySelector('.exp-org').value, date: row.querySelector('.exp-date').value, descEN: row.querySelector('.exp-den').innerHTML, descID: row.querySelector('.exp-did').innerHTML })).filter(e => e.role !== ''); await window.saveDb(); window.populateAdminForms(); alert("Experience saved!"); }
+
+        window.populateAdminPortfolioList = function() { document.getElementById('adm-port-list').innerHTML = window.db.portfolio.map(p => `<div class="glass" style="padding:1rem; display:flex; justify-content:space-between; align-items:center;"><div><strong>${p.title}</strong> <span style="font-size:0.8rem; color:var(--accent);">(${p.cat})</span></div><div style="display:flex; gap:0.5rem;"><button class="admin-btn" style="background:var(--accent); color:#fff;" onclick="window.editPortProject('${p.id}')">Edit</button><button class="admin-btn admin-btn-del" onclick="window.deletePortProject('${p.id}')">Delete</button></div></div>`).join(''); }
+        window.deletePortProject = async function(id) { if(confirm('Delete this project?')) { window.db.portfolio = window.db.portfolio.filter(p => p.id !== id); await window.saveDb(); window.populateAdminPortfolioList(); } }
+
+        window.openPortEditor = function(id = null) {
             document.getElementById('adm-port-list').style.display = 'none'; document.getElementById('adm-port-editor').style.display = 'block'; document.querySelector('#tab-portfolio > .admin-btn-add').style.display = 'none'; document.getElementById('adm-port-media-list').innerHTML = '';
-            if (id) { const p = db.portfolio.find(x => x.id === id); document.getElementById('adm-port-id').value = p.id; document.getElementById('adm-port-title').value = p.title; document.getElementById('adm-port-cat').value = p.cat; document.getElementById('adm-port-desc-en').innerHTML = p.descEN || ''; document.getElementById('adm-port-desc-id').innerHTML = p.descID || ''; if(p.media) { p.media.forEach(m => addPortMediaRow(m)); }
-            } else { document.getElementById('adm-port-id').value = ""; document.getElementById('adm-port-title').value = ""; document.getElementById('adm-port-cat').value = ""; document.getElementById('adm-port-desc-en').innerHTML = ""; document.getElementById('adm-port-desc-id').innerHTML = ""; addPortMediaRow(); }
+            if (id) { const p = window.db.portfolio.find(x => x.id === id); document.getElementById('adm-port-id').value = p.id; document.getElementById('adm-port-title').value = p.title; document.getElementById('adm-port-cat').value = p.cat; document.getElementById('adm-port-desc-en').innerHTML = p.descEN || ''; document.getElementById('adm-port-desc-id').innerHTML = p.descID || ''; if(p.media) { p.media.forEach(m => window.addPortMediaRow(m)); }
+            } else { document.getElementById('adm-port-id').value = ""; document.getElementById('adm-port-title').value = ""; document.getElementById('adm-port-cat').value = ""; document.getElementById('adm-port-desc-en').innerHTML = ""; document.getElementById('adm-port-desc-id').innerHTML = ""; window.addPortMediaRow(); }
         }
-        function closePortEditor() { document.getElementById('adm-port-list').style.display = 'flex'; document.getElementById('adm-port-editor').style.display = 'none'; document.querySelector('#tab-portfolio > .admin-btn-add').style.display = 'block'; }
-        function editPortProject(id) { openPortEditor(id); }
-        function addPortMediaRow(m = {type:'image', src:''}) { const srcStr = m.src || ''; const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = `<input type="hidden" class="port-media-hidden-src" value="${srcStr}"><select class="admin-select port-media-type" style="width:120px;"><option value="image" ${m.type==='image'?'selected':''}>Image</option><option value="video" ${m.type==='video'?'selected':''}>Video</option><option value="document" ${m.type==='document'?'selected':''}>Document (PDF)</option></select><div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><input type="text" class="admin-input port-media-url" placeholder="URL Google Drive (Share Link) atau URL lainnya" value="${srcStr.startsWith('data:') ? '' : srcStr}"><div style="display:flex; align-items:center; gap:0.5rem;"><span style="font-size:0.8rem; color:var(--text-muted);">OR Local File:</span><input type="file" class="admin-input port-media-file" style="padding:0.4rem;"></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; document.getElementById('adm-port-media-list').appendChild(div); }
+        window.closePortEditor = function() { document.getElementById('adm-port-list').style.display = 'flex'; document.getElementById('adm-port-editor').style.display = 'none'; document.querySelector('#tab-portfolio > .admin-btn-add').style.display = 'block'; }
+        window.editPortProject = function(id) { window.openPortEditor(id); }
+        window.addPortMediaRow = function(m = {type:'image', src:''}) { const srcStr = m.src || ''; const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = `<input type="hidden" class="port-media-hidden-src" value="${srcStr}"><select class="admin-select port-media-type" style="width:120px;"><option value="image" ${m.type==='image'?'selected':''}>Image</option><option value="video" ${m.type==='video'?'selected':''}>Video</option><option value="document" ${m.type==='document'?'selected':''}>Document (PDF)</option></select><div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><input type="text" class="admin-input port-media-url" placeholder="URL Google Drive (Share Link) atau URL lainnya" value="${srcStr.startsWith('data:') ? '' : srcStr}"><div style="display:flex; align-items:center; gap:0.5rem;"><span style="font-size:0.8rem; color:var(--text-muted);">OR Local File:</span><input type="file" class="admin-input port-media-file" style="padding:0.4rem;"></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; document.getElementById('adm-port-media-list').appendChild(div); }
         
-        async function savePortProject() { const id = document.getElementById('adm-port-id').value || 'p' + Date.now(); const title = document.getElementById('adm-port-title').value; if(!title) { alert('Project title is required'); return; } let mediaArr = []; const rows = Array.from(document.getElementById('adm-port-media-list').children); for(let row of rows) { const type = row.querySelector('.port-media-type').value; let src = row.querySelector('.port-media-url').value; const hiddenSrc = row.querySelector('.port-media-hidden-src').value; const fileInput = row.querySelector('.port-media-file'); if (fileInput.files.length > 0) { try { src = await getBase64(fileInput.files[0]); } catch(e){} } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } if(src) { src = makeDriveLink(src, type); mediaArr.push({ type, src }); } } const newProject = { id, title, cat: document.getElementById('adm-port-cat').value || "Other", descEN: document.getElementById('adm-port-desc-en').innerHTML, descID: document.getElementById('adm-port-desc-id').innerHTML, media: mediaArr }; const existingIndex = db.portfolio.findIndex(p => p.id === id); if (existingIndex >= 0) db.portfolio[existingIndex] = newProject; else db.portfolio.push(newProject); await saveDb(); closePortEditor(); populateAdminPortfolioList(); alert('Project saved successfully!'); }
+        window.savePortProject = async function() { const id = document.getElementById('adm-port-id').value || 'p' + Date.now(); const title = document.getElementById('adm-port-title').value; if(!title) { alert('Project title is required'); return; } let mediaArr = []; const rows = Array.from(document.getElementById('adm-port-media-list').children); for(let row of rows) { const type = row.querySelector('.port-media-type').value; let src = row.querySelector('.port-media-url').value; const hiddenSrc = row.querySelector('.port-media-hidden-src').value; const fileInput = row.querySelector('.port-media-file'); if (fileInput.files.length > 0) { try { src = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } } const newProject = { id, title, cat: document.getElementById('adm-port-cat').value || "Other", descEN: document.getElementById('adm-port-desc-en').innerHTML, descID: document.getElementById('adm-port-desc-id').innerHTML, media: mediaArr }; const existingIndex = window.db.portfolio.findIndex(p => p.id === id); if (existingIndex >= 0) window.db.portfolio[existingIndex] = newProject; else window.db.portfolio.push(newProject); await window.saveDb(); window.closePortEditor(); window.populateAdminPortfolioList(); alert('Project saved successfully!'); }
 
-        function populateAdminInbox() { document.getElementById('inbox-count').innerText = db.inbox.length; const list = document.getElementById('adm-inbox-list'); if(db.inbox.length === 0) { list.innerHTML = "<p>No messages yet.</p>"; return; } list.innerHTML = db.inbox.slice().reverse().map((msg, i) => `<div class="glass" style="padding: 1.5rem;"><div style="display:flex; justify-content:space-between; margin-bottom:1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;"><strong>${msg.name}</strong><span style="font-size:0.8rem; color:var(--text-muted);">${msg.date}</span></div><div style="color:var(--accent); margin-bottom:1rem;">📞 ${msg.contact}</div><p style="white-space: pre-wrap;">${msg.msg}</p></div>`).join(''); }
-        async function clearInbox() { if(confirm("Delete all messages?")) { db.inbox = []; await saveDb(); populateAdminInbox(); } }
+        window.populateAdminInbox = function() { document.getElementById('inbox-count').innerText = window.db.inbox.length; const list = document.getElementById('adm-inbox-list'); if(window.db.inbox.length === 0) { list.innerHTML = "<p>No messages yet.</p>"; return; } list.innerHTML = window.db.inbox.slice().reverse().map((msg, i) => `<div class="glass" style="padding: 1.5rem;"><div style="display:flex; justify-content:space-between; margin-bottom:1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;"><strong>${msg.name}</strong><span style="font-size:0.8rem; color:var(--text-muted);">${msg.date}</span></div><div style="color:var(--accent); margin-bottom:1rem;">📞 ${msg.contact}</div><p style="white-space: pre-wrap;">${msg.msg}</p></div>`).join(''); }
+        window.clearInbox = async function() { if(confirm("Delete all messages?")) { window.db.inbox = []; await window.saveDb(); window.populateAdminInbox(); } }
 
         /* CONTACT LINKS LOGIC */
-        function addContactRow() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = addContactRowHtml(); document.getElementById('adm-contact-list').appendChild(div); }
+        window.addContactRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addContactRowHtml(); document.getElementById('adm-contact-list').appendChild(div); }
 
-        async function exportBackup() { try { const dataStr = JSON.stringify(db, null, 2); const blob = new Blob([dataStr], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; const date = new Date().toISOString().slice(0,10); a.download = `ABJ_Portfolio_Backup_${date}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); } catch (e) { alert("Gagal mengekspor data."); } }
-        function importBackup(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = async (e) => { try { const importedData = JSON.parse(e.target.result); if (importedData && importedData.hero && importedData.portfolio) { if(confirm("PERINGATAN: Ini akan menimpa data yang ada di perangkat ini dengan data dari file backup. Lanjutkan?")) { db = importedData; await saveDb(); alert("Data berhasil dipulihkan! Halaman akan dimuat ulang."); location.reload(); } } else { alert("File JSON tidak valid atau rusak."); } } catch (error) { alert("Gagal membaca file JSON."); } }; reader.readAsText(file); }
+        window.exportBackup = async function() { try { const dataStr = JSON.stringify(window.db, null, 2); const blob = new Blob([dataStr], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; const date = new Date().toISOString().slice(0,10); a.download = `ABJ_Portfolio_Backup_${date}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); } catch (e) { alert("Gagal mengekspor data."); } }
+        window.importBackup = function(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = async (e) => { try { const importedData = JSON.parse(e.target.result); if (importedData && importedData.hero && importedData.portfolio) { if(confirm("PERINGATAN: Ini akan menimpa data yang ada di perangkat ini dengan data dari file backup. Lanjutkan?")) { window.db = importedData; await window.saveDb(); alert("Data berhasil dipulihkan! Halaman akan dimuat ulang."); location.reload(); } } else { alert("File JSON tidak valid atau rusak."); } } catch (error) { alert("Gagal membaca file JSON."); } }; reader.readAsText(file); }
         
-        async function saveSettings() { 
+        window.saveSettings = async function() { 
             const newPin = document.getElementById('adm-set-pin').value; 
-            if(newPin) { if(newPin.length === 6 && !isNaN(newPin)) { db.pin = newPin; document.getElementById('adm-set-pin').value = ''; } else { alert("PIN must be exactly 6 digits."); return; } } 
+            if(newPin) { if(newPin.length === 6 && !isNaN(newPin)) { window.db.pin = newPin; document.getElementById('adm-set-pin').value = ''; } else { alert("PIN must be exactly 6 digits."); return; } } 
             
             const rows = Array.from(document.getElementById('adm-contact-list').children);
             let newContacts = [];
@@ -1080,20 +1085,20 @@
                 const hiddenSrc = row.querySelector('.contact-hidden-src').value;
                 const fileInput = row.querySelector('.contact-file');
                 
-                if (fileInput.files.length > 0) { try { iconUrl = await getBase64(fileInput.files[0]); } catch(e){} } 
+                if (fileInput.files.length > 0) { try { iconUrl = await window.getBase64(fileInput.files[0]); } catch(e){} } 
                 else if (!iconUrl && hiddenSrc.startsWith('data:')) { iconUrl = hiddenSrc; }
                 
                 newContacts.push({ id: 'c' + Date.now() + Math.random(), label, link, icon: iconUrl });
             }
-            db.contacts = newContacts;
+            window.db.contacts = newContacts;
 
-            await saveDb(); alert("Settings saved!"); 
+            await window.saveDb(); alert("Settings saved!"); 
         }
 
         // ========================== GEMINI AI ==========================
-        async function callGeminiAPI(prompt, retries = 5) {
+        window.callGeminiAPI = async function(prompt, retries = 5) {
             const apiKey = "AIzaSyDeo98AZxcmyje35gAMDBYDrTtIGquCvQU"; 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
             const payload = { contents: [{ parts: [{ text: prompt }] }] };
 
             for (let i = 0; i < retries; i++) {
@@ -1111,7 +1116,7 @@
             }
         }
 
-        async function autoDraftMessage() {
+        window.autoDraftMessage = async function() {
             const msgField = document.getElementById('chat-message');
             const intent = msgField.value.trim();
             if (!intent) {
@@ -1131,7 +1136,7 @@
             TIDAK PERLU menuliskan salam pembuka atau tempat tanggal, HANYA isi pesannya saja tanpa tanda kurung [Nama Anda].`;
 
             try {
-                const drafted = await callGeminiAPI(prompt);
+                const drafted = await window.callGeminiAPI(prompt);
                 msgField.value = drafted.trim();
             } catch (e) {
                 alert('Gagal terhubung dengan Asisten AI Gemini. Silakan coba lagi.');
@@ -1141,7 +1146,7 @@
             }
         }
 
-        async function enhanceAdminText(elementId, lang) {
+        window.enhanceAdminText = async function(elementId, lang) {
             const el = document.getElementById(elementId);
             const text = el.innerText || el.value; 
             if (!text.trim()) { alert('Mohon tuliskan teks awal terlebih dahulu sebelum menggunakan AI Enhancer.'); return; }
@@ -1160,7 +1165,7 @@
             Teks awal: "${text}"`;
 
             try {
-                const enhanced = await callGeminiAPI(prompt);
+                const enhanced = await window.callGeminiAPI(prompt);
                 if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
                     el.value = enhanced.trim();
                 } else {
