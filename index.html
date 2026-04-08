@@ -682,7 +682,12 @@
             if (!url || !url.includes('drive.google.com')) return url;
             const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
             if (!idMatch) return url; const id = idMatch[1];
-            if (type === 'image') return `https://drive.google.com/uc?export=view&id=${id}`; else return `https://drive.google.com/file/d/${id}/preview`;
+            if (type === 'image') {
+                // MENGGUNAKAN THUMBNAIL AGAR GAMBAR DARI DRIVE BISA MUNCUL
+                return `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
+            } else {
+                return `https://drive.google.com/file/d/${id}/preview`;
+            }
         }
 
         window.stripHtml = function(html) { let tmp = document.createElement("DIV"); tmp.innerHTML = html; return tmp.textContent || tmp.innerText || ""; }
@@ -968,7 +973,7 @@
                 let thumbSrc = "https://placehold.co/600x400?text=No+Media";
                 if(p.media && p.media.length > 0) { if(p.media[0].type === 'image') thumbSrc = p.media[0].src; else if(p.media[0].type === 'video') thumbSrc = "https://placehold.co/600x400?text=Video"; else if(p.media[0].type === 'document') thumbSrc = "https://placehold.co/600x400?text=Document"; }
                 const descStr = currentLang === 'en' ? p.descEN : p.descID;
-                return `<div class="portfolio-card glass" onclick="window.openPortfolioModal('${p.id}')"><img src="${thumbSrc}" alt="${p.title}" class="portfolio-thumb"><div class="portfolio-info"><div class="portfolio-cat">${p.cat}</div><h3 class="portfolio-title">${p.title}</h3><p style="font-size: 0.85rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${window.stripHtml(descStr)}</p></div></div>`
+                return `<div class="portfolio-card glass" onclick="window.openPortfolioModal('${p.id}')"><img src="${thumbSrc}" onerror="this.src='https://placehold.co/600x400?text=Image+Unavailable'" alt="${p.title}" class="portfolio-thumb"><div class="portfolio-info"><div class="portfolio-cat">${p.cat}</div><h3 class="portfolio-title">${p.title}</h3><p style="font-size: 0.85rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${window.stripHtml(descStr)}</p></div></div>`
             }).join('');
         }
 
@@ -986,7 +991,7 @@
             if (p.media && p.media.length > 0) {
                 p.media.forEach((m, index) => {
                     let mediaHtml = '';
-                    if (m.type === 'image') { mediaHtml = `<img src="${m.src}" alt="Media ${index}">`; } 
+                    if (m.type === 'image') { mediaHtml = `<img src="${m.src}" onerror="this.src='https://placehold.co/800x600?text=Image+Unavailable'" alt="Media ${index}">`; } 
                     else if (m.type === 'video') {
                         if(m.src.includes('drive.google.com')) mediaHtml = `<iframe src="${m.src}" allow="autoplay" allowfullscreen="true"></iframe>`;
                         else mediaHtml = `<video controls><source src="${m.src}"></video>`;
@@ -1103,7 +1108,7 @@
         
         window.savePortProject = async function() { const id = document.getElementById('adm-port-id').value || 'p' + Date.now(); const title = document.getElementById('adm-port-title').value; if(!title) { alert('Project title is required'); return; } let mediaArr = []; const rows = Array.from(document.getElementById('adm-port-media-list').children); for(let row of rows) { const type = row.querySelector('.port-media-type').value; let src = row.querySelector('.port-media-url').value; const hiddenSrc = row.querySelector('.port-media-hidden-src').value; const fileInput = row.querySelector('.port-media-file'); if (fileInput.files.length > 0) { try { src = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } } const newProject = { id, title, cat: document.getElementById('adm-port-cat').value || "Other", descEN: document.getElementById('adm-port-desc-en').innerHTML, descID: document.getElementById('adm-port-desc-id').innerHTML, media: mediaArr }; const existingIndex = window.db.portfolio.findIndex(p => p.id === id); if (existingIndex >= 0) window.db.portfolio[existingIndex] = newProject; else window.db.portfolio.push(newProject); await window.saveDb(); window.closePortEditor(); window.populateAdminPortfolioList(); alert('Project saved successfully!'); }
 
-        window.populateAdminInbox = function() { document.getElementById('inbox-count').innerText = window.db.inbox.length; const list = document.getElementById('adm-inbox-list'); if(window.db.inbox.length === 0) { list.innerHTML = "<p>No messages yet.</p>"; return; } list.innerHTML = window.db.inbox.slice().reverse().map((msg, i) => `<div class="glass" style="padding: 1.5rem;"><div style="display:flex; justify-content:space-between; margin-bottom:1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;"><strong>${msg.name}</strong><span style="font-size:0.8rem; color:var(--text-muted);">${msg.date}</span></div><div style="color:var(--accent); margin-bottom:1rem;">📞 ${msg.contact}</div><p style="white-space: pre-wrap;">${msg.msg}</p></div>`).join(''); }
+        function populateAdminInbox() { document.getElementById('inbox-count').innerText = window.db.inbox.length; const list = document.getElementById('adm-inbox-list'); if(window.db.inbox.length === 0) { list.innerHTML = "<p>No messages yet.</p>"; return; } list.innerHTML = window.db.inbox.slice().reverse().map((msg, i) => `<div class="glass" style="padding: 1.5rem;"><div style="display:flex; justify-content:space-between; margin-bottom:1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;"><strong>${msg.name}</strong><span style="font-size:0.8rem; color:var(--text-muted);">${msg.date}</span></div><div style="color:var(--accent); margin-bottom:1rem;">📞 ${msg.contact}</div><p style="white-space: pre-wrap;">${msg.msg}</p></div>`).join(''); }
         window.clearInbox = async function() { if(confirm("Delete all messages?")) { window.db.inbox = []; await window.saveDb(); window.populateAdminInbox(); } }
 
         /* CONTACT LINKS LOGIC */
