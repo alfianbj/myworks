@@ -157,6 +157,10 @@
         .portfolio-cat { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
         .portfolio-title { font-size: 1.2rem; font-family: 'Inter', sans-serif; margin-bottom: 0.5rem; }
         
+        /* Card Khusus Tulisan/Artikel */
+        .writing-card { padding: 2rem; display: flex; flex-direction: column; justify-content: flex-start; cursor: pointer; transition: all 0.3s ease; border-top: 4px solid var(--accent); }
+        .writing-card:hover { transform: translateY(-5px); border-color: var(--text-main); }
+        
         /* Modal General & Slider Navigation */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -754,6 +758,7 @@
             `;
         }
 
+        // Otomatis kompres gambar jika ukurannya besar agar Firebase tidak Crash
         window.getBase64 = function(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader(); 
@@ -935,6 +940,19 @@
             window.scrollTo(0, 0);
             if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
 
+            // Menyiapkan global variabel
+            if(!window.db) window.db = {};
+            if(!window.db.hero) window.db.hero = {};
+            if(!window.db.about) window.db.about = {en: "", id: ""};
+            if(!window.db.education) window.db.education = [];
+            if(!window.db.expertise) window.db.expertise = [];
+            if(!window.db.tools) window.db.tools = [];
+            if(!window.db.experience) window.db.experience = [];
+            if(!window.db.portfolio) window.db.portfolio = [];
+            if(!window.db.writings) window.db.writings = [];
+            if(!window.db.contacts) window.db.contacts = [];
+            if(!window.db.inbox) window.db.inbox = [];
+
             document.querySelectorAll('.rt-toolbar-placeholder').forEach(el => { el.outerHTML = window.getToolbarStr(); });
             
             const localRaw = localStorage.getItem('abj_db_live_final');
@@ -946,6 +964,7 @@
 
             if(!window.db.contacts) { window.db.contacts = JSON.parse(JSON.stringify(FACTORY_DATA.contacts)); }
             if(!window.db.writings) { window.db.writings = []; }
+            if(!window.db.about) { window.db.about = {en: "", id: ""}; }
 
             if (window.db && window.db.hero) {
                 if (window.db.hero.roles === "Urban Planner | GIS & Spatial Data Specialist" || window.db.hero.roles === "Urban Planner | GIS Specialist") {
@@ -999,6 +1018,7 @@
                                     }
                                 }
                                 if(!incomingData.writings) { incomingData.writings = []; }
+                                if(!incomingData.about) { incomingData.about = {en: "", id: ""}; }
 
                                 if (JSON.stringify(incomingData) !== JSON.stringify(window.db)) {
                                     window.db = incomingData;
@@ -1015,22 +1035,22 @@
         }
 
         window.saveDb = async function() { 
-            const safeDb = {
-                pin: window.db.pin || "010217",
-                hero: {
-                    name: window.db.hero?.name || "", roles: window.db.hero?.roles || "", motto: window.db.hero?.motto || "", descEN: window.db.hero?.descEN || "", descID: window.db.hero?.descID || "", status: window.db.hero?.status || "", img: window.db.hero?.img || ""
-                },
-                about: { en: window.db.about?.en || "", id: window.db.about?.id || "" },
-                education: Array.isArray(window.db.education) ? window.db.education : [],
-                expertise: Array.isArray(window.db.expertise) ? window.db.expertise : [],
-                tools: Array.isArray(window.db.tools) ? window.db.tools : [],
-                experience: Array.isArray(window.db.experience) ? window.db.experience : [],
-                portfolio: Array.isArray(window.db.portfolio) ? window.db.portfolio : [],
-                writings: Array.isArray(window.db.writings) ? window.db.writings : [],
-                contacts: Array.isArray(window.db.contacts) ? window.db.contacts : [],
-                inbox: Array.isArray(window.db.inbox) ? window.db.inbox : []
-            };
+            // 1. Pelindung Data - Memastikan semua ruang di database ada isinya
+            if(!window.db) window.db = {};
+            if(!window.db.hero) window.db.hero = {};
+            if(!window.db.about) window.db.about = {en: "", id: ""};
+            if(!window.db.education) window.db.education = [];
+            if(!window.db.expertise) window.db.expertise = [];
+            if(!window.db.tools) window.db.tools = [];
+            if(!window.db.experience) window.db.experience = [];
+            if(!window.db.portfolio) window.db.portfolio = [];
+            if(!window.db.writings) window.db.writings = [];
+            if(!window.db.contacts) window.db.contacts = [];
+            if(!window.db.inbox) window.db.inbox = [];
 
+            // 2. Pembersih Data (Mengamankan dari invalid nested entity)
+            const safeDb = JSON.parse(JSON.stringify(window.db));
+            
             window.db = safeDb;
             window.renderAll(); 
 
@@ -1072,23 +1092,52 @@
 
         window.renderAll = function() {
             window.applyTranslations(); document.getElementById('currentYear').innerText = new Date().getFullYear();
-            document.getElementById('ui-hero-name').innerText = window.db.hero.name; document.getElementById('ui-hero-roles').innerText = window.db.hero.roles; document.getElementById('ui-hero-motto').innerText = window.db.hero.motto; document.getElementById('ui-hero-desc').innerHTML = currentLang === 'en' ? window.db.hero.descEN : window.db.hero.descID; document.getElementById('ui-hero-status').innerText = window.db.hero.status; document.getElementById('ui-hero-img').src = window.db.hero.img;
             
-            document.getElementById('ui-edu-container').innerHTML = window.db.education.map(e => `<div class="glass" style="padding: 1.5rem;"><h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.2rem;">${e.degree}</h4><p style="font-weight: 500;">${e.uni}</p><p style="font-size: 0.85rem; color: var(--text-muted);">${e.year}</p>${e.link ? `<a href="${e.link}" target="_blank" style="font-size: 0.8rem; color: var(--accent);">View Publication ↗</a>` : ''}</div>`).join('');
-            document.getElementById('ui-expertise-list').innerHTML = window.db.expertise.map(x => `<div class="expertise-item"><span class="bullet">▹</span><span>${currentLang === 'en' ? x.en : x.id}</span></div>`).join('');
-            document.getElementById('ui-tools-grid').innerHTML = window.db.tools.map(t => `<div class="tool-item"><img src="${t.icon}" alt="${t.name}" class="tool-icon"><span>${t.name}</span></div>`).join('');
-            document.getElementById('ui-exp-container').innerHTML = window.db.experience.map(e => `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">${e.date}</div><div class="timeline-content glass"><h4>${e.role}</h4><div class="timeline-org">${e.org}</div><div class="timeline-desc rich-content">${currentLang === 'en' ? e.descEN : e.descID}</div></div></div>`).join('');
-            const categories = [...new Set(window.db.portfolio.map(p => p.cat))];
-            document.getElementById('ui-portfolio-filters').innerHTML = `<button class="filter-btn active" onclick="window.filterPortfolio('all', this)">${dict[currentLang].catAll}</button>${categories.map(c => `<button class="filter-btn" onclick="window.filterPortfolio('${c}', this)">${c}</button>`).join('')}`;
-            window.renderPortfolioGrid(window.db.portfolio);
+            if(window.db.hero) {
+                document.getElementById('ui-hero-name').innerText = window.db.hero.name || ""; 
+                document.getElementById('ui-hero-roles').innerText = window.db.hero.roles || ""; 
+                document.getElementById('ui-hero-motto').innerText = window.db.hero.motto || ""; 
+                document.getElementById('ui-hero-desc').innerHTML = currentLang === 'en' ? (window.db.hero.descEN || "") : (window.db.hero.descID || ""); 
+                document.getElementById('ui-hero-status').innerText = window.db.hero.status || ""; 
+                if(window.db.hero.img) document.getElementById('ui-hero-img').src = window.db.hero.img;
+            }
+            
+            if(window.db.about) {
+                document.getElementById('ui-about-text').innerHTML = currentLang === 'en' ? (window.db.about.en || "") : (window.db.about.id || "");
+            }
+
+            if(window.db.education) {
+                document.getElementById('ui-edu-container').innerHTML = window.db.education.map(e => `<div class="glass" style="padding: 1.5rem;"><h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.2rem;">${e.degree}</h4><p style="font-weight: 500;">${e.uni}</p><p style="font-size: 0.85rem; color: var(--text-muted);">${e.year}</p>${e.link ? `<a href="${e.link}" target="_blank" style="font-size: 0.8rem; color: var(--accent);">View Publication ↗</a>` : ''}</div>`).join('');
+            }
+            
+            if(window.db.expertise) {
+                document.getElementById('ui-expertise-list').innerHTML = window.db.expertise.map(x => `<div class="expertise-item"><span class="bullet">▹</span><span>${currentLang === 'en' ? x.en : x.id}</span></div>`).join('');
+            }
+
+            if(window.db.tools) {
+                document.getElementById('ui-tools-grid').innerHTML = window.db.tools.map(t => `<div class="tool-item"><img src="${t.icon}" alt="${t.name}" class="tool-icon"><span>${t.name}</span></div>`).join('');
+            }
+
+            if(window.db.experience) {
+                document.getElementById('ui-exp-container').innerHTML = window.db.experience.map(e => `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">${e.date}</div><div class="timeline-content glass"><h4>${e.role}</h4><div class="timeline-org">${e.org}</div><div class="timeline-desc rich-content">${currentLang === 'en' ? e.descEN : e.descID}</div></div></div>`).join('');
+            }
+
+            if(window.db.portfolio) {
+                const categories = [...new Set(window.db.portfolio.map(p => p.cat))];
+                document.getElementById('ui-portfolio-filters').innerHTML = `<button class="filter-btn active" onclick="window.filterPortfolio('all', this)">${dict[currentLang].catAll}</button>${categories.map(c => `<button class="filter-btn" onclick="window.filterPortfolio('${c}', this)">${c}</button>`).join('')}`;
+                window.renderPortfolioGrid(window.db.portfolio);
+            }
+
             window.renderWritingsGrid();
             
-            document.getElementById('ui-contact-list').innerHTML = (window.db.contacts || []).map(c => `
-                <a href="${c.link}" target="_blank" class="contact-link-item">
-                    <img src="${c.icon || 'https://placehold.co/28x28?text=' + c.label.charAt(0)}" alt="${c.label}" class="contact-icon-img">
-                    <span>${c.label}</span>
-                </a>
-            `).join('');
+            if(window.db.contacts) {
+                document.getElementById('ui-contact-list').innerHTML = window.db.contacts.map(c => `
+                    <a href="${c.link}" target="_blank" class="contact-link-item">
+                        <img src="${c.icon || 'https://placehold.co/28x28?text=' + c.label.charAt(0)}" alt="${c.label}" class="contact-icon-img">
+                        <span>${c.label}</span>
+                    </a>
+                `).join('');
+            }
         }
 
         window.renderPortfolioGrid = function(items) {
@@ -1098,7 +1147,6 @@
                     if(p.media[0].type === 'image') { thumbSrc = p.media[0].src; }
                     else if(p.media[0].type === 'video') { thumbSrc = "https://placehold.co/600x400?text=Video"; }
                     else if(p.media[0].type === 'document') { 
-                        // MENARIK HALAMAN PERTAMA PDF DARI GOOGLE DRIVE SEBAGAI GAMBAR SAMPUL
                         if (p.media[0].src.includes('drive.google.com')) {
                             const idMatch = p.media[0].src.match(/\/d\/([a-zA-Z0-9_-]+)/) || p.media[0].src.match(/id=([a-zA-Z0-9_-]+)/);
                             thumbSrc = idMatch ? `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w600` : "https://placehold.co/600x400?text=Document";
@@ -1128,7 +1176,6 @@
                     if(w.media[0].type === 'image') { thumbSrc = w.media[0].src; }
                     else if(w.media[0].type === 'video') { thumbSrc = "https://placehold.co/600x400?text=Video"; }
                     else if(w.media[0].type === 'document') { 
-                        // MENARIK HALAMAN PERTAMA PDF DARI GOOGLE DRIVE SEBAGAI GAMBAR SAMPUL
                         if (w.media[0].src.includes('drive.google.com')) {
                             const idMatch = w.media[0].src.match(/\/d\/([a-zA-Z0-9_-]+)/) || w.media[0].src.match(/id=([a-zA-Z0-9_-]+)/);
                             thumbSrc = idMatch ? `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w600` : "https://placehold.co/600x400?text=Document";
@@ -1236,14 +1283,15 @@
         window.switchAdminTab = function(tabId, element) { document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active')); document.getElementById(tabId).classList.add('active'); }
 
         window.populateAdminForms = function() {
-            const heroImgStr = window.db.hero.img || ''; document.getElementById('adm-hero-hidden-img').value = heroImgStr; document.getElementById('adm-hero-img-url').value = heroImgStr.startsWith('data:') ? '' : heroImgStr;
-            document.getElementById('adm-hero-name').value = window.db.hero.name; document.getElementById('adm-hero-roles').value = window.db.hero.roles; document.getElementById('adm-hero-motto').value = window.db.hero.motto; document.getElementById('adm-hero-desc-en').innerHTML = window.db.hero.descEN || ''; document.getElementById('adm-hero-desc-id').innerHTML = window.db.hero.descID || ''; document.getElementById('adm-hero-status').value = window.db.hero.status;
-            document.getElementById('adm-about-en').innerHTML = window.db.about.en || ''; document.getElementById('adm-about-id').innerHTML = window.db.about.id || '';
+            if(!window.db) return;
+            const heroImgStr = window.db.hero?.img || ''; document.getElementById('adm-hero-hidden-img').value = heroImgStr; document.getElementById('adm-hero-img-url').value = heroImgStr.startsWith('data:') ? '' : heroImgStr;
+            document.getElementById('adm-hero-name').value = window.db.hero?.name || ''; document.getElementById('adm-hero-roles').value = window.db.hero?.roles || ''; document.getElementById('adm-hero-motto').value = window.db.hero?.motto || ''; document.getElementById('adm-hero-desc-en').innerHTML = window.db.hero?.descEN || ''; document.getElementById('adm-hero-desc-id').innerHTML = window.db.hero?.descID || ''; document.getElementById('adm-hero-status').value = window.db.hero?.status || '';
+            document.getElementById('adm-about-en').innerHTML = window.db.about?.en || ''; document.getElementById('adm-about-id').innerHTML = window.db.about?.id || '';
             
-            window.renderAdminList('adm-edu-list', window.db.education, window.addEduRowHtml); 
-            window.renderAdminList('adm-expertise-list', window.db.expertise, window.addExpertiseRowHtml); 
-            window.renderAdminList('adm-tools-list', window.db.tools, window.addToolRowHtml); 
-            window.renderAdminList('adm-exp-list', window.db.experience, window.addExpRowHtml);
+            window.renderAdminList('adm-edu-list', window.db.education || [], window.addEduRowHtml); 
+            window.renderAdminList('adm-expertise-list', window.db.expertise || [], window.addExpertiseRowHtml); 
+            window.renderAdminList('adm-tools-list', window.db.tools || [], window.addToolRowHtml); 
+            window.renderAdminList('adm-exp-list', window.db.experience || [], window.addExpRowHtml);
             window.renderAdminList('adm-contact-list', window.db.contacts || [], window.addContactRowHtml);
 
             window.populateAdminPortfolioList(); 
@@ -1253,19 +1301,69 @@
         
         window.renderAdminList = function(containerId, dataArray, htmlGenerator) { const container = document.getElementById(containerId); container.innerHTML = ''; dataArray.forEach(item => { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = htmlGenerator(item); container.appendChild(div); }); }
         
-        window.saveHero = async function() { const fileInput = document.getElementById('adm-hero-img-file'); let newImg = document.getElementById('adm-hero-img-url').value; const hiddenImg = document.getElementById('adm-hero-hidden-img').value; if (fileInput.files.length > 0) { try { newImg = await window.getBase64(fileInput.files[0]); } catch (e) { return;} } else if (!newImg && hiddenImg.startsWith('data:')) { newImg = hiddenImg; } if(newImg) window.db.hero.img = newImg; window.db.hero.name = document.getElementById('adm-hero-name').value; window.db.hero.roles = document.getElementById('adm-hero-roles').value; window.db.hero.motto = document.getElementById('adm-hero-motto').value; window.db.hero.descEN = document.getElementById('adm-hero-desc-en').innerHTML; window.db.hero.descID = document.getElementById('adm-hero-desc-id').innerHTML; window.db.hero.status = document.getElementById('adm-hero-status').value; await window.saveDb(); window.populateAdminForms(); alert("Hero saved!"); }
+        window.saveHero = async function() { 
+            try {
+                if(!window.db.hero) window.db.hero = {};
+                const fileInput = document.getElementById('adm-hero-img-file'); let newImg = document.getElementById('adm-hero-img-url').value; const hiddenImg = document.getElementById('adm-hero-hidden-img').value; if (fileInput.files.length > 0) { try { newImg = await window.getBase64(fileInput.files[0]); } catch (e) {} } else if (!newImg && hiddenImg.startsWith('data:')) { newImg = hiddenImg; } if(newImg) window.db.hero.img = newImg; 
+                window.db.hero.name = document.getElementById('adm-hero-name').value || ""; 
+                window.db.hero.roles = document.getElementById('adm-hero-roles').value || ""; 
+                window.db.hero.motto = document.getElementById('adm-hero-motto').value || ""; 
+                window.db.hero.descEN = document.getElementById('adm-hero-desc-en').innerHTML || ""; 
+                window.db.hero.descID = document.getElementById('adm-hero-desc-id').innerHTML || ""; 
+                window.db.hero.status = document.getElementById('adm-hero-status').value || ""; 
+                await window.saveDb(); 
+                window.populateAdminForms(); 
+                alert("Hero saved!"); 
+            } catch(e) { alert("Terjadi kesalahan sistem saat menyimpan."); }
+        }
         
         window.addEduRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addEduRowHtml(); document.getElementById('adm-edu-list').appendChild(div); }
-        window.saveAboutEdu = async function() { window.db.about.en = document.getElementById('adm-about-en').innerHTML; window.db.about.id = document.getElementById('adm-about-id').innerHTML; window.db.education = Array.from(document.getElementById('adm-edu-list').children).map(row => ({ id: 'e' + Date.now() + Math.random(), degree: row.querySelector('.edu-deg').value, uni: row.querySelector('.edu-uni').value, year: row.querySelector('.edu-year').value, link: row.querySelector('.edu-link').value })).filter(e => e.degree !== ''); await window.saveDb(); window.populateAdminForms(); alert("About & Education saved!"); }
+        window.saveAboutEdu = async function() { 
+            try {
+                if(!window.db.about) window.db.about = {};
+                window.db.about.en = document.getElementById('adm-about-en').innerHTML || ""; 
+                window.db.about.id = document.getElementById('adm-about-id').innerHTML || ""; 
+                window.db.education = Array.from(document.getElementById('adm-edu-list').children).map(row => ({ id: 'e' + Date.now() + Math.random(), degree: row.querySelector('.edu-deg').value || "", uni: row.querySelector('.edu-uni').value || "", year: row.querySelector('.edu-year').value || "", link: row.querySelector('.edu-link').value || "" })).filter(e => e.degree !== ''); 
+                await window.saveDb(); 
+                window.populateAdminForms(); 
+                alert("About & Education saved!"); 
+            } catch(e) { alert("Terjadi kesalahan sistem saat menyimpan."); }
+        }
 
         window.addExpertiseRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addExpertiseRowHtml(); document.getElementById('adm-expertise-list').appendChild(div); }
 
         window.addToolRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addToolRowHtml(); document.getElementById('adm-tools-list').appendChild(div); }
         
-        window.saveSkills = async function() { window.db.expertise = Array.from(document.getElementById('adm-expertise-list').children).map(row => ({ id: 'x' + Date.now() + Math.random(), en: row.querySelector('.exp-en').value, id: row.querySelector('.exp-id').value })).filter(x => x.en !== ''); const toolRows = Array.from(document.getElementById('adm-tools-list').children); let newTools = []; for (let row of toolRows) { let name = row.querySelector('.tool-name').value; if (!name) continue; let iconUrl = row.querySelector('.tool-url').value; const hiddenSrc = row.querySelector('.tool-hidden-src').value; const fileInput = row.querySelector('.tool-file'); if (fileInput.files.length > 0) { try { iconUrl = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!iconUrl && hiddenSrc.startsWith('data:')) { iconUrl = hiddenSrc; } newTools.push({ id: 't' + Date.now() + Math.random(), name, icon: iconUrl }); } window.db.tools = newTools; await window.saveDb(); window.populateAdminForms(); alert("Skills & Tools saved!"); }
+        window.saveSkills = async function() { 
+            try {
+                window.db.expertise = Array.from(document.getElementById('adm-expertise-list').children).map(row => ({ id: 'x' + Date.now() + Math.random(), en: row.querySelector('.exp-en').value || "", id: row.querySelector('.exp-id').value || "" })).filter(x => x.en !== ''); 
+                const toolRows = Array.from(document.getElementById('adm-tools-list').children); let newTools = []; 
+                for (let row of toolRows) { 
+                    let name = row.querySelector('.tool-name').value || ""; 
+                    if (!name) continue; 
+                    let iconUrl = row.querySelector('.tool-url').value || ""; 
+                    const hiddenSrc = row.querySelector('.tool-hidden-src').value || ""; 
+                    const fileInput = row.querySelector('.tool-file'); 
+                    if (fileInput && fileInput.files.length > 0) { try { iconUrl = await window.getBase64(fileInput.files[0]); } catch(e){} } 
+                    else if (!iconUrl && hiddenSrc.startsWith('data:')) { iconUrl = hiddenSrc; } 
+                    newTools.push({ id: 't' + Date.now() + Math.random(), name, icon: iconUrl || "" }); 
+                } 
+                window.db.tools = newTools; 
+                await window.saveDb(); 
+                window.populateAdminForms(); 
+                alert("Skills & Tools saved!"); 
+            } catch(e) { alert("Terjadi kesalahan sistem saat menyimpan."); }
+        }
 
         window.addExpRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addExpRowHtml(); document.getElementById('adm-exp-list').appendChild(div); }
-        window.saveExp = async function() { window.db.experience = Array.from(document.getElementById('adm-exp-list').children).map(row => ({ id: 'exp' + Date.now() + Math.random(), role: row.querySelector('.exp-role').value, org: row.querySelector('.exp-org').value, date: row.querySelector('.exp-date').value, descEN: row.querySelector('.exp-den').innerHTML, descID: row.querySelector('.exp-did').innerHTML })).filter(e => e.role !== ''); await window.saveDb(); window.populateAdminForms(); alert("Experience saved!"); }
+        window.saveExp = async function() { 
+            try {
+                window.db.experience = Array.from(document.getElementById('adm-exp-list').children).map(row => ({ id: 'exp' + Date.now() + Math.random(), role: row.querySelector('.exp-role').value || "", org: row.querySelector('.exp-org').value || "", date: row.querySelector('.exp-date').value || "", descEN: row.querySelector('.exp-den').innerHTML || "", descID: row.querySelector('.exp-did').innerHTML || "" })).filter(e => e.role !== ''); 
+                await window.saveDb(); 
+                window.populateAdminForms(); 
+                alert("Experience saved!"); 
+            } catch(e) { alert("Terjadi kesalahan sistem saat menyimpan."); }
+        }
 
         /* FUNGSI ADMIN PORTFOLIO PROJECT */
         window.movePortUp = async function(index) { if(index > 0) { const temp = window.db.portfolio[index]; window.db.portfolio[index] = window.db.portfolio[index-1]; window.db.portfolio[index-1] = temp; await window.saveDb(); window.populateAdminPortfolioList(); } };
@@ -1303,7 +1401,31 @@
             document.getElementById('adm-port-media-list').appendChild(div); 
         }
         
-        window.savePortProject = async function() { const id = document.getElementById('adm-port-id').value || 'p' + Date.now(); const title = document.getElementById('adm-port-title').value; if(!title) { alert('Project title is required'); return; } let mediaArr = []; const rows = Array.from(document.getElementById('adm-port-media-list').children); for(let row of rows) { const type = row.querySelector('.port-media-type').value; let src = row.querySelector('.port-media-url').value; const hiddenSrc = row.querySelector('.port-media-hidden-src').value; const fileInput = row.querySelector('.port-media-file'); if (fileInput.files.length > 0) { try { src = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } } const newProject = { id, title, cat: document.getElementById('adm-port-cat').value || "Other", descEN: document.getElementById('adm-port-desc-en').innerHTML, descID: document.getElementById('adm-port-desc-id').innerHTML, media: mediaArr }; const existingIndex = window.db.portfolio.findIndex(p => p.id === id); if (existingIndex >= 0) window.db.portfolio[existingIndex] = newProject; else window.db.portfolio.push(newProject); await window.saveDb(); window.closePortEditor(); window.populateAdminPortfolioList(); alert('Project saved successfully!'); }
+        window.savePortProject = async function() { 
+            try {
+                if(!window.db.portfolio) window.db.portfolio = [];
+                const id = document.getElementById('adm-port-id').value || 'p' + Date.now(); 
+                const title = document.getElementById('adm-port-title').value; 
+                if(!title) { alert('Project title is required'); return; } 
+                let mediaArr = []; const rows = Array.from(document.getElementById('adm-port-media-list').children); 
+                for(let row of rows) { 
+                    const type = row.querySelector('.port-media-type').value || "image"; 
+                    let src = row.querySelector('.port-media-url').value || ""; 
+                    const hiddenSrc = row.querySelector('.port-media-hidden-src').value || ""; 
+                    const fileInput = row.querySelector('.port-media-file'); 
+                    if (fileInput && fileInput.files.length > 0) { try { src = await window.getBase64(fileInput.files[0]); } catch(e){} } 
+                    else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } 
+                    if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } 
+                } 
+                const newProject = { id, title, cat: document.getElementById('adm-port-cat').value || "Other", descEN: document.getElementById('adm-port-desc-en').innerHTML || "", descID: document.getElementById('adm-port-desc-id').innerHTML || "", media: mediaArr }; 
+                const existingIndex = window.db.portfolio.findIndex(p => p.id === id); 
+                if (existingIndex >= 0) window.db.portfolio[existingIndex] = newProject; else window.db.portfolio.push(newProject); 
+                await window.saveDb(); 
+                window.closePortEditor(); 
+                window.populateAdminPortfolioList(); 
+                alert('Project saved successfully!'); 
+            } catch(e) { alert("Terjadi kesalahan sistem saat menyimpan."); }
+        }
 
         /* FUNGSI ADMIN WRITINGS / ARTICLES */
         window.moveWritingUp = async function(index) { if(index > 0) { const temp = window.db.writings[index]; window.db.writings[index] = window.db.writings[index-1]; window.db.writings[index-1] = temp; await window.saveDb(); window.populateAdminWritingsList(); } };
@@ -1358,40 +1480,42 @@
         }
 
         window.saveWriting = async function() { 
-            const id = document.getElementById('adm-writing-id').value || 'w' + Date.now(); 
-            const title = document.getElementById('adm-writing-title').value; 
-            if(!title) { alert('Title is required'); return; } 
+            try {
+                if(!window.db.writings) window.db.writings = [];
+                const id = document.getElementById('adm-writing-id').value || 'w' + Date.now(); 
+                const title = document.getElementById('adm-writing-title').value; 
+                if(!title) { alert('Title is required'); return; } 
 
-            let mediaArr = []; 
-            const rows = Array.from(document.getElementById('adm-writing-media-list').children); 
-            for(let row of rows) { 
-                const type = row.querySelector('.writing-media-type').value; 
-                let src = row.querySelector('.writing-media-url').value; 
-                const hiddenSrc = row.querySelector('.writing-media-hidden-src').value; 
-                const fileInput = row.querySelector('.writing-media-file'); 
-                if (fileInput.files.length > 0) { 
-                    try { src = await window.getBase64(fileInput.files[0]); } catch(e){} 
-                } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } 
-                if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } 
-            }
-            
-            const newWriting = { 
-                id, 
-                title, 
-                date: document.getElementById('adm-writing-date').value || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }), 
-                descEN: document.getElementById('adm-writing-desc-en').innerHTML, 
-                descID: document.getElementById('adm-writing-desc-id').innerHTML,
-                media: mediaArr
-            }; 
-            
-            if(!window.db.writings) window.db.writings = [];
-            const existingIndex = window.db.writings.findIndex(w => w.id === id); 
-            if (existingIndex >= 0) window.db.writings[existingIndex] = newWriting; else window.db.writings.push(newWriting); 
-            
-            await window.saveDb(); 
-            window.closeWritingEditor(); 
-            window.populateAdminWritingsList(); 
-            alert('Article saved successfully!'); 
+                let mediaArr = []; 
+                const rows = Array.from(document.getElementById('adm-writing-media-list').children); 
+                for(let row of rows) { 
+                    const type = row.querySelector('.writing-media-type').value || "image"; 
+                    let src = row.querySelector('.writing-media-url').value || ""; 
+                    const hiddenSrc = row.querySelector('.writing-media-hidden-src').value || ""; 
+                    const fileInput = row.querySelector('.writing-media-file'); 
+                    if (fileInput && fileInput.files.length > 0) { 
+                        try { src = await window.getBase64(fileInput.files[0]); } catch(e){} 
+                    } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } 
+                    if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } 
+                }
+                
+                const newWriting = { 
+                    id, 
+                    title, 
+                    date: document.getElementById('adm-writing-date').value || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }), 
+                    descEN: document.getElementById('adm-writing-desc-en').innerHTML || "", 
+                    descID: document.getElementById('adm-writing-desc-id').innerHTML || "",
+                    media: mediaArr
+                }; 
+                
+                const existingIndex = window.db.writings.findIndex(w => w.id === id); 
+                if (existingIndex >= 0) window.db.writings[existingIndex] = newWriting; else window.db.writings.push(newWriting); 
+                
+                await window.saveDb(); 
+                window.closeWritingEditor(); 
+                window.populateAdminWritingsList(); 
+                alert('Article saved successfully!'); 
+            } catch(e) { alert("Terjadi kesalahan sistem saat menyimpan."); }
         }
 
         window.populateAdminInbox = function() { document.getElementById('inbox-count').innerText = window.db.inbox.length; const list = document.getElementById('adm-inbox-list'); if(window.db.inbox.length === 0) { list.innerHTML = "<p>No messages yet.</p>"; return; } list.innerHTML = window.db.inbox.slice().reverse().map((msg, i) => `<div class="glass" style="padding: 1.5rem;"><div style="display:flex; justify-content:space-between; margin-bottom:1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;"><strong>${msg.name}</strong><span style="font-size:0.8rem; color:var(--text-muted);">${msg.date}</span></div><div style="color:var(--accent); margin-bottom:1rem;">📞 ${msg.contact}</div><p style="white-space: pre-wrap;">${msg.msg}</p></div>`).join(''); }
@@ -1404,28 +1528,31 @@
         window.importBackup = function(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = async (e) => { try { const importedData = JSON.parse(e.target.result); if (importedData && importedData.hero && importedData.portfolio) { if(confirm("PERINGATAN: Ini akan menimpa data yang ada di perangkat ini dengan data dari file backup. Lanjutkan?")) { window.db = importedData; await window.saveDb(); alert("Data berhasil dipulihkan! Halaman akan dimuat ulang."); location.reload(); } } else { alert("File JSON tidak valid atau rusak."); } } catch (error) { alert("Gagal membaca file JSON."); } }; reader.readAsText(file); }
         
         window.saveSettings = async function() { 
-            const newPin = document.getElementById('adm-set-pin').value; 
-            if(newPin) { if(newPin.length === 6 && !isNaN(newPin)) { window.db.pin = newPin; document.getElementById('adm-set-pin').value = ''; } else { alert("PIN must be exactly 6 digits."); return; } } 
-            
-            const rows = Array.from(document.getElementById('adm-contact-list').children);
-            let newContacts = [];
-            for (let row of rows) {
-                let label = row.querySelector('.contact-label').value;
-                let link = row.querySelector('.contact-link').value;
-                if (!label) continue;
+            try {
+                if(!window.db.contacts) window.db.contacts = [];
+                const newPin = document.getElementById('adm-set-pin').value; 
+                if(newPin) { if(newPin.length === 6 && !isNaN(newPin)) { window.db.pin = newPin; document.getElementById('adm-set-pin').value = ''; } else { alert("PIN must be exactly 6 digits."); return; } } 
                 
-                let iconUrl = row.querySelector('.contact-url').value;
-                const hiddenSrc = row.querySelector('.contact-hidden-src').value;
-                const fileInput = row.querySelector('.contact-file');
-                
-                if (fileInput.files.length > 0) { try { iconUrl = await window.getBase64(fileInput.files[0]); } catch(e){} } 
-                else if (!iconUrl && hiddenSrc.startsWith('data:')) { iconUrl = hiddenSrc; }
-                
-                newContacts.push({ id: 'c' + Date.now() + Math.random(), label, link, icon: iconUrl });
-            }
-            window.db.contacts = newContacts;
+                const rows = Array.from(document.getElementById('adm-contact-list').children);
+                let newContacts = [];
+                for (let row of rows) {
+                    let label = row.querySelector('.contact-label').value || "";
+                    let link = row.querySelector('.contact-link').value || "";
+                    if (!label) continue;
+                    
+                    let iconUrl = row.querySelector('.contact-url').value || "";
+                    const hiddenSrc = row.querySelector('.contact-hidden-src').value || "";
+                    const fileInput = row.querySelector('.contact-file');
+                    
+                    if (fileInput && fileInput.files.length > 0) { try { iconUrl = await window.getBase64(fileInput.files[0]); } catch(e){} } 
+                    else if (!iconUrl && hiddenSrc.startsWith('data:')) { iconUrl = hiddenSrc; }
+                    
+                    newContacts.push({ id: 'c' + Date.now() + Math.random(), label, link, icon: iconUrl || "" });
+                }
+                window.db.contacts = newContacts;
 
-            await window.saveDb(); alert("Settings saved!"); 
+                await window.saveDb(); alert("Settings saved!"); 
+            } catch(e) { alert("Terjadi kesalahan sistem saat menyimpan pengaturan."); }
         }
 
         // ========================== GEMINI AI ==========================
@@ -1514,7 +1641,6 @@
 
         // Jalankan inisialisasi awal
         window.onload = () => {
-            window.scrollTo(0, 0); // Posisikan halaman di paling atas saat pertama dibuka
             initApp();
         };
     </script>
