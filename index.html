@@ -95,12 +95,15 @@
             will-change: width;
         }
 
+        /* UX IMPROVEMENT: Anti-Flickering Reveal Animation with TranslateZ */
         .reveal {
-            opacity: 0; transform: translateY(20px);
-            transition: opacity 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: 0; transform: translateY(20px) translateZ(0);
+            transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
             will-change: transform, opacity;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
         }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal.active { opacity: 1; transform: translateY(0) translateZ(0); }
         .reveal.d-1 { transition-delay: 0.05s; }
         .reveal.d-2 { transition-delay: 0.1s; }
         .reveal.d-3 { transition-delay: 0.15s; }
@@ -123,7 +126,6 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 24px;
-            /* UX FIX: Mencegah flickering dengan spesifikasi ketat & akselerasi Hardware (translateZ) */
             transition: background-color 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
@@ -200,7 +202,10 @@
         .hero { display: flex; align-items: center; min-height: 100vh; padding-top: 5rem; }
         .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
         .hero-content h1 { font-size: clamp(3rem, 5vw, 4.5rem); line-height: 1.1; margin-bottom: 1rem; }
-        .hero-roles { color: var(--accent); font-size: 1.1rem; font-weight: 500; margin-bottom: 1.5rem; letter-spacing: 0.5px; }
+        
+        /* UX IMPROVEMENT: Ukuran font dinamis agar proporsional di HP maupun Desktop */
+        .hero-roles { color: var(--accent); font-size: clamp(0.9rem, 2vw, 1.05rem); font-weight: 500; margin-bottom: 1.5rem; letter-spacing: 0.5px; line-height: 1.6; }
+
         .hero-motto { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem; border-left: 3px solid var(--accent); padding-left: 1rem; font-style: italic;}
         .hero-btns { display: flex; gap: 1rem; }
         
@@ -263,9 +268,8 @@
 
         /* ================= EXPERIENCE & EDUCATION ================= */
         .timeline { position: relative; padding-left: 2rem; border-left: 2px solid var(--glass-border); }
-        .timeline-item { margin-bottom: 3rem; position: relative; }
+        .timeline-item { margin-bottom: 3rem; position: relative; transform: translateZ(0); }
         
-        /* MICRO-UX 3: Titik timeline membesar elegan saat kursor di atas Glass Content */
         .timeline-dot { 
             position: absolute; left: -2.6rem; top: 0; width: 16px; height: 16px; 
             background-color: var(--accent); border-radius: 50%; border: 4px solid var(--bg-base); 
@@ -276,7 +280,13 @@
         }
         
         .timeline-date { font-size: 0.9rem; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; }
-        .timeline-content { padding: 1.5rem; }
+        
+        /* UX IMPROVEMENT: Anti-Aliasing Teks untuk memuluskan animasi */
+        .timeline-content { 
+            padding: 1.5rem; 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale; 
+        }
         .timeline-content h4 { font-size: 1.2rem; margin-bottom: 0.2rem; font-family: 'Inter', sans-serif; }
         .timeline-org { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; }
 
@@ -298,7 +308,7 @@
         .portfolio-card { 
             cursor: pointer; overflow: hidden; display: flex; flex-direction: column; 
             transition: background-color 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease, box-shadow 0.3s ease; position: relative;
-            transform: translateZ(0); /* Menghindari bentrok akselerasi don hover */
+            transform: translateZ(0); 
         }
         .portfolio-card::before {
             content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
@@ -640,7 +650,7 @@
     <section id="experience" style="background: rgba(0,0,0,0.2);">
         <div class="container">
             <h2 class="section-title reveal" data-i18n="titleWork"><span>Work</span> Experience</h2>
-            <div class="timeline glass reveal d-1" style="padding: 3rem;" id="ui-exp-container"></div>
+            <div class="timeline" style="padding: 1rem 0;" id="ui-exp-container"></div>
         </div>
     </section>
 
@@ -1355,7 +1365,10 @@
             }
 
             if(window.db.education) {
-                document.getElementById('ui-edu-container').innerHTML = window.db.education.map(e => `<div class="glass reveal d-2" style="padding: 1.5rem;"><h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.2rem;">${e.degree}</h4><p style="font-weight: 500;">${e.uni}</p><p style="font-size: 0.85rem; color: var(--text-muted);">${e.year}</p>${e.link ? `<a href="${e.link}" target="_blank" style="font-size: 0.8rem; color: var(--accent);">View Publication ↗</a>` : ''}</div>`).join('');
+                document.getElementById('ui-edu-container').innerHTML = window.db.education.map((e, index) => {
+                    const delayClass = index % 3 === 0 ? 'd-1' : index % 3 === 1 ? 'd-2' : 'd-3';
+                    return `<div class="glass reveal ${delayClass}" style="padding: 1.5rem;"><h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.2rem;">${e.degree}</h4><p style="font-weight: 500;">${e.uni}</p><p style="font-size: 0.85rem; color: var(--text-muted);">${e.year}</p>${e.link ? `<a href="${e.link}" target="_blank" style="font-size: 0.8rem; color: var(--accent);">View Publication ↗</a>` : ''}</div>`
+                }).join('');
             }
             
             if(window.db.expertise) {
@@ -1366,8 +1379,12 @@
                 document.getElementById('ui-tools-grid').innerHTML = window.db.tools.map(t => `<div class="tool-item"><img src="${t.icon}" alt="${t.name}" class="tool-icon" draggable="false"><span>${t.name}</span></div>`).join('');
             }
 
+            /* UX FIX: Staggered animation delay on Experience to prevent lag */
             if(window.db.experience) {
-                document.getElementById('ui-exp-container').innerHTML = window.db.experience.map(e => `<div class="timeline-item reveal"><div class="timeline-dot"></div><div class="timeline-date">${e.date}</div><div class="timeline-content glass"><h4>${e.role}</h4><div class="timeline-org">${e.org}</div><div class="timeline-desc rich-content">${currentLang === 'en' ? e.descEN : e.descID}</div></div></div>`).join('');
+                document.getElementById('ui-exp-container').innerHTML = window.db.experience.map((e, index) => {
+                    const delayClass = index === 0 ? 'd-1' : index === 1 ? 'd-2' : 'd-3';
+                    return `<div class="timeline-item reveal ${delayClass}"><div class="timeline-dot"></div><div class="timeline-date">${e.date}</div><div class="timeline-content glass"><h4>${e.role}</h4><div class="timeline-org">${e.org}</div><div class="timeline-desc rich-content">${currentLang === 'en' ? e.descEN : e.descID}</div></div></div>`;
+                }).join('');
             }
 
             if(window.db.portfolio) {
@@ -1450,6 +1467,7 @@
 
         /* ================= UX / INTERACTION LISTENERS ================= */
         
+        let isScrolling = false;
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('backToTopBtn');
             const nav = document.getElementById('mainNav');
@@ -1467,21 +1485,29 @@
                 btn.classList.remove('visible');
             }
 
-            let current = '';
-            const sections = document.querySelectorAll('section');
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 150) {
-                    current = section.getAttribute('id');
-                }
-            });
+            /* UX FIX: Throttling Scroll Spy dengan requestAnimationFrame agar tetap 60fps saat gulir */
+            if (!isScrolling) {
+                window.requestAnimationFrame(() => {
+                    let current = '';
+                    const sections = document.querySelectorAll('section');
+                    const pageY = window.pageYOffset;
+                    sections.forEach(section => {
+                        const sectionTop = section.offsetTop;
+                        if (pageY >= sectionTop - 150) {
+                            current = section.getAttribute('id');
+                        }
+                    });
 
-            document.querySelectorAll('.nav-links a').forEach(a => {
-                a.classList.remove('active');
-                if (a.getAttribute('href') === `#${current}`) {
-                    a.classList.add('active');
-                }
-            });
+                    document.querySelectorAll('.nav-links a').forEach(a => {
+                        a.classList.remove('active');
+                        if (a.getAttribute('href') === `#${current}`) {
+                            a.classList.add('active');
+                        }
+                    });
+                    isScrolling = false;
+                });
+                isScrolling = true;
+            }
         });
 
         document.querySelectorAll('.nav-links a').forEach(link => {
@@ -2001,7 +2027,6 @@
         // Jalankan inisialisasi awal
         window.onload = () => {
             initApp();
-            // PERBAIKAN UX: Memudarkan dan menyembunyikan Splash Screen setelah data siap
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 if (splash) splash.classList.add('hidden');
