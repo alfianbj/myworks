@@ -82,7 +82,7 @@
         }
         .nav-inner { display: flex; justify-content: space-between; align-items: center; }
         .logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--accent); }
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
         .nav-links a { font-size: 0.9rem; font-weight: 500; transition: color 0.3s; }
         .nav-links a:hover { color: var(--accent); }
         .controls { display: flex; gap: 1rem; align-items: center; }
@@ -136,7 +136,7 @@
         .timeline-content h4 { font-size: 1.2rem; margin-bottom: 0.2rem; font-family: 'Inter', sans-serif; }
         .timeline-org { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem; }
 
-        /* ================= PORTFOLIO ================= */
+        /* ================= PORTFOLIO & WRITINGS ================= */
         .portfolio-filters {
             display: flex; gap: 1rem; margin-bottom: 2rem; overflow-x: auto; padding-bottom: 1rem;
             scrollbar-width: thin; scrollbar-color: var(--accent) transparent;
@@ -157,7 +157,7 @@
         .portfolio-cat { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
         .portfolio-title { font-size: 1.2rem; font-family: 'Inter', sans-serif; margin-bottom: 0.5rem; }
         
-        /* Modal Portfolio (Viewer) */
+        /* Modal General & Slider Navigation */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); z-index: 1000; display: none;
@@ -173,7 +173,7 @@
         .modal-content.fullscreen {
             max-width: 100vw; width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; margin: 0;
         }
-        .modal-controls { position: absolute; top: 1.5rem; right: 1.5rem; display: flex; gap: 0.5rem; z-index: 20; }
+        .modal-controls { position: absolute; top: 1.5rem; right: 1.5rem; display: flex; gap: 0.5rem; z-index: 40; }
         .modal-btn {
             width: 40px; height: 40px; background: rgba(255,255,255,0.1); border: none; 
             border-radius: 50%; color: #fff; font-size: 1.2rem; cursor: pointer;
@@ -183,8 +183,23 @@
         .modal-close:hover { background: #ef4444; }
         
         .modal-body { padding: 2rem; flex: 1; display: flex; flex-direction: column;}
-        .media-slider { display: flex; overflow-x: auto; gap: 1rem; margin-bottom: 1.5rem; scroll-snap-type: x mandatory; flex: 1;}
-        .media-item { flex: 0 0 100%; scroll-snap-align: start; border-radius: 12px; overflow: hidden; background: #111; display:flex; flex-direction: column; align-items:center; justify-content:center; min-height: 500px; position: relative;}
+        
+        /* Slider Navigator Buttons */
+        .slider-wrapper { position: relative; width: 100%; display: flex; flex: 1; min-height: 500px; margin-bottom: 1.5rem;}
+        .slider-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(0,0,0,0.7); border: 1px solid var(--glass-border);
+            color: white; width: 45px; height: 45px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 30; font-size: 1.2rem; transition: 0.3s;
+        }
+        .slider-nav:hover { background: var(--accent); }
+        .slider-nav.prev { left: -10px; }
+        .slider-nav.next { right: -10px; }
+
+        .media-slider { display: flex; overflow-x: auto; gap: 1rem; scroll-snap-type: x mandatory; flex: 1; width: 100%; scroll-behavior: smooth;}
+        .media-slider::-webkit-scrollbar { display: none; }
+        .media-item { flex: 0 0 100%; scroll-snap-align: start; border-radius: 12px; overflow: hidden; background: #111; display:flex; flex-direction: column; align-items:center; justify-content:center; min-height: 500px; position: relative; width: 100%;}
         .modal-content.fullscreen .media-item { min-height: 80vh; }
         .media-item img, .media-item video { max-width: 100%; max-height: 70vh; object-fit: contain; }
         
@@ -309,6 +324,7 @@
             .admin-main { padding: 1.5rem; }
             .admin-close { top: 1rem; right: 1rem; width: 35px; height: 35px; font-size: 1.2rem;}
             .contact-link-item { font-size: 0.85rem; }
+            .slider-nav { width: 35px; height: 35px; font-size: 1rem; }
         }
     </style>
 </head>
@@ -321,7 +337,8 @@
                 <li><a href="#about" data-i18n="navAbout">About</a></li>
                 <li><a href="#expertise" data-i18n="navExpertise">Expertise</a></li>
                 <li><a href="#experience" data-i18n="navExperience">Experience</a></li>
-                <li><a href="#portfolio" data-i18n="navPortfolio">Selected Works</a></li>
+                <li><a href="#portfolio" data-i18n="navPortfolio">Works</a></li>
+                <li><a href="#writings" data-i18n="navWritings">Writings</a></li>
                 <li><a href="#contact" data-i18n="navContact">Contact</a></li>
             </ul>
             <div class="controls">
@@ -356,7 +373,7 @@
 
     <section id="about" style="background: rgba(0,0,0,0.2);">
         <div class="container">
-            <h2 class="section-title"><span data-i18n="titleAbout">Professional</span> Summary</h2>
+            <h2 class="section-title" data-i18n="titleAbout"><span>Professional</span> Summary</h2>
             <div class="glass" style="padding: 3rem; margin-bottom: 3rem;">
                 <div id="ui-about-text" class="rich-content" style="font-size: 1.1rem; line-height: 1.8;">
                     I am a professional in Urban and Regional Planning, certified as a Junior Urban Planner by BNSP. I specialize in formulating Strategic Environmental Assessments (KLHS), Spatial Detail Plans (RDTR), and data-driven feasibility studies to support measurable strategic decision-making.
@@ -369,7 +386,7 @@
 
     <section id="expertise">
         <div class="container">
-            <h2 class="section-title"><span data-i18n="titleSkills">Skills</span> & Tools</h2>
+            <h2 class="section-title" data-i18n="titleSkills"><span>Skills</span> & Tools</h2>
             <div class="skills-container">
                 <div class="glass skill-box">
                     <h3 data-i18n="titleExpertiseArea">Expertise Area</h3>
@@ -385,25 +402,35 @@
 
     <section id="experience" style="background: rgba(0,0,0,0.2);">
         <div class="container">
-            <h2 class="section-title"><span data-i18n="titleWork">Work</span> Experience</h2>
+            <h2 class="section-title" data-i18n="titleWork"><span>Work</span> Experience</h2>
             <div class="timeline glass" style="padding: 3rem;" id="ui-exp-container"></div>
         </div>
     </section>
 
     <section id="portfolio">
         <div class="container">
-            <h2 class="section-title"><span data-i18n="titleSelected">Selected</span> Works & Projects</h2>
+            <h2 class="section-title" data-i18n="titleSelected"><span>Selected</span> Works & Projects</h2>
             <div class="portfolio-filters" id="ui-portfolio-filters"></div>
             <div class="portfolio-grid" id="ui-portfolio-grid"></div>
         </div>
     </section>
 
-    <section id="contact" style="background: rgba(0,0,0,0.2);">
+    <!-- WRITINGS / ARTICLES SECTION -->
+    <section id="writings" style="background: rgba(0,0,0,0.2);">
         <div class="container">
-            <h2 class="section-title"><span data-i18n="titleLet">Let's</span> Collaborate</h2>
+            <h2 class="section-title" data-i18n="titleWritings"><span>Articles</span> & Thoughts</h2>
+            <div class="portfolio-grid" id="ui-writings-grid">
+                <!-- Articles will render here -->
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title" data-i18n="titleLet"><span>Let's</span> Collaborate</h2>
             <div class="contact-grid">
                 <div class="contact-info">
-                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem;" data-i18n="contactTagline">Ready to shape better spatial environments?</h3>
+                    <h3 style="font-size: 1.8rem; margin-bottom: 1rem;" data-i18n="contactTagline">Ready to shape better environments?</h3>
                     <p style="color: var(--text-muted); margin-bottom: 2rem;" data-i18n="contactDesc">Feel free to reach out for project inquiries, remote work opportunities, or spatial data consulting.</p>
                     
                     <!-- Dynamic Contact List -->
@@ -436,20 +463,50 @@
         <p>© <span id="currentYear"></span> Alfian Bhara Juang TA. Building Better Cities.</p>
     </footer>
 
-    <!-- MODAL PORTFOLIO (Viewer PDF Interaktif) -->
+    <!-- MODAL PORTFOLIO (Viewer PDF Interaktif & Next/Prev) -->
     <div class="modal" id="portfolio-modal">
         <div class="modal-content glass">
             <div class="modal-controls">
-                <button class="modal-btn" onclick="window.toggleMaximizeModal()" title="Maximize/Minimize">🗖</button>
+                <button class="modal-btn" onclick="window.toggleMaximizeModal('portfolio-modal')" title="Maximize/Minimize">🗖</button>
                 <button class="modal-btn modal-close" onclick="window.closePortfolioModal()" title="Close">×</button>
             </div>
             <div class="modal-body">
                 <h2 id="modal-title" style="margin-bottom: 0.5rem;">Project Title</h2>
                 <p id="modal-cat" style="color: var(--accent); text-transform: uppercase; font-size: 0.8rem; margin-bottom: 1rem;">Category</p>
-                <div class="media-slider" id="modal-slider"></div>
+                
+                <div class="slider-wrapper">
+                    <button class="slider-nav prev" id="modal-nav-prev" onclick="window.slidePrev('modal-slider')" title="Previous">❮</button>
+                    <button class="slider-nav next" id="modal-nav-next" onclick="window.slideNext('modal-slider')" title="Next">❯</button>
+                    <div class="media-slider" id="modal-slider"></div>
+                </div>
+
                 <div class="media-dots" id="modal-dots"></div>
                 <div id="modal-desc" class="rich-content" style="color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;"></div>
                 <div id="modal-downloads"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL WRITINGS / ARTICLES (Sama Canggihnya dengan Portfolio) -->
+    <div class="modal" id="writing-modal">
+        <div class="modal-content glass">
+            <div class="modal-controls">
+                <button class="modal-btn" onclick="window.toggleMaximizeModal('writing-modal')" title="Maximize/Minimize">🗖</button>
+                <button class="modal-btn modal-close" onclick="window.closeWritingModal()" title="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <h2 id="w-modal-title" style="margin-bottom: 0.5rem;">Title</h2>
+                <p id="w-modal-date" style="color: var(--accent); font-size: 0.9rem; margin-bottom: 1rem;">Date</p>
+                
+                <div class="slider-wrapper">
+                    <button class="slider-nav prev" id="w-modal-nav-prev" onclick="window.slidePrev('w-modal-slider')" title="Previous">❮</button>
+                    <button class="slider-nav next" id="w-modal-nav-next" onclick="window.slideNext('w-modal-slider')" title="Next">❯</button>
+                    <div class="media-slider" id="w-modal-slider"></div>
+                </div>
+
+                <div class="media-dots" id="w-modal-dots"></div>
+                <div id="w-modal-content" class="rich-content" style="color: var(--text-main); line-height: 1.8; margin-bottom: 1rem;"></div>
+                <div id="w-modal-downloads"></div>
             </div>
         </div>
     </div>
@@ -477,12 +534,14 @@
                 <div class="admin-tab" onclick="window.switchAdminTab('tab-skills', this)">🛠️ Expertise & Tools</div>
                 <div class="admin-tab" onclick="window.switchAdminTab('tab-exp', this)">💼 Experience</div>
                 <div class="admin-tab" onclick="window.switchAdminTab('tab-portfolio', this)">📂 Portfolio Manager</div>
+                <div class="admin-tab" onclick="window.switchAdminTab('tab-writings', this)">📝 Articles & Thoughts</div>
                 <div class="admin-tab" onclick="window.switchAdminTab('tab-inbox', this)">✉️ Inbox (<span id="inbox-count">0</span>)</div>
                 <div class="admin-tab" onclick="window.switchAdminTab('tab-settings', this)">🔐 Settings</div>
             </div>
         </div>
         
         <div class="admin-main">
+            <!-- TAB: HERO -->
             <div class="admin-section active" id="tab-hero">
                 <h2 style="margin-bottom: 2rem;">Edit Profile & Hero</h2>
                 <div class="admin-form-group">
@@ -515,6 +574,7 @@
                 <button class="admin-btn admin-btn-save" onclick="window.saveHero()">💾 Save Profile & Hero</button>
             </div>
 
+            <!-- TAB: ABOUT -->
             <div class="admin-section" id="tab-about">
                 <h2 style="margin-bottom: 2rem;">Edit About & Education</h2>
                 <div class="admin-form-group">
@@ -537,6 +597,7 @@
                 <button class="admin-btn admin-btn-save" onclick="window.saveAboutEdu()">💾 Save About & Education</button>
             </div>
 
+            <!-- TAB: SKILLS -->
             <div class="admin-section" id="tab-skills">
                 <h2 style="margin-bottom: 2rem;">Expertise & Tools</h2>
                 <h3 style="margin-bottom: 1rem;">Expertise Area (Text items)</h3>
@@ -549,6 +610,7 @@
                 <button class="admin-btn admin-btn-save" onclick="window.saveSkills()">💾 Save Expertise & Tools</button>
             </div>
 
+            <!-- TAB: EXPERIENCE -->
             <div class="admin-section" id="tab-exp">
                 <h2 style="margin-bottom: 2rem;">Work Experience</h2>
                 <div id="adm-exp-list"></div>
@@ -556,6 +618,7 @@
                 <button class="admin-btn admin-btn-save" onclick="window.saveExp()">💾 Save Experience</button>
             </div>
 
+            <!-- TAB: PORTFOLIO -->
             <div class="admin-section" id="tab-portfolio">
                 <h2 style="margin-bottom: 1rem;">Portfolio Manager</h2>
                 <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 2rem;">Manage your projects. Each project can have multiple media files (Images, Videos, Documents).</p>
@@ -599,12 +662,56 @@
                 </div>
             </div>
 
+            <!-- TAB: WRITINGS (ARTIKEL BARU) -->
+            <div class="admin-section" id="tab-writings">
+                <h2 style="margin-bottom: 1rem;">Articles & Thoughts</h2>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 2rem;">Upload your writings, thoughts, or tips & tricks here. Supports multiple images & PDFs just like portfolio.</p>
+                <div id="adm-writings-list" style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem;"></div>
+                <button class="admin-btn admin-btn-add" onclick="window.openWritingEditor()" style="border-style: solid; background: rgba(16, 185, 129, 0.1);">+ Create New Article</button>
+                
+                <div id="adm-writing-editor" style="display:none; padding: 2rem; margin-top: 2rem; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(0,0,0,0.2);">
+                    <h3 id="adm-writing-ed-title" style="margin-bottom: 1.5rem;">Edit Article</h3>
+                    <input type="hidden" id="adm-writing-id">
+                    <div class="admin-form-group"><label>Title</label><input type="text" id="adm-writing-title" class="admin-input"></div>
+                    <div class="admin-form-group"><label>Date / Category</label><input type="text" id="adm-writing-date" class="admin-input" placeholder="e.g. October 24, 2023 or Tips & Tricks"></div>
+                    
+                    <div class="admin-form-group">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <label style="margin:0;">Content / Description (EN)</label>
+                            <button class="ai-btn" id="btn-adm-writing-desc-en" onclick="window.enhanceAdminText('adm-writing-desc-en', 'en')">✨ Enhance (AI)</button>
+                        </div>
+                        <div class="rt-container"><div class="rt-toolbar-placeholder"></div><div class="rt-editor" id="adm-writing-desc-en" contenteditable="true" style="min-height: 200px;"></div></div>
+                    </div>
+                    <div class="admin-form-group">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <label style="margin:0;">Content / Description (ID)</label>
+                            <button class="ai-btn" id="btn-adm-writing-desc-id" onclick="window.enhanceAdminText('adm-writing-desc-id', 'id')">✨ Enhance (AI)</button>
+                        </div>
+                        <div class="rt-container"><div class="rt-toolbar-placeholder"></div><div class="rt-editor" id="adm-writing-desc-id" contenteditable="true" style="min-height: 200px;"></div></div>
+                    </div>
+
+                    <!-- Media Files untuk Artikel -->
+                    <div style="margin: 2rem 0; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed var(--glass-border);">
+                        <h4 style="margin-bottom: 0.5rem;">Media Files (PDF / Images) for this Article</h4>
+                        <div id="adm-writing-media-list"></div>
+                        <button class="admin-btn admin-btn-add" onclick="window.addWritingMediaRow()" style="margin-top:1rem; margin-bottom:0;">+ Add Media (Image/Video/Doc)</button>
+                    </div>
+
+                    <div style="display:flex; gap:1rem;">
+                        <button class="admin-btn admin-btn-save" style="margin-top:0;" onclick="window.saveWriting()">💾 Save Article</button>
+                        <button class="admin-btn" style="background:var(--glass-bg); border: 1px solid var(--glass-border); color:var(--text-main); width:50%; margin-top:0;" onclick="window.closeWritingEditor()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: INBOX -->
             <div class="admin-section" id="tab-inbox">
                 <h2 style="margin-bottom: 2rem;">Visitor Messages</h2>
                 <div id="adm-inbox-list" style="display: flex; flex-direction: column; gap: 1rem;"></div>
                 <button class="admin-btn admin-btn-del" style="margin-top: 2rem;" onclick="window.clearInbox()">🗑️ Clear All Messages</button>
             </div>
 
+            <!-- TAB: SETTINGS -->
             <div class="admin-section" id="tab-settings">
                 <h2 style="margin-bottom: 2rem;">Settings & Contact Info</h2>
                 
@@ -647,7 +754,6 @@
             `;
         }
 
-        // Otomatis kompres gambar jika ukurannya besar agar Firebase tidak Crash
         window.getBase64 = function(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader(); 
@@ -683,7 +789,6 @@
             const idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
             if (!idMatch) return url; const id = idMatch[1];
             if (type === 'image') {
-                // MENGGUNAKAN THUMBNAIL AGAR GAMBAR DARI DRIVE BISA MUNCUL
                 return `https://drive.google.com/thumbnail?id=${id}&sz=w1200`;
             } else {
                 return `https://drive.google.com/file/d/${id}/preview`;
@@ -776,6 +881,7 @@
                     ]
                 }
             ],
+            writings: [],
             contacts: [
                 { id: 'c1', label: 'alfianbharajuang@gmail.com', link: 'mailto:alfianbharajuang@gmail.com', icon: 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg' },
                 { id: 'c2', label: '+6285201237794', link: 'https://wa.me/6285201237794', icon: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg' },
@@ -787,20 +893,32 @@
 
         const dict = {
             en: {
-                navAbout: "About", navExpertise: "Expertise", navExperience: "Experience", navPortfolio: "Works", navContact: "Contact",
+                navAbout: "About", navExpertise: "Expertise", navExperience: "Experience", navPortfolio: "Works", navWritings: "Writings", navContact: "Contact",
                 btnPortfolio: "View Portfolio", btnContact: "Let's Collaborate",
-                titleAbout: "Professional", titleEdu: "Education & Certification",
-                titleSkills: "Skills", titleExpertiseArea: "Expertise Area", titleSoftwareTools: "Tools",
-                titleWork: "Work", titleSelected: "Selected", titleLet: "Let's",
+                titleAbout: "<span>Professional</span> Summary", 
+                titleEdu: "Education & Certification",
+                titleSkills: "<span>Skills</span> & Tools", 
+                titleExpertiseArea: "Expertise Area", 
+                titleSoftwareTools: "Tools",
+                titleWork: "<span>Work</span> Experience", 
+                titleSelected: "<span>Selected</span> Works & Projects", 
+                titleWritings: "<span>Articles</span> & Thoughts",
+                titleLet: "<span>Let's</span> Collaborate",
                 contactTagline: "Ready to shape better environments?", contactDesc: "Feel free to reach out for project inquiries.",
                 formName: "Name / Organization", formEmail: "Email or WhatsApp", formMessage: "Message", formBtn: "Send Message", catAll: "All Works"
             },
             id: {
-                navAbout: "Tentang", navExpertise: "Keahlian", navExperience: "Pengalaman", navPortfolio: "Karya", navContact: "Kontak",
+                navAbout: "Tentang", navExpertise: "Keahlian", navExperience: "Pengalaman", navPortfolio: "Karya", navWritings: "Artikel", navContact: "Kontak",
                 btnPortfolio: "Lihat Portfolio", btnContact: "Mari Berkolaborasi",
-                titleAbout: "Ringkasan", titleEdu: "Pendidikan & Sertifikasi",
-                titleSkills: "Keahlian", titleExpertiseArea: "Area Keahlian", titleSoftwareTools: "Perangkat Lunak",
-                titleWork: "Pengalaman", titleSelected: "Proyek", titleLet: "Mari",
+                titleAbout: "<span>Ringkasan</span> Profesional", 
+                titleEdu: "Pendidikan & Sertifikasi",
+                titleSkills: "<span>Keahlian</span> & Perangkat", 
+                titleExpertiseArea: "Area Keahlian", 
+                titleSoftwareTools: "Perangkat Lunak",
+                titleWork: "<span>Pengalaman</span> Kerja", 
+                titleSelected: "<span>Karya & Proyek</span> Pilihan", 
+                titleWritings: "<span>Artikel</span> & Tulisan",
+                titleLet: "<span>Mari</span> Berkolaborasi",
                 contactTagline: "Siap menata ruang dan lingkungan yang lebih baik?", contactDesc: "Silakan hubungi untuk pertanyaan proyek atau konsultasi.",
                 formName: "Nama / Organisasi", formEmail: "Email atau WhatsApp", formMessage: "Pesan", formBtn: "Kirim Pesan", catAll: "Semua Karya"
             }
@@ -814,13 +932,11 @@
         const appId = 'alfian-portfolio-live-v3';
 
         async function initApp() {
-            // Memaksa halaman agar tidak scroll ke bawah saat pertama kali dibuka
             window.scrollTo(0, 0);
             if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
 
             document.querySelectorAll('.rt-toolbar-placeholder').forEach(el => { el.outerHTML = window.getToolbarStr(); });
             
-            // 1. Ambil data lokal terlebih dahulu (Fallback)
             const localRaw = localStorage.getItem('abj_db_live_final');
             if (localRaw) {
                 window.db = JSON.parse(localRaw);
@@ -829,8 +945,8 @@
             }
 
             if(!window.db.contacts) { window.db.contacts = JSON.parse(JSON.stringify(FACTORY_DATA.contacts)); }
+            if(!window.db.writings) { window.db.writings = []; }
 
-            // SMART PATCH: Paksa update Posisi & Motto
             if (window.db && window.db.hero) {
                 if (window.db.hero.roles === "Urban Planner | GIS & Spatial Data Specialist" || window.db.hero.roles === "Urban Planner | GIS Specialist") {
                     window.db.hero.roles = "Urban Planner | GIS & Spatial Data Specialist | Sustainable Development Enthusiast";
@@ -842,7 +958,6 @@
 
             window.renderAll();
 
-            // 2. Hubungkan ke Firebase secara asinkron
             try {
                 const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
                 const { getAuth, signInAnonymously, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
@@ -883,6 +998,7 @@
                                         incomingData.hero.motto = `"Building Better Cities Through Spatial Insight and Sustainable Vision"`;
                                     }
                                 }
+                                if(!incomingData.writings) { incomingData.writings = []; }
 
                                 if (JSON.stringify(incomingData) !== JSON.stringify(window.db)) {
                                     window.db = incomingData;
@@ -910,6 +1026,7 @@
                 tools: Array.isArray(window.db.tools) ? window.db.tools : [],
                 experience: Array.isArray(window.db.experience) ? window.db.experience : [],
                 portfolio: Array.isArray(window.db.portfolio) ? window.db.portfolio : [],
+                writings: Array.isArray(window.db.writings) ? window.db.writings : [],
                 contacts: Array.isArray(window.db.contacts) ? window.db.contacts : [],
                 inbox: Array.isArray(window.db.inbox) ? window.db.inbox : []
             };
@@ -943,7 +1060,12 @@
         window.toggleTheme = function() { currentTheme = currentTheme === 'dark' ? 'light' : 'dark'; document.body.setAttribute('data-theme', currentTheme); document.getElementById('themeBtn').innerText = currentTheme === 'dark' ? '☀️' : '🌙'; }
 
         window.applyTranslations = function() {
-            document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if(dict[currentLang][key]) el.innerText = dict[currentLang][key]; });
+            document.querySelectorAll('[data-i18n]').forEach(el => { 
+                const key = el.getAttribute('data-i18n'); 
+                if(dict[currentLang][key]) {
+                    el.innerHTML = dict[currentLang][key]; 
+                }
+            });
             const draftBtn = document.getElementById('draft-btn');
             if (draftBtn) draftBtn.innerText = currentLang === 'en' ? '✨ Auto-Draft with AI' : '✨ Draf Otomatis dengan AI';
         }
@@ -951,7 +1073,7 @@
         window.renderAll = function() {
             window.applyTranslations(); document.getElementById('currentYear').innerText = new Date().getFullYear();
             document.getElementById('ui-hero-name').innerText = window.db.hero.name; document.getElementById('ui-hero-roles').innerText = window.db.hero.roles; document.getElementById('ui-hero-motto').innerText = window.db.hero.motto; document.getElementById('ui-hero-desc').innerHTML = currentLang === 'en' ? window.db.hero.descEN : window.db.hero.descID; document.getElementById('ui-hero-status').innerText = window.db.hero.status; document.getElementById('ui-hero-img').src = window.db.hero.img;
-            document.getElementById('ui-about-text').innerHTML = currentLang === 'en' ? window.db.about.en : window.db.about.id;
+            
             document.getElementById('ui-edu-container').innerHTML = window.db.education.map(e => `<div class="glass" style="padding: 1.5rem;"><h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.2rem;">${e.degree}</h4><p style="font-weight: 500;">${e.uni}</p><p style="font-size: 0.85rem; color: var(--text-muted);">${e.year}</p>${e.link ? `<a href="${e.link}" target="_blank" style="font-size: 0.8rem; color: var(--accent);">View Publication ↗</a>` : ''}</div>`).join('');
             document.getElementById('ui-expertise-list').innerHTML = window.db.expertise.map(x => `<div class="expertise-item"><span class="bullet">▹</span><span>${currentLang === 'en' ? x.en : x.id}</span></div>`).join('');
             document.getElementById('ui-tools-grid').innerHTML = window.db.tools.map(t => `<div class="tool-item"><img src="${t.icon}" alt="${t.name}" class="tool-icon"><span>${t.name}</span></div>`).join('');
@@ -959,6 +1081,7 @@
             const categories = [...new Set(window.db.portfolio.map(p => p.cat))];
             document.getElementById('ui-portfolio-filters').innerHTML = `<button class="filter-btn active" onclick="window.filterPortfolio('all', this)">${dict[currentLang].catAll}</button>${categories.map(c => `<button class="filter-btn" onclick="window.filterPortfolio('${c}', this)">${c}</button>`).join('')}`;
             window.renderPortfolioGrid(window.db.portfolio);
+            window.renderWritingsGrid();
             
             document.getElementById('ui-contact-list').innerHTML = (window.db.contacts || []).map(c => `
                 <a href="${c.link}" target="_blank" class="contact-link-item">
@@ -982,12 +1105,45 @@
             if (cat === 'all') window.renderPortfolioGrid(window.db.portfolio); else window.renderPortfolioGrid(window.db.portfolio.filter(p => p.cat === cat));
         }
 
-        /* ================= PDF VIEWER ================= */
+        window.renderWritingsGrid = function() {
+            if(!window.db.writings || window.db.writings.length === 0) {
+                document.getElementById('ui-writings-grid').innerHTML = `<p style="color:var(--text-muted); grid-column: 1/-1;">Belum ada tulisan saat ini.</p>`;
+                return;
+            }
+            document.getElementById('ui-writings-grid').innerHTML = window.db.writings.map(w => {
+                let thumbSrc = "https://placehold.co/600x400?text=No+Media";
+                if(w.media && w.media.length > 0) {
+                    if(w.media[0].type === 'image') thumbSrc = w.media[0].src;
+                    else if(w.media[0].type === 'video') thumbSrc = "https://placehold.co/600x400?text=Video";
+                    else if(w.media[0].type === 'document') thumbSrc = "https://placehold.co/600x400?text=Document";
+                }
+                const descStr = currentLang === 'en' ? w.descEN : w.descID;
+                return `
+                <div class="portfolio-card glass writing-card" onclick="window.openWritingModal('${w.id}')" style="padding:0; border-top:none;">
+                    <img src="${thumbSrc}" onerror="this.src='https://placehold.co/600x400?text=Image+Unavailable'" alt="${w.title}" class="portfolio-thumb">
+                    <div class="portfolio-info">
+                        <div class="portfolio-cat">${w.date}</div>
+                        <h3 class="portfolio-title">${w.title}</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${window.stripHtml(descStr)}</p>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        /* ================= PORTFOLIO & WRITING SLIDER CONTROLS ================= */
+        window.slideNext = function(sliderId) { const slider = document.getElementById(sliderId); slider.scrollBy({ left: slider.offsetWidth, behavior: 'smooth' }); }
+        window.slidePrev = function(sliderId) { const slider = document.getElementById(sliderId); slider.scrollBy({ left: -slider.offsetWidth, behavior: 'smooth' }); }
+
+        /* ================= MODAL VIEWER LOGIC ================= */
         window.openPortfolioModal = function(id) {
             const p = window.db.portfolio.find(x => x.id === id); if(!p) return;
             document.getElementById('modal-title').innerText = p.title; document.getElementById('modal-cat').innerText = p.cat; document.getElementById('modal-desc').innerHTML = currentLang === 'en' ? p.descEN : p.descID;
             const slider = document.getElementById('modal-slider'), dots = document.getElementById('modal-dots'), downloads = document.getElementById('modal-downloads');
             slider.innerHTML = ''; dots.innerHTML = ''; downloads.innerHTML = '';
+            
+            if (p.media && p.media.length > 1) { document.getElementById('modal-nav-prev').style.display = 'flex'; document.getElementById('modal-nav-next').style.display = 'flex';
+            } else { document.getElementById('modal-nav-prev').style.display = 'none'; document.getElementById('modal-nav-next').style.display = 'none'; }
+
             if (p.media && p.media.length > 0) {
                 p.media.forEach((m, index) => {
                     let mediaHtml = '';
@@ -997,28 +1153,59 @@
                         else mediaHtml = `<video controls><source src="${m.src}"></video>`;
                     } else if (m.type === 'document') {
                         let viewerHtml = '';
-                        if (m.src.includes('drive.google.com')) {
-                            viewerHtml = `<iframe src="${m.src}" title="PDF Viewer" allow="autoplay" allowfullscreen="true"></iframe>`;
-                        } else if (m.src.startsWith('http')) {
-                            viewerHtml = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(m.src)}&embedded=true" allowfullscreen="true"></iframe>`;
-                        } else {
-                            viewerHtml = `<iframe src="${m.src}#toolbar=1" title="PDF Viewer" style="width:100%; height:100%; min-height:60vh; border-radius:8px; border:none; background:#fff;" allowfullscreen="true"></iframe>`;
-                        }
+                        if (m.src.includes('drive.google.com')) { viewerHtml = `<iframe src="${m.src}" title="PDF Viewer" allow="autoplay" allowfullscreen="true"></iframe>`;
+                        } else if (m.src.startsWith('http')) { viewerHtml = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(m.src)}&embedded=true" allowfullscreen="true"></iframe>`;
+                        } else { viewerHtml = `<iframe src="${m.src}#toolbar=1" title="PDF Viewer" style="width:100%; height:100%; min-height:60vh; border-radius:8px; border:none; background:#fff;" allowfullscreen="true"></iframe>`; }
                         mediaHtml = viewerHtml;
                         downloads.innerHTML += `<a href="${m.src}" target="_blank" class="download-btn" download>📥 Download Document ${index+1}</a> `;
                     }
                     slider.innerHTML += `<div class="media-item" id="slide-${index}">${mediaHtml}</div>`;
                     dots.innerHTML += `<div class="media-dot ${index===0?'active':''}" onclick="document.getElementById('slide-${index}').scrollIntoView({behavior:'smooth'})"></div>`;
                 });
-                slider.onscroll = () => { let index = Math.round(slider.scrollLeft / slider.offsetWidth); document.querySelectorAll('.media-dot').forEach((d, i) => { d.classList.toggle('active', i === index); }); };
+                slider.onscroll = () => { let index = Math.round(slider.scrollLeft / slider.offsetWidth); document.querySelectorAll('#modal-dots .media-dot').forEach((d, i) => { d.classList.toggle('active', i === index); }); };
             } else { slider.innerHTML = `<div class="media-item"><p>No media available.</p></div>`; }
             
-            document.querySelector('.modal-content').classList.remove('fullscreen');
+            document.querySelector('#portfolio-modal .modal-content').classList.remove('fullscreen');
             document.getElementById('portfolio-modal').classList.add('active');
         }
 
-        window.toggleMaximizeModal = function() { document.querySelector('.modal-content').classList.toggle('fullscreen'); }
+        window.openWritingModal = function(id) {
+            const w = window.db.writings.find(x => x.id === id); if(!w) return;
+            document.getElementById('w-modal-title').innerText = w.title; document.getElementById('w-modal-date').innerText = w.date; document.getElementById('w-modal-content').innerHTML = currentLang === 'en' ? w.descEN : w.descID;
+            const slider = document.getElementById('w-modal-slider'), dots = document.getElementById('w-modal-dots'), downloads = document.getElementById('w-modal-downloads');
+            slider.innerHTML = ''; dots.innerHTML = ''; downloads.innerHTML = '';
+            
+            if (w.media && w.media.length > 1) { document.getElementById('w-modal-nav-prev').style.display = 'flex'; document.getElementById('w-modal-nav-next').style.display = 'flex';
+            } else { document.getElementById('w-modal-nav-prev').style.display = 'none'; document.getElementById('w-modal-nav-next').style.display = 'none'; }
+
+            if (w.media && w.media.length > 0) {
+                w.media.forEach((m, index) => {
+                    let mediaHtml = '';
+                    if (m.type === 'image') { mediaHtml = `<img src="${m.src}" onerror="this.src='https://placehold.co/800x600?text=Image+Unavailable'" alt="Media ${index}">`; } 
+                    else if (m.type === 'video') {
+                        if(m.src.includes('drive.google.com')) mediaHtml = `<iframe src="${m.src}" allow="autoplay" allowfullscreen="true"></iframe>`;
+                        else mediaHtml = `<video controls><source src="${m.src}"></video>`;
+                    } else if (m.type === 'document') {
+                        let viewerHtml = '';
+                        if (m.src.includes('drive.google.com')) { viewerHtml = `<iframe src="${m.src}" title="PDF Viewer" allow="autoplay" allowfullscreen="true"></iframe>`;
+                        } else if (m.src.startsWith('http')) { viewerHtml = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(m.src)}&embedded=true" allowfullscreen="true"></iframe>`;
+                        } else { viewerHtml = `<iframe src="${m.src}#toolbar=1" title="PDF Viewer" style="width:100%; height:100%; min-height:60vh; border-radius:8px; border:none; background:#fff;" allowfullscreen="true"></iframe>`; }
+                        mediaHtml = viewerHtml;
+                        downloads.innerHTML += `<a href="${m.src}" target="_blank" class="download-btn" download>📥 Download Document ${index+1}</a> `;
+                    }
+                    slider.innerHTML += `<div class="media-item" id="w-slide-${index}">${mediaHtml}</div>`;
+                    dots.innerHTML += `<div class="media-dot ${index===0?'active':''}" onclick="document.getElementById('w-slide-${index}').scrollIntoView({behavior:'smooth'})"></div>`;
+                });
+                slider.onscroll = () => { let index = Math.round(slider.scrollLeft / slider.offsetWidth); document.querySelectorAll('#w-modal-dots .media-dot').forEach((d, i) => { d.classList.toggle('active', i === index); }); };
+            } else { slider.innerHTML = `<div class="media-item"><p>No media available.</p></div>`; }
+            
+            document.querySelector('#writing-modal .modal-content').classList.remove('fullscreen');
+            document.getElementById('writing-modal').classList.add('active');
+        }
+
+        window.toggleMaximizeModal = function(modalId) { document.querySelector(`#${modalId} .modal-content`).classList.toggle('fullscreen'); }
         window.closePortfolioModal = function() { document.getElementById('portfolio-modal').classList.remove('active'); document.getElementById('modal-slider').innerHTML = ''; }
+        window.closeWritingModal = function() { document.getElementById('writing-modal').classList.remove('active'); document.getElementById('w-modal-slider').innerHTML = ''; }
         
         window.submitChat = async function() { const name = document.getElementById('chat-name').value, contact = document.getElementById('chat-contact').value, msg = document.getElementById('chat-message').value; if(!name || !msg) { alert('Please enter name and message.'); return; } window.db.inbox.push({ date: new Date().toLocaleString(), name, contact, msg }); await window.saveDb(); document.getElementById('chat-name').value = ''; document.getElementById('chat-contact').value = ''; document.getElementById('chat-message').value = ''; document.getElementById('chat-status').style.display = 'block'; setTimeout(() => document.getElementById('chat-status').style.display = 'none', 3000); window.populateAdminInbox(); }
         window.openPin = function() { document.getElementById('pin-overlay').classList.add('active'); document.getElementById('pin-input').focus(); }
@@ -1040,6 +1227,7 @@
             window.renderAdminList('adm-contact-list', window.db.contacts || [], window.addContactRowHtml);
 
             window.populateAdminPortfolioList(); 
+            window.populateAdminWritingsList();
             window.populateAdminInbox();
         }
         
@@ -1059,19 +1247,9 @@
         window.addExpRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addExpRowHtml(); document.getElementById('adm-exp-list').appendChild(div); }
         window.saveExp = async function() { window.db.experience = Array.from(document.getElementById('adm-exp-list').children).map(row => ({ id: 'exp' + Date.now() + Math.random(), role: row.querySelector('.exp-role').value, org: row.querySelector('.exp-org').value, date: row.querySelector('.exp-date').value, descEN: row.querySelector('.exp-den').innerHTML, descID: row.querySelector('.exp-did').innerHTML })).filter(e => e.role !== ''); await window.saveDb(); window.populateAdminForms(); alert("Experience saved!"); }
 
-        /* FUNGSI PINDAH PORTFOLIO PROJECT */
-        window.movePortUp = async function(index) {
-            if(index > 0) {
-                const temp = window.db.portfolio[index]; window.db.portfolio[index] = window.db.portfolio[index-1]; window.db.portfolio[index-1] = temp;
-                await window.saveDb(); window.populateAdminPortfolioList();
-            }
-        };
-        window.movePortDown = async function(index) {
-            if(index < window.db.portfolio.length - 1) {
-                const temp = window.db.portfolio[index]; window.db.portfolio[index] = window.db.portfolio[index+1]; window.db.portfolio[index+1] = temp;
-                await window.saveDb(); window.populateAdminPortfolioList();
-            }
-        };
+        /* FUNGSI ADMIN PORTFOLIO PROJECT */
+        window.movePortUp = async function(index) { if(index > 0) { const temp = window.db.portfolio[index]; window.db.portfolio[index] = window.db.portfolio[index-1]; window.db.portfolio[index-1] = temp; await window.saveDb(); window.populateAdminPortfolioList(); } };
+        window.movePortDown = async function(index) { if(index < window.db.portfolio.length - 1) { const temp = window.db.portfolio[index]; window.db.portfolio[index] = window.db.portfolio[index+1]; window.db.portfolio[index+1] = temp; await window.saveDb(); window.populateAdminPortfolioList(); } };
 
         window.populateAdminPortfolioList = function() { 
             document.getElementById('adm-port-list').innerHTML = window.db.portfolio.map((p, i) => `
@@ -1088,7 +1266,7 @@
             </div>`).join(''); 
         }
         
-        async function deletePortProject(id) { if(confirm('Delete this project?')) { window.db.portfolio = window.db.portfolio.filter(p => p.id !== id); await window.saveDb(); window.populateAdminPortfolioList(); } }
+        window.deletePortProject = async function(id) { if(confirm('Delete this project?')) { window.db.portfolio = window.db.portfolio.filter(p => p.id !== id); await window.saveDb(); window.populateAdminPortfolioList(); } }
 
         window.openPortEditor = function(id = null) {
             document.getElementById('adm-port-list').style.display = 'none'; document.getElementById('adm-port-editor').style.display = 'block'; document.querySelector('#tab-portfolio > .admin-btn-add').style.display = 'none'; document.getElementById('adm-port-media-list').innerHTML = '';
@@ -1097,7 +1275,6 @@
         }
         window.closePortEditor = function() { document.getElementById('adm-port-list').style.display = 'flex'; document.getElementById('adm-port-editor').style.display = 'none'; document.querySelector('#tab-portfolio > .admin-btn-add').style.display = 'block'; }
         window.editPortProject = function(id) { window.openPortEditor(id); }
-        
         window.addPortMediaRow = function(m = {type:'image', src:''}) { 
             const srcStr = m.src || ''; 
             const div = document.createElement('div'); 
@@ -1108,7 +1285,96 @@
         
         window.savePortProject = async function() { const id = document.getElementById('adm-port-id').value || 'p' + Date.now(); const title = document.getElementById('adm-port-title').value; if(!title) { alert('Project title is required'); return; } let mediaArr = []; const rows = Array.from(document.getElementById('adm-port-media-list').children); for(let row of rows) { const type = row.querySelector('.port-media-type').value; let src = row.querySelector('.port-media-url').value; const hiddenSrc = row.querySelector('.port-media-hidden-src').value; const fileInput = row.querySelector('.port-media-file'); if (fileInput.files.length > 0) { try { src = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } } const newProject = { id, title, cat: document.getElementById('adm-port-cat').value || "Other", descEN: document.getElementById('adm-port-desc-en').innerHTML, descID: document.getElementById('adm-port-desc-id').innerHTML, media: mediaArr }; const existingIndex = window.db.portfolio.findIndex(p => p.id === id); if (existingIndex >= 0) window.db.portfolio[existingIndex] = newProject; else window.db.portfolio.push(newProject); await window.saveDb(); window.closePortEditor(); window.populateAdminPortfolioList(); alert('Project saved successfully!'); }
 
-        function populateAdminInbox() { document.getElementById('inbox-count').innerText = window.db.inbox.length; const list = document.getElementById('adm-inbox-list'); if(window.db.inbox.length === 0) { list.innerHTML = "<p>No messages yet.</p>"; return; } list.innerHTML = window.db.inbox.slice().reverse().map((msg, i) => `<div class="glass" style="padding: 1.5rem;"><div style="display:flex; justify-content:space-between; margin-bottom:1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;"><strong>${msg.name}</strong><span style="font-size:0.8rem; color:var(--text-muted);">${msg.date}</span></div><div style="color:var(--accent); margin-bottom:1rem;">📞 ${msg.contact}</div><p style="white-space: pre-wrap;">${msg.msg}</p></div>`).join(''); }
+        /* FUNGSI ADMIN WRITINGS / ARTICLES */
+        window.moveWritingUp = async function(index) { if(index > 0) { const temp = window.db.writings[index]; window.db.writings[index] = window.db.writings[index-1]; window.db.writings[index-1] = temp; await window.saveDb(); window.populateAdminWritingsList(); } };
+        window.moveWritingDown = async function(index) { if(index < window.db.writings.length - 1) { const temp = window.db.writings[index]; window.db.writings[index] = window.db.writings[index+1]; window.db.writings[index+1] = temp; await window.saveDb(); window.populateAdminWritingsList(); } };
+
+        window.populateAdminWritingsList = function() { 
+            if(!window.db.writings) window.db.writings = [];
+            document.getElementById('adm-writings-list').innerHTML = window.db.writings.map((w, i) => `
+            <div class="glass" style="padding:1rem; display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
+                <div><strong>${w.title}</strong> <span style="font-size:0.8rem; color:var(--accent);">(${w.date})</span></div>
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <div style="display:flex; flex-direction:column; gap:2px;">
+                        <button class="admin-btn" style="padding:2px 6px; font-size:10px; background:rgba(255,255,255,0.1); color:#fff; border:none;" onclick="window.moveWritingUp(${i})" title="Naik">▲</button>
+                        <button class="admin-btn" style="padding:2px 6px; font-size:10px; background:rgba(255,255,255,0.1); color:#fff; border:none;" onclick="window.moveWritingDown(${i})" title="Turun">▼</button>
+                    </div>
+                    <button class="admin-btn" style="background:var(--accent); color:#fff; padding:0.6rem 1rem;" onclick="window.editWriting('${w.id}')">Edit</button>
+                    <button class="admin-btn admin-btn-del" style="padding:0.6rem 1rem;" onclick="window.deleteWriting('${w.id}')">Delete</button>
+                </div>
+            </div>`).join(''); 
+        }
+        
+        window.deleteWriting = async function(id) { if(confirm('Delete this article?')) { window.db.writings = window.db.writings.filter(w => w.id !== id); await window.saveDb(); window.populateAdminWritingsList(); } }
+
+        window.openWritingEditor = function(id = null) {
+            document.getElementById('adm-writings-list').style.display = 'none'; document.getElementById('adm-writing-editor').style.display = 'block'; document.querySelector('#tab-writings > .admin-btn-add').style.display = 'none'; document.getElementById('adm-writing-media-list').innerHTML = '';
+            if (id) { 
+                const w = window.db.writings.find(x => x.id === id); 
+                document.getElementById('adm-writing-id').value = w.id; 
+                document.getElementById('adm-writing-title').value = w.title; 
+                document.getElementById('adm-writing-date').value = w.date || ''; 
+                document.getElementById('adm-writing-desc-en').innerHTML = w.descEN || ''; 
+                document.getElementById('adm-writing-desc-id').innerHTML = w.descID || ''; 
+                if(w.media) { w.media.forEach(m => window.addWritingMediaRow(m)); }
+            } else { 
+                document.getElementById('adm-writing-id').value = ""; 
+                document.getElementById('adm-writing-title').value = ""; 
+                document.getElementById('adm-writing-date').value = ""; 
+                document.getElementById('adm-writing-desc-en').innerHTML = ""; 
+                document.getElementById('adm-writing-desc-id').innerHTML = ""; 
+                window.addWritingMediaRow();
+            }
+        }
+        window.closeWritingEditor = function() { document.getElementById('adm-writings-list').style.display = 'flex'; document.getElementById('adm-writing-editor').style.display = 'none'; document.querySelector('#tab-writings > .admin-btn-add').style.display = 'block'; }
+        window.editWriting = function(id) { window.openWritingEditor(id); }
+        
+        window.addWritingMediaRow = function(m = {type:'image', src:''}) { 
+            const srcStr = m.src || ''; 
+            const div = document.createElement('div'); 
+            div.className = 'admin-row'; 
+            div.innerHTML = `<input type="hidden" class="writing-media-hidden-src" value="${srcStr}"><select class="admin-select writing-media-type" style="width:120px;"><option value="image" ${m.type==='image'?'selected':''}>Image</option><option value="video" ${m.type==='video'?'selected':''}>Video</option><option value="document" ${m.type==='document'?'selected':''}>Document (PDF)</option></select><div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><input type="text" class="admin-input writing-media-url" placeholder="URL Google Drive (Share Link) atau URL lainnya" value="${srcStr.startsWith('data:') ? '' : srcStr}"><div style="display:flex; align-items:center; gap:0.5rem;"><span style="font-size:0.8rem; color:var(--text-muted);">OR Local File:</span><input type="file" class="admin-input writing-media-file" style="padding:0.4rem;"></div></div>${window.getRowControls()}`; 
+            document.getElementById('adm-writing-media-list').appendChild(div); 
+        }
+
+        window.saveWriting = async function() { 
+            const id = document.getElementById('adm-writing-id').value || 'w' + Date.now(); 
+            const title = document.getElementById('adm-writing-title').value; 
+            if(!title) { alert('Title is required'); return; } 
+
+            let mediaArr = []; 
+            const rows = Array.from(document.getElementById('adm-writing-media-list').children); 
+            for(let row of rows) { 
+                const type = row.querySelector('.writing-media-type').value; 
+                let src = row.querySelector('.writing-media-url').value; 
+                const hiddenSrc = row.querySelector('.writing-media-hidden-src').value; 
+                const fileInput = row.querySelector('.writing-media-file'); 
+                if (fileInput.files.length > 0) { 
+                    try { src = await window.getBase64(fileInput.files[0]); } catch(e){} 
+                } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } 
+                if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } 
+            }
+            
+            const newWriting = { 
+                id, 
+                title, 
+                date: document.getElementById('adm-writing-date').value || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }), 
+                descEN: document.getElementById('adm-writing-desc-en').innerHTML, 
+                descID: document.getElementById('adm-writing-desc-id').innerHTML,
+                media: mediaArr
+            }; 
+            
+            if(!window.db.writings) window.db.writings = [];
+            const existingIndex = window.db.writings.findIndex(w => w.id === id); 
+            if (existingIndex >= 0) window.db.writings[existingIndex] = newWriting; else window.db.writings.push(newWriting); 
+            
+            await window.saveDb(); 
+            window.closeWritingEditor(); 
+            window.populateAdminWritingsList(); 
+            alert('Article saved successfully!'); 
+        }
+
+        window.populateAdminInbox = function() { document.getElementById('inbox-count').innerText = window.db.inbox.length; const list = document.getElementById('adm-inbox-list'); if(window.db.inbox.length === 0) { list.innerHTML = "<p>No messages yet.</p>"; return; } list.innerHTML = window.db.inbox.slice().reverse().map((msg, i) => `<div class="glass" style="padding: 1.5rem;"><div style="display:flex; justify-content:space-between; margin-bottom:1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;"><strong>${msg.name}</strong><span style="font-size:0.8rem; color:var(--text-muted);">${msg.date}</span></div><div style="color:var(--accent); margin-bottom:1rem;">📞 ${msg.contact}</div><p style="white-space: pre-wrap;">${msg.msg}</p></div>`).join(''); }
         window.clearInbox = async function() { if(confirm("Delete all messages?")) { window.db.inbox = []; await window.saveDb(); window.populateAdminInbox(); } }
 
         /* CONTACT LINKS LOGIC */
