@@ -687,11 +687,30 @@
 
         window.stripHtml = function(html) { let tmp = document.createElement("DIV"); tmp.innerHTML = html; return tmp.textContent || tmp.innerText || ""; }
 
-        window.addEduRowHtml = function(e = {degree:'', uni:'', year:'', link:''}) { return `<div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><input type="text" class="admin-input edu-deg" placeholder="Degree / Certificate" value="${e.degree}"><input type="text" class="admin-input edu-uni" placeholder="University" value="${e.uni}"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input edu-year" placeholder="Year | GPA/Reg" value="${e.year}"><input type="text" class="admin-input edu-link" placeholder="Publication URL (Optional)" value="${e.link}"></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
-        window.addExpertiseRowHtml = function(x = {en:'', id:''}) { return `<div style="flex:1; display:flex; gap:0.5rem;"><input type="text" class="admin-input exp-en" placeholder="Expertise (EN)" value="${x.en}"><input type="text" class="admin-input exp-id" placeholder="Expertise (ID)" value="${x.id}"></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
-        window.addToolRowHtml = function(t = {name:'', icon:''}) { return `<input type="hidden" class="tool-hidden-src" value="${t.icon || ''}"><div style="flex:1; display:flex; gap:0.5rem; align-items:center;"><input type="text" class="admin-input tool-name" placeholder="Tool Name (e.g. QGIS)" value="${t.name || ''}"><input type="text" class="admin-input tool-url" placeholder="Icon URL" value="${(t.icon||'').startsWith('data:') ? '' : t.icon}"><span>OR</span><input type="file" class="admin-input tool-file" accept="image/*" style="padding:0.4rem;"></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
-        window.addExpRowHtml = function(e = {role:'', org:'', date:'', descEN:'', descID:''}) { return `<div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input exp-role" placeholder="Role" value="${e.role}"><input type="text" class="admin-input exp-org" placeholder="Organization" value="${e.org}"><input type="text" class="admin-input exp-date" placeholder="Date" value="${e.date}"></div><div class="rt-container">${window.getToolbarStr()}<div class="rt-editor exp-den" contenteditable="true">${e.descEN || ''}</div></div><div class="rt-container">${window.getToolbarStr()}<div class="rt-editor exp-did" contenteditable="true">${e.descID || ''}</div></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
-        window.addContactRowHtml = function(c = {label:'', link:'', icon:''}) { return `<input type="hidden" class="contact-hidden-src" value="${c.icon || ''}"><div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input contact-label" placeholder="Label (e.g. GitHub)" value="${c.label || ''}"><input type="text" class="admin-input contact-link" placeholder="Link (e.g. https://github.com/...)" value="${c.link || ''}"></div><div style="display:flex; align-items:center; gap:0.5rem;"><input type="text" class="admin-input contact-url" placeholder="Icon URL" value="${(c.icon||'').startsWith('data:') ? '' : c.icon}"><span style="font-size:0.8rem; color:var(--text-muted);">OR</span><input type="file" class="admin-input contact-file" accept="image/*" style="padding:0.4rem;"></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; }
+        // FUNGSI UNTUK MEMINDAHKAN BARIS KE ATAS / BAWAH
+        window.moveRowUp = function(btn) {
+            const row = btn.closest('.admin-row');
+            if (row && row.previousElementSibling) { row.parentNode.insertBefore(row, row.previousElementSibling); }
+        };
+        window.moveRowDown = function(btn) {
+            const row = btn.closest('.admin-row');
+            if (row && row.nextElementSibling) { row.parentNode.insertBefore(row.nextElementSibling, row); }
+        };
+
+        window.getRowControls = function() {
+            return `
+            <div style="display:flex; flex-direction:column; gap:4px; justify-content:center;">
+                <button type="button" class="admin-btn" style="padding:2px 6px; font-size:12px; background:var(--glass-border); color:var(--text-main);" onclick="window.moveRowUp(this)" title="Move Up">▲</button>
+                <button type="button" class="admin-btn" style="padding:2px 6px; font-size:12px; background:var(--glass-border); color:var(--text-main);" onclick="window.moveRowDown(this)" title="Move Down">▼</button>
+                <button type="button" class="admin-btn admin-btn-del" style="padding:2px 6px; font-size:12px;" onclick="this.closest('.admin-row').remove()" title="Delete">❌</button>
+            </div>`;
+        };
+
+        window.addEduRowHtml = function(e = {degree:'', uni:'', year:'', link:''}) { return `<div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><input type="text" class="admin-input edu-deg" placeholder="Degree / Certificate" value="${e.degree}"><input type="text" class="admin-input edu-uni" placeholder="University" value="${e.uni}"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input edu-year" placeholder="Year | GPA/Reg" value="${e.year}"><input type="text" class="admin-input edu-link" placeholder="Publication URL (Optional)" value="${e.link}"></div></div>${window.getRowControls()}`; }
+        window.addExpertiseRowHtml = function(x = {en:'', id:''}) { return `<div style="flex:1; display:flex; gap:0.5rem;"><input type="text" class="admin-input exp-en" placeholder="Expertise (EN)" value="${x.en}"><input type="text" class="admin-input exp-id" placeholder="Expertise (ID)" value="${x.id}"></div>${window.getRowControls()}`; }
+        window.addToolRowHtml = function(t = {name:'', icon:''}) { return `<input type="hidden" class="tool-hidden-src" value="${t.icon || ''}"><div style="flex:1; display:flex; gap:0.5rem; align-items:center;"><input type="text" class="admin-input tool-name" placeholder="Tool Name (e.g. QGIS)" value="${t.name || ''}"><input type="text" class="admin-input tool-url" placeholder="Icon URL" value="${(t.icon||'').startsWith('data:') ? '' : t.icon}"><span>OR</span><input type="file" class="admin-input tool-file" accept="image/*" style="padding:0.4rem;"></div>${window.getRowControls()}`; }
+        window.addExpRowHtml = function(e = {role:'', org:'', date:'', descEN:'', descID:''}) { return `<div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input exp-role" placeholder="Role" value="${e.role}"><input type="text" class="admin-input exp-org" placeholder="Organization" value="${e.org}"><input type="text" class="admin-input exp-date" placeholder="Date" value="${e.date}"></div><div class="rt-container">${window.getToolbarStr()}<div class="rt-editor exp-den" contenteditable="true">${e.descEN || ''}</div></div><div class="rt-container">${window.getToolbarStr()}<div class="rt-editor exp-did" contenteditable="true">${e.descID || ''}</div></div></div>${window.getRowControls()}`; }
+        window.addContactRowHtml = function(c = {label:'', link:'', icon:''}) { return `<input type="hidden" class="contact-hidden-src" value="${c.icon || ''}"><div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><div style="display:flex; gap:0.5rem;"><input type="text" class="admin-input contact-label" placeholder="Label (e.g. GitHub)" value="${c.label || ''}"><input type="text" class="admin-input contact-link" placeholder="Link (e.g. https://github.com/...)" value="${c.link || ''}"></div><div style="display:flex; align-items:center; gap:0.5rem;"><input type="text" class="admin-input contact-url" placeholder="Icon URL" value="${(c.icon||'').startsWith('data:') ? '' : c.icon}"><span style="font-size:0.8rem; color:var(--text-muted);">OR</span><input type="file" class="admin-input contact-file" accept="image/*" style="padding:0.4rem;"></div></div>${window.getRowControls()}`; }
 
         // ========================== DATA & CONFIGURATION ==========================
         const FACTORY_DATA = {
@@ -782,17 +801,18 @@
             }
         };
 
-        let currentLang = 'en';
-        let currentTheme = 'dark';
-        window.db = null; 
+        let currentLang = 'en', currentTheme = 'dark', db = null; 
         
         // ========================== FIREBASE LIVE SINKRONISASI ==========================
         let firestoreDb = null;
         let currentUser = null;
-        // App ID unik untuk mencegah bentrok data di server
         const appId = 'alfian-portfolio-live-v3';
 
         async function initApp() {
+            // Memaksa halaman agar tidak scroll ke bawah saat pertama kali dibuka
+            window.scrollTo(0, 0);
+            if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+
             document.querySelectorAll('.rt-toolbar-placeholder').forEach(el => { el.outerHTML = window.getToolbarStr(); });
             
             // 1. Ambil data lokal terlebih dahulu (Fallback)
@@ -803,12 +823,9 @@
                 window.db = JSON.parse(JSON.stringify(FACTORY_DATA));
             }
 
-            // Pastikan contacts ada (kompatibilitas mundur)
-            if(!window.db.contacts) {
-                window.db.contacts = JSON.parse(JSON.stringify(FACTORY_DATA.contacts));
-            }
+            if(!window.db.contacts) { window.db.contacts = JSON.parse(JSON.stringify(FACTORY_DATA.contacts)); }
 
-            // SMART PATCH: Paksa update Posisi & Motto jika masih versi lama (agar tidak perlu hard reset)
+            // SMART PATCH: Paksa update Posisi & Motto
             if (window.db && window.db.hero) {
                 if (window.db.hero.roles === "Urban Planner | GIS & Spatial Data Specialist" || window.db.hero.roles === "Urban Planner | GIS Specialist") {
                     window.db.hero.roles = "Urban Planner | GIS & Spatial Data Specialist | Sustainable Development Enthusiast";
@@ -839,7 +856,6 @@
                 const auth = getAuth(app);
                 firestoreDb = getFirestore(app);
                 
-                // Ekspos ke global agar saveDb bisa pakai
                 window.firebaseSetDoc = setDoc;
                 window.firebaseDoc = doc;
 
@@ -854,7 +870,6 @@
                             if (snap.exists()) {
                                 const incomingData = snap.data();
                                 
-                                // Smart Patcher untuk mencegah Firebase menimpa teks posisi & motto Anda ke versi lama
                                 if (incomingData && incomingData.hero) {
                                     if (incomingData.hero.roles === "Urban Planner | GIS & Spatial Data Specialist" || incomingData.hero.roles === "Urban Planner | GIS Specialist") {
                                         incomingData.hero.roles = "Urban Planner | GIS & Spatial Data Specialist | Sustainable Development Enthusiast";
@@ -870,7 +885,6 @@
                                     window.renderAll();
                                 }
                             } else {
-                                // Jika di Firebase kosong
                                 if(window.firebaseSetDoc) window.firebaseSetDoc(docRef, window.db).catch(e => console.warn(e));
                             }
                         });
@@ -880,7 +894,6 @@
         }
 
         window.saveDb = async function() { 
-            // 1. Bersihkan Data dari undefined agar Firestore tidak Error "Invalid nested entity"
             const safeDb = {
                 pin: window.db.pin || "010217",
                 hero: {
@@ -899,10 +912,8 @@
             window.db = safeDb;
             window.renderAll(); 
 
-            // Coba simpan ke LocalStorage komputer
             try { localStorage.setItem('abj_db_live_final', JSON.stringify(safeDb)); } catch (errLocal) {}
                 
-            // Mendorong perubahan ke Firebase Cloud (Paling Penting!)
             if (firestoreDb && window.firebaseSetDoc && window.firebaseDoc) {
                 try {
                     const docRef = window.firebaseDoc(firestoreDb, 'portfolio', 'data');
@@ -966,7 +977,7 @@
             if (cat === 'all') window.renderPortfolioGrid(window.db.portfolio); else window.renderPortfolioGrid(window.db.portfolio.filter(p => p.cat === cat));
         }
 
-        /* ================= PDF VIEWER (Dilengkapi Maximize & Toolbar) ================= */
+        /* ================= PDF VIEWER ================= */
         window.openPortfolioModal = function(id) {
             const p = window.db.portfolio.find(x => x.id === id); if(!p) return;
             document.getElementById('modal-title').innerText = p.title; document.getElementById('modal-cat').innerText = p.cat; document.getElementById('modal-desc').innerHTML = currentLang === 'en' ? p.descEN : p.descID;
@@ -986,7 +997,6 @@
                         } else if (m.src.startsWith('http')) {
                             viewerHtml = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(m.src)}&embedded=true" allowfullscreen="true"></iframe>`;
                         } else {
-                            /* SOLUSI PDF (Memaksa memunculkan tombol Download bawaan menggunakan #toolbar=1) */
                             viewerHtml = `<iframe src="${m.src}#toolbar=1" title="PDF Viewer" style="width:100%; height:100%; min-height:60vh; border-radius:8px; border:none; background:#fff;" allowfullscreen="true"></iframe>`;
                         }
                         mediaHtml = viewerHtml;
@@ -1002,10 +1012,7 @@
             document.getElementById('portfolio-modal').classList.add('active');
         }
 
-        window.toggleMaximizeModal = function() { 
-            document.querySelector('.modal-content').classList.toggle('fullscreen'); 
-        }
-
+        window.toggleMaximizeModal = function() { document.querySelector('.modal-content').classList.toggle('fullscreen'); }
         window.closePortfolioModal = function() { document.getElementById('portfolio-modal').classList.remove('active'); document.getElementById('modal-slider').innerHTML = ''; }
         
         window.submitChat = async function() { const name = document.getElementById('chat-name').value, contact = document.getElementById('chat-contact').value, msg = document.getElementById('chat-message').value; if(!name || !msg) { alert('Please enter name and message.'); return; } window.db.inbox.push({ date: new Date().toLocaleString(), name, contact, msg }); await window.saveDb(); document.getElementById('chat-name').value = ''; document.getElementById('chat-contact').value = ''; document.getElementById('chat-message').value = ''; document.getElementById('chat-status').style.display = 'block'; setTimeout(() => document.getElementById('chat-status').style.display = 'none', 3000); window.populateAdminInbox(); }
@@ -1047,8 +1054,36 @@
         window.addExpRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addExpRowHtml(); document.getElementById('adm-exp-list').appendChild(div); }
         window.saveExp = async function() { window.db.experience = Array.from(document.getElementById('adm-exp-list').children).map(row => ({ id: 'exp' + Date.now() + Math.random(), role: row.querySelector('.exp-role').value, org: row.querySelector('.exp-org').value, date: row.querySelector('.exp-date').value, descEN: row.querySelector('.exp-den').innerHTML, descID: row.querySelector('.exp-did').innerHTML })).filter(e => e.role !== ''); await window.saveDb(); window.populateAdminForms(); alert("Experience saved!"); }
 
-        window.populateAdminPortfolioList = function() { document.getElementById('adm-port-list').innerHTML = window.db.portfolio.map(p => `<div class="glass" style="padding:1rem; display:flex; justify-content:space-between; align-items:center;"><div><strong>${p.title}</strong> <span style="font-size:0.8rem; color:var(--accent);">(${p.cat})</span></div><div style="display:flex; gap:0.5rem;"><button class="admin-btn" style="background:var(--accent); color:#fff;" onclick="window.editPortProject('${p.id}')">Edit</button><button class="admin-btn admin-btn-del" onclick="window.deletePortProject('${p.id}')">Delete</button></div></div>`).join(''); }
-        window.deletePortProject = async function(id) { if(confirm('Delete this project?')) { window.db.portfolio = window.db.portfolio.filter(p => p.id !== id); await window.saveDb(); window.populateAdminPortfolioList(); } }
+        /* FUNGSI PINDAH PORTFOLIO PROJECT */
+        window.movePortUp = async function(index) {
+            if(index > 0) {
+                const temp = window.db.portfolio[index]; window.db.portfolio[index] = window.db.portfolio[index-1]; window.db.portfolio[index-1] = temp;
+                await window.saveDb(); window.populateAdminPortfolioList();
+            }
+        };
+        window.movePortDown = async function(index) {
+            if(index < window.db.portfolio.length - 1) {
+                const temp = window.db.portfolio[index]; window.db.portfolio[index] = window.db.portfolio[index+1]; window.db.portfolio[index+1] = temp;
+                await window.saveDb(); window.populateAdminPortfolioList();
+            }
+        };
+
+        window.populateAdminPortfolioList = function() { 
+            document.getElementById('adm-port-list').innerHTML = window.db.portfolio.map((p, i) => `
+            <div class="glass" style="padding:1rem; display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
+                <div><strong>${p.title}</strong> <span style="font-size:0.8rem; color:var(--accent);">(${p.cat})</span></div>
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                    <div style="display:flex; flex-direction:column; gap:2px;">
+                        <button class="admin-btn" style="padding:2px 6px; font-size:10px; background:rgba(255,255,255,0.1); color:#fff; border:none;" onclick="window.movePortUp(${i})" title="Naik">▲</button>
+                        <button class="admin-btn" style="padding:2px 6px; font-size:10px; background:rgba(255,255,255,0.1); color:#fff; border:none;" onclick="window.movePortDown(${i})" title="Turun">▼</button>
+                    </div>
+                    <button class="admin-btn" style="background:var(--accent); color:#fff; padding:0.6rem 1rem;" onclick="window.editPortProject('${p.id}')">Edit</button>
+                    <button class="admin-btn admin-btn-del" style="padding:0.6rem 1rem;" onclick="window.deletePortProject('${p.id}')">Delete</button>
+                </div>
+            </div>`).join(''); 
+        }
+        
+        async function deletePortProject(id) { if(confirm('Delete this project?')) { window.db.portfolio = window.db.portfolio.filter(p => p.id !== id); await window.saveDb(); window.populateAdminPortfolioList(); } }
 
         window.openPortEditor = function(id = null) {
             document.getElementById('adm-port-list').style.display = 'none'; document.getElementById('adm-port-editor').style.display = 'block'; document.querySelector('#tab-portfolio > .admin-btn-add').style.display = 'none'; document.getElementById('adm-port-media-list').innerHTML = '';
@@ -1057,7 +1092,14 @@
         }
         window.closePortEditor = function() { document.getElementById('adm-port-list').style.display = 'flex'; document.getElementById('adm-port-editor').style.display = 'none'; document.querySelector('#tab-portfolio > .admin-btn-add').style.display = 'block'; }
         window.editPortProject = function(id) { window.openPortEditor(id); }
-        window.addPortMediaRow = function(m = {type:'image', src:''}) { const srcStr = m.src || ''; const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = `<input type="hidden" class="port-media-hidden-src" value="${srcStr}"><select class="admin-select port-media-type" style="width:120px;"><option value="image" ${m.type==='image'?'selected':''}>Image</option><option value="video" ${m.type==='video'?'selected':''}>Video</option><option value="document" ${m.type==='document'?'selected':''}>Document (PDF)</option></select><div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><input type="text" class="admin-input port-media-url" placeholder="URL Google Drive (Share Link) atau URL lainnya" value="${srcStr.startsWith('data:') ? '' : srcStr}"><div style="display:flex; align-items:center; gap:0.5rem;"><span style="font-size:0.8rem; color:var(--text-muted);">OR Local File:</span><input type="file" class="admin-input port-media-file" style="padding:0.4rem;"></div></div><button class="admin-btn admin-btn-del" onclick="this.parentElement.remove()">X</button>`; document.getElementById('adm-port-media-list').appendChild(div); }
+        
+        window.addPortMediaRow = function(m = {type:'image', src:''}) { 
+            const srcStr = m.src || ''; 
+            const div = document.createElement('div'); 
+            div.className = 'admin-row'; 
+            div.innerHTML = `<input type="hidden" class="port-media-hidden-src" value="${srcStr}"><select class="admin-select port-media-type" style="width:120px;"><option value="image" ${m.type==='image'?'selected':''}>Image</option><option value="video" ${m.type==='video'?'selected':''}>Video</option><option value="document" ${m.type==='document'?'selected':''}>Document (PDF)</option></select><div style="flex:1; display:flex; flex-direction:column; gap:0.5rem;"><input type="text" class="admin-input port-media-url" placeholder="URL Google Drive (Share Link) atau URL lainnya" value="${srcStr.startsWith('data:') ? '' : srcStr}"><div style="display:flex; align-items:center; gap:0.5rem;"><span style="font-size:0.8rem; color:var(--text-muted);">OR Local File:</span><input type="file" class="admin-input port-media-file" style="padding:0.4rem;"></div></div>${window.getRowControls()}`; 
+            document.getElementById('adm-port-media-list').appendChild(div); 
+        }
         
         window.savePortProject = async function() { const id = document.getElementById('adm-port-id').value || 'p' + Date.now(); const title = document.getElementById('adm-port-title').value; if(!title) { alert('Project title is required'); return; } let mediaArr = []; const rows = Array.from(document.getElementById('adm-port-media-list').children); for(let row of rows) { const type = row.querySelector('.port-media-type').value; let src = row.querySelector('.port-media-url').value; const hiddenSrc = row.querySelector('.port-media-hidden-src').value; const fileInput = row.querySelector('.port-media-file'); if (fileInput.files.length > 0) { try { src = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } } const newProject = { id, title, cat: document.getElementById('adm-port-cat').value || "Other", descEN: document.getElementById('adm-port-desc-en').innerHTML, descID: document.getElementById('adm-port-desc-id').innerHTML, media: mediaArr }; const existingIndex = window.db.portfolio.findIndex(p => p.id === id); if (existingIndex >= 0) window.db.portfolio[existingIndex] = newProject; else window.db.portfolio.push(newProject); await window.saveDb(); window.closePortEditor(); window.populateAdminPortfolioList(); alert('Project saved successfully!'); }
 
@@ -1179,7 +1221,11 @@
             }
         }
 
-        window.onload = initApp;
+        // Jalankan inisialisasi awal
+        window.onload = () => {
+            window.scrollTo(0, 0); // Posisikan halaman di paling atas saat pertama dibuka
+            initApp();
+        };
     </script>
 </body>
 </html>
