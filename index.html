@@ -338,7 +338,7 @@
                 <li><a href="#expertise" data-i18n="navExpertise">Expertise</a></li>
                 <li><a href="#experience" data-i18n="navExperience">Experience</a></li>
                 <li><a href="#portfolio" data-i18n="navPortfolio">Works</a></li>
-                <li><a href="#writings" data-i18n="navWritings">Writings</a></li>
+                <li><a href="#writings" data-i18n="navWritings">Articles</a></li>
                 <li><a href="#contact" data-i18n="navContact">Contact</a></li>
             </ul>
             <div class="controls">
@@ -893,7 +893,7 @@
 
         const dict = {
             en: {
-                navAbout: "About", navExpertise: "Expertise", navExperience: "Experience", navPortfolio: "Works", navWritings: "Writings", navContact: "Contact",
+                navAbout: "About", navExpertise: "Expertise", navExperience: "Experience", navPortfolio: "Works", navWritings: "Articles", navContact: "Contact",
                 btnPortfolio: "View Portfolio", btnContact: "Let's Collaborate",
                 titleAbout: "<span>Professional</span> Summary", 
                 titleEdu: "Education & Certification",
@@ -1094,9 +1094,21 @@
         window.renderPortfolioGrid = function(items) {
             document.getElementById('ui-portfolio-grid').innerHTML = items.map(p => {
                 let thumbSrc = "https://placehold.co/600x400?text=No+Media";
-                if(p.media && p.media.length > 0) { if(p.media[0].type === 'image') thumbSrc = p.media[0].src; else if(p.media[0].type === 'video') thumbSrc = "https://placehold.co/600x400?text=Video"; else if(p.media[0].type === 'document') thumbSrc = "https://placehold.co/600x400?text=Document"; }
+                if(p.media && p.media.length > 0) { 
+                    if(p.media[0].type === 'image') { thumbSrc = p.media[0].src; }
+                    else if(p.media[0].type === 'video') { thumbSrc = "https://placehold.co/600x400?text=Video"; }
+                    else if(p.media[0].type === 'document') { 
+                        // MENARIK HALAMAN PERTAMA PDF DARI GOOGLE DRIVE SEBAGAI GAMBAR SAMPUL
+                        if (p.media[0].src.includes('drive.google.com')) {
+                            const idMatch = p.media[0].src.match(/\/d\/([a-zA-Z0-9_-]+)/) || p.media[0].src.match(/id=([a-zA-Z0-9_-]+)/);
+                            thumbSrc = idMatch ? `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w600` : "https://placehold.co/600x400?text=Document";
+                        } else {
+                            thumbSrc = "https://placehold.co/600x400?text=Document";
+                        }
+                    } 
+                }
                 const descStr = currentLang === 'en' ? p.descEN : p.descID;
-                return `<div class="portfolio-card glass" onclick="window.openPortfolioModal('${p.id}')"><img src="${thumbSrc}" onerror="this.src='https://placehold.co/600x400?text=Image+Unavailable'" alt="${p.title}" class="portfolio-thumb"><div class="portfolio-info"><div class="portfolio-cat">${p.cat}</div><h3 class="portfolio-title">${p.title}</h3><p style="font-size: 0.85rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${window.stripHtml(descStr)}</p></div></div>`
+                return `<div class="portfolio-card glass" onclick="window.openPortfolioModal('${p.id}')"><img src="${thumbSrc}" onerror="this.src='https://placehold.co/600x400?text=Document'" alt="${p.title}" class="portfolio-thumb"><div class="portfolio-info"><div class="portfolio-cat">${p.cat}</div><h3 class="portfolio-title">${p.title}</h3><p style="font-size: 0.85rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${window.stripHtml(descStr)}</p></div></div>`
             }).join('');
         }
 
@@ -1113,14 +1125,22 @@
             document.getElementById('ui-writings-grid').innerHTML = window.db.writings.map(w => {
                 let thumbSrc = "https://placehold.co/600x400?text=No+Media";
                 if(w.media && w.media.length > 0) {
-                    if(w.media[0].type === 'image') thumbSrc = w.media[0].src;
-                    else if(w.media[0].type === 'video') thumbSrc = "https://placehold.co/600x400?text=Video";
-                    else if(w.media[0].type === 'document') thumbSrc = "https://placehold.co/600x400?text=Document";
+                    if(w.media[0].type === 'image') { thumbSrc = w.media[0].src; }
+                    else if(w.media[0].type === 'video') { thumbSrc = "https://placehold.co/600x400?text=Video"; }
+                    else if(w.media[0].type === 'document') { 
+                        // MENARIK HALAMAN PERTAMA PDF DARI GOOGLE DRIVE SEBAGAI GAMBAR SAMPUL
+                        if (w.media[0].src.includes('drive.google.com')) {
+                            const idMatch = w.media[0].src.match(/\/d\/([a-zA-Z0-9_-]+)/) || w.media[0].src.match(/id=([a-zA-Z0-9_-]+)/);
+                            thumbSrc = idMatch ? `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w600` : "https://placehold.co/600x400?text=Document";
+                        } else {
+                            thumbSrc = "https://placehold.co/600x400?text=Document";
+                        }
+                    }
                 }
                 const descStr = currentLang === 'en' ? w.descEN : w.descID;
                 return `
                 <div class="portfolio-card glass writing-card" onclick="window.openWritingModal('${w.id}')" style="padding:0; border-top:none;">
-                    <img src="${thumbSrc}" onerror="this.src='https://placehold.co/600x400?text=Image+Unavailable'" alt="${w.title}" class="portfolio-thumb">
+                    <img src="${thumbSrc}" onerror="this.src='https://placehold.co/600x400?text=Document'" alt="${w.title}" class="portfolio-thumb">
                     <div class="portfolio-info">
                         <div class="portfolio-cat">${w.date}</div>
                         <h3 class="portfolio-title">${w.title}</h3>
