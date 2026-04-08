@@ -201,7 +201,14 @@
         /* ================= HERO SECTION ================= */
         .hero { display: flex; align-items: center; min-height: 100vh; padding-top: 5rem; }
         .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-        .hero-content h1 { font-size: clamp(3rem, 5vw, 4.5rem); line-height: 1.1; margin-bottom: 1rem; }
+        
+        /* UX IMPROVEMENT: text-wrap balance untuk mencegah nama terpotong jelek di baris baru */
+        .hero-content h1 { 
+            font-size: clamp(2.8rem, 5vw, 4.5rem); 
+            line-height: 1.15; 
+            margin-bottom: 1rem; 
+            text-wrap: balance; 
+        }
         
         /* UX IMPROVEMENT: Ukuran font dinamis agar proporsional di HP maupun Desktop */
         .hero-roles { color: var(--accent); font-size: clamp(0.9rem, 2vw, 1.05rem); font-weight: 500; margin-bottom: 1.5rem; letter-spacing: 0.5px; line-height: 1.6; }
