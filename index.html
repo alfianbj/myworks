@@ -1251,7 +1251,7 @@
             try {
                 const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
                 const { getAuth, signInAnonymously, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
-                const { getFirestore, initializeFirestore, doc, setDoc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+                const { getFirestore, initializeFirestore, doc, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
 
                 const firebaseConfig = {
                     apiKey: "AIzaSyCU5jBwUjsYtmeaagZxj5vTOn-y0biKMEI",
@@ -1265,7 +1265,6 @@
                 const app = initializeApp(firebaseConfig);
                 const auth = getAuth(app);
                 
-                // PERBAIKAN: Menggunakan metode Long Polling agar koneksi database tidak terblokir / timeout
                 try {
                     firestoreDb = initializeFirestore(app, { experimentalForceLongPolling: true });
                 } catch (e) {
@@ -1274,16 +1273,23 @@
                 
                 window.firebaseSetDoc = setDoc;
                 window.firebaseDoc = doc;
+                window.firebaseGetDoc = getDoc;
 
                 signInAnonymously(auth).catch(err => console.warn("Peringatan Auth Firebase:", err.message));
                 
-                onAuthStateChanged(auth, (user) => {
+                onAuthStateChanged(auth, async (user) => {
                     currentUser = user;
                     if (user) {
                         const docRef = doc(firestoreDb, 'portfolio', 'data');
                         
-                        onSnapshot(docRef, (snap) => {
-                            if (snap.exists()) {
+                        try {
+                            const snap = await getDoc(docRef);
+                            const localRaw = localStorage.getItem('abj_db_live_final');
+                            
+                            // SISTEM ANTI-TIMPA DARURAT: Data laptop adalah bosnya. Jangan pernah timpa data laptop dengan cloud, KECUALI laptop kosong.
+                            if (localRaw && localRaw !== JSON.stringify(FACTORY_DATA)) {
+                                window.firebaseSetDoc(docRef, window.db).catch(e => console.warn(e));
+                            } else if (snap.exists()) {
                                 const incomingData = snap.data();
                                 
                                 if (incomingData && incomingData.hero) {
@@ -1297,15 +1303,11 @@
                                 if(!incomingData.writings) { incomingData.writings = []; }
                                 if(!incomingData.about) { incomingData.about = {en: "", id: ""}; }
 
-                                if (JSON.stringify(incomingData) !== JSON.stringify(window.db)) {
-                                    window.db = incomingData;
-                                    try { localStorage.setItem('abj_db_live_final', JSON.stringify(window.db)); } catch(e){}
-                                    window.renderAll();
-                                }
-                            } else {
-                                if(window.firebaseSetDoc) window.firebaseSetDoc(docRef, window.db).catch(e => console.warn(e));
+                                window.db = incomingData;
+                                try { localStorage.setItem('abj_db_live_final', JSON.stringify(window.db)); } catch(e){}
+                                window.renderAll();
                             }
-                        });
+                        } catch(e) { console.warn("Sync error:", e); }
                     }
                 });
             } catch (e) { console.warn("Info Firebase:", e); }
