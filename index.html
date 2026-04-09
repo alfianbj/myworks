@@ -139,10 +139,10 @@
         /* ================= HERO ================= */
         .hero { display: flex; align-items: center; min-height: 100vh; padding-top: 5rem; }
         .hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center; }
-        .hero-content h1 { font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: 1.15; margin-bottom: 1rem; text-wrap: balance; letter-spacing: -1px;}
+        .hero-content h1 { font-size: clamp(1.5rem, 4.5vw, 4.5rem); line-height: 1.15; margin-bottom: 1rem; white-space: nowrap; letter-spacing: -1px; text-overflow: ellipsis; overflow: hidden; max-width: 100%;}
         .hero-roles { color: var(--accent); font-size: clamp(0.9rem, 2vw, 1rem); font-weight: 500; margin-bottom: 1.5rem; letter-spacing: 0.5px; line-height: 1.6; }
         .hero-motto { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem; border-left: 2px solid var(--accent); padding-left: 1rem; font-style: italic; font-weight: 300;}
-        .hero-btns { display: flex; gap: 1rem; margin-top: 2.5rem;}
+        .hero-btns { display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap;}
         
         .btn-primary { background-color: var(--accent); color: var(--btn-text); padding: 0.85rem 2rem; border-radius: 8px; font-weight: 500; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.3px;}
         .btn-secondary { background-color: transparent; color: var(--text-main); padding: 0.85rem 2rem; border-radius: 8px; font-weight: 500; font-size: 0.95rem; border: 1px solid var(--glass-border); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.3px;}
@@ -152,8 +152,7 @@
         .profile-wrapper { position: relative; width: 320px; height: 320px; }
         .profile-img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; border: 1px solid var(--glass-border); transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); filter: grayscale(15%); transform: translateZ(0);}
         @media (hover: hover) { .profile-wrapper:hover .profile-img { filter: grayscale(0%); transform: scale(1.02); } }
-        /* Status Badge Bersih Tanpa Titik Kedip */
-        .status-badge { position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); background-color: var(--bg-base); border: 1px solid var(--glass-border); padding: 0.6rem 1.2rem; border-radius: 30px; font-size: 0.8rem; display: flex; gap: 0.6rem; align-items: center; white-space: nowrap; font-weight: 500; color: var(--text-main); box-shadow: 0 4px 24px rgba(0,0,0,0.15);}
+        .status-badge { position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); background-color: var(--bg-base); border: 1px solid var(--glass-border); padding: 0.6rem 1.5rem; border-radius: 30px; font-size: 0.85rem; display: flex; align-items: center; white-space: nowrap; font-weight: 500; color: var(--text-main); box-shadow: 0 4px 24px rgba(0,0,0,0.15);}
 
         /* ================= EXPERTISE ================= */
         .skills-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
@@ -189,7 +188,7 @@
 
         .portfolio-card { cursor: pointer; overflow: hidden; display: flex; flex-direction: column; position: relative; border-radius: 12px; background: transparent; border: 1px solid var(--glass-border); transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform: translateZ(0);}
         .portfolio-thumb-wrapper { width: 100%; aspect-ratio: 16 / 10; overflow: hidden; border-bottom: 1px solid var(--glass-border); background-color: rgba(0,0,0,0.1);}
-        .portfolio-thumb { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); filter: brightness(0.9);}
+        .portfolio-thumb { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); filter: brightness(0.9);}
         @media (hover: hover) { 
             .portfolio-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
             [data-theme="light"] .portfolio-card:hover { border-color: rgba(0,0,0,0.15); }
@@ -209,8 +208,11 @@
         .modal-content::-webkit-scrollbar { display: none; } 
         .modal-content.fullscreen { max-width: 100vw; width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; margin: 0; border: none;}
         
-        .modal-close-floating { position: fixed; top: 1.5rem; right: 1.5rem; width: 44px; height: 44px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 1001; cursor: pointer;}
-        @media (hover: hover) { .modal-close-floating:hover { background: var(--danger); border-color: var(--danger); transform: rotate(90deg);} }
+        /* Grup Tombol Mengambang (Share & Close) */
+        .modal-actions-floating { position: fixed; top: 1.5rem; right: 1.5rem; display: flex; gap: 0.8rem; z-index: 1001;}
+        .modal-btn-floating { width: 44px; height: 44px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: #fff; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;}
+        @media (hover: hover) { .modal-btn-floating:hover { background: var(--text-main); color: var(--bg-base); border-color: var(--text-main); transform: scale(1.05);} }
+        @media (hover: hover) { .modal-btn-floating.close-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); transform: rotate(90deg);} }
         
         .modal-controls { position: sticky; top: 0; right: 0; display: flex; justify-content: flex-end; padding: 1.5rem 1.5rem 0 0; z-index: 50; pointer-events: none;}
         .modal-btn { pointer-events: auto; width: 36px; height: 36px; background-color: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; backdrop-filter: blur(4px);}
@@ -360,17 +362,17 @@
             .admin-row { flex-direction: column; }
             .modal-body { padding: 0 1.5rem 1.5rem 1.5rem; }
             .modal-text-content { max-width: 100%; }
+            .modal-actions-floating { top: 1rem; right: 1rem; }
         }
 
         /* PRINT MODE PERFECTED */
         @media print {
-            nav, .hero-btns, .controls, .back-to-top, .admin-trigger, .modal, .toast-notification, .scroll-progress, #splash-screen, .slider-nav, .media-dots, .ai-btn, .admin-dashboard, .pin-overlay, footer { display: none !important; }
+            nav, .hero-btns, .controls, .back-to-top, .admin-trigger, .modal, .toast-notification, .scroll-progress, #splash-screen, .slider-nav, .media-dots, .ai-btn, .admin-dashboard, .pin-overlay, footer, .portfolio-filters { display: none !important; }
             body { background: #ffffff !important; color: #000000 !important; background-image: none !important;}
             .glass { box-shadow: none !important; border: 1px solid #e5e7eb !important; background: transparent !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; transform: none !important; }
             * { color: #000000 !important; text-shadow: none !important; }
             section { padding: 2rem 0 !important; page-break-inside: avoid; }
             .hero { min-height: auto !important; padding-top: 0 !important; }
-            .status-badge { display: none !important; }
             .portfolio-grid, .skills-container, .contact-grid { display: block !important; }
             .portfolio-card, .skill-box, .timeline-item { page-break-inside: avoid !important; margin-bottom: 2rem !important; border: 1px solid #cccccc !important; display: block !important; }
             .portfolio-thumb-wrapper { display: none !important; }
@@ -420,14 +422,15 @@
                 <div class="hero-btns">
                     <a href="#portfolio" class="btn-primary interactive-scale" data-i18n="btnPortfolio">View Portfolio</a>
                     <a href="#contact" class="btn-secondary interactive-scale" data-i18n="btnContact">Let's Collaborate</a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" id="ui-hero-cv" style="display:none; padding: 0.85rem; border-radius: 8px; border-color: var(--accent); color: var(--accent);" title="Download CV">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    </a>
                 </div>
             </div>
             <div class="hero-visual reveal d-1">
                 <div class="profile-wrapper">
                     <img src="https://ui-avatars.com/api/?background=10b981&color=fff&size=400&name=Alfian+Bhara" alt="Alfian Bhara" class="profile-img" id="ui-hero-img" draggable="false" loading="lazy">
-                    <div class="status-badge" id="ui-hero-status">
-                        Available for Remote Working
-                    </div>
+                    <div class="status-badge" id="ui-hero-status" style="display:none;"></div>
                 </div>
             </div>
         </div>
@@ -480,6 +483,7 @@
     <section id="writings">
         <div class="container">
             <h2 class="section-title reveal" data-i18n="titleWritings"><span>Articles</span> & Thoughts</h2>
+            <div class="portfolio-filters reveal" id="ui-writings-filters"></div>
             <div class="portfolio-grid" id="ui-writings-grid"></div>
         </div>
     </section>
@@ -506,7 +510,7 @@
                         <div style="display:flex; justify-content:space-between; margin-bottom: 0.8rem; align-items:center;">
                             <label data-i18n="formMessage" style="margin-bottom:0;">Message</label>
                             <button id="draft-btn" type="button" class="ai-btn interactive-scale" onclick="window.autoDraftMessage()" title="Enhanced with AI">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path></svg>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
                                 <span style="font-weight: 500;">AI Enhance</span>
                             </button>
                         </div>
@@ -530,9 +534,14 @@
 
     <!-- MODAL PORTFOLIO -->
     <div class="modal" id="portfolio-modal">
-        <button class="modal-close-floating interactive-scale" onclick="window.closePortfolioModal()" title="Close">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
+        <div class="modal-actions-floating">
+            <button class="modal-btn-floating interactive-scale" onclick="window.shareContent()" title="Share Link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            </button>
+            <button class="modal-btn-floating close-btn interactive-scale" onclick="window.closePortfolioModal()" title="Close">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
         <div class="modal-content">
             <div class="modal-body">
                 <div class="slider-wrapper">
@@ -559,9 +568,14 @@
 
     <!-- MODAL WRITINGS -->
     <div class="modal" id="writing-modal">
-        <button class="modal-close-floating interactive-scale" onclick="window.closeWritingModal()" title="Close">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
+        <div class="modal-actions-floating">
+            <button class="modal-btn-floating interactive-scale" onclick="window.shareContent()" title="Share Link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            </button>
+            <button class="modal-btn-floating close-btn interactive-scale" onclick="window.closeWritingModal()" title="Close">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
         <div class="modal-content">
             <div class="modal-body">
                 <div class="slider-wrapper">
@@ -647,6 +661,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="admin-form-group"><label>Download CV Link (Google Drive / PDF URL)</label><input type="text" id="adm-hero-cv" class="admin-input" placeholder="Paste link to your CV here..."></div>
                 <div class="admin-form-group"><label>Full Name</label><input type="text" id="adm-hero-name" class="admin-input"></div>
                 <div class="admin-form-group"><label>Job Roles</label><input type="text" id="adm-hero-roles" class="admin-input"></div>
                 <div class="admin-form-group"><label>Tagline</label><input type="text" id="adm-hero-motto" class="admin-input"></div>
@@ -654,7 +669,7 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
                         <label style="margin:0;">Description (EN)</label>
                         <button class="ai-btn interactive-scale" id="btn-adm-hero-desc-en" onclick="window.enhanceAdminText('adm-hero-desc-en', 'en')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
                             <span style="font-weight: 500;">AI Enhance</span>
                         </button>
                     </div>
@@ -664,7 +679,7 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
                         <label style="margin:0;">Description (ID)</label>
                         <button class="ai-btn interactive-scale" id="btn-adm-hero-desc-id" onclick="window.enhanceAdminText('adm-hero-desc-id', 'id')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
                             <span style="font-weight: 500;">AI Enhance</span>
                         </button>
                     </div>
@@ -851,6 +866,10 @@
 
     <!-- MAIN SCRIPT AREA -->
     <script>
+        // ========================== GLOBAL STATE ==========================
+        window.currentOpenModalId = null;
+        window.currentOpenModalType = null;
+
         // ========================== UTILITIES ==========================
         window.getToolbarStr = function() {
             return `
@@ -929,6 +948,25 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
+        window.shareContent = function() {
+            if(!window.currentOpenModalId) return;
+            const url = window.location.origin + window.location.pathname + '#' + window.currentOpenModalType + '-' + window.currentOpenModalId;
+            
+            if (navigator.share) {
+                navigator.share({ title: document.title, url: url }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    window.showToast("Link copied to clipboard!");
+                }).catch(() => {
+                    const input = document.createElement('input');
+                    input.value = url; document.body.appendChild(input);
+                    input.select(); document.execCommand('copy');
+                    document.body.removeChild(input);
+                    window.showToast("Link copied!");
+                });
+            }
+        }
+
         window.moveRowUp = function(btn) { const row = btn.closest('.admin-row'); if (row && row.previousElementSibling) row.parentNode.insertBefore(row, row.previousElementSibling); };
         window.moveRowDown = function(btn) { const row = btn.closest('.admin-row'); if (row && row.nextElementSibling) row.parentNode.insertBefore(row.nextElementSibling, row); };
 
@@ -977,7 +1015,8 @@
                 descEN: "Certified Junior Urban Planner with 4+ years of experience in Geographic Information Systems (GIS), sustainable urban development, and environmental analysis.",
                 descID: "Profesional Perencana Wilayah & Kota tersertifikasi Ahli Muda dengan pengalaman 4+ tahun dalam GIS, pembangunan berkelanjutan, dan analisis lingkungan.",
                 status: "Available for Remote Working",
-                img: "https://ui-avatars.com/api/?background=10b981&color=fff&size=400&name=Alfian+Bhara"
+                img: "https://ui-avatars.com/api/?background=10b981&color=fff&size=400&name=Alfian+Bhara",
+                cvLink: ""
             },
             about: {
                 en: "I am a professional in Urban and Regional Planning, certified as a Junior Urban Planner by BNSP. I specialize in formulating Strategic Environmental Assessments (KLHS), Spatial Detail Plans (RDTR), and data-driven feasibility studies to support measurable strategic decision-making.",
@@ -1114,7 +1153,18 @@
 
             window.renderAll();
 
-            setTimeout(() => { const splash = document.getElementById('splash-screen'); if (splash) splash.classList.add('hidden'); }, 500);
+            setTimeout(() => { 
+                const splash = document.getElementById('splash-screen'); if (splash) splash.classList.add('hidden'); 
+                // DEEP LINKING CHECK ON LOAD
+                const hash = window.location.hash;
+                if (hash.startsWith('#p-')) {
+                    const id = hash.replace('#p-', '');
+                    if(window.db.portfolio.find(x => x.id === id)) window.openPortfolioModal(id);
+                } else if (hash.startsWith('#w-')) {
+                    const id = hash.replace('#w-', '');
+                    if(window.db.writings.find(x => x.id === id)) window.openWritingModal(id);
+                }
+            }, 500);
 
             try {
                 const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
@@ -1219,7 +1269,40 @@
             window.applyTranslations(); document.getElementById('currentYear').innerText = new Date().getFullYear();
             
             if(window.db.hero) {
-                document.getElementById('ui-hero-name').innerText = window.db.hero.name || ""; document.getElementById('ui-hero-roles').innerText = window.db.hero.roles || ""; document.getElementById('ui-hero-motto').innerText = window.db.hero.motto || ""; document.getElementById('ui-hero-desc').innerHTML = currentLang === 'en' ? (window.db.hero.descEN || "") : (window.db.hero.descID || ""); document.getElementById('ui-hero-status').innerText = window.db.hero.status || ""; if(window.db.hero.img) document.getElementById('ui-hero-img').src = window.db.hero.img;
+                const heroNameEl = document.getElementById('ui-hero-name');
+                if(heroNameEl) heroNameEl.innerText = window.db.hero.name || ""; 
+                
+                const heroRolesEl = document.getElementById('ui-hero-roles');
+                if(heroRolesEl) heroRolesEl.innerText = window.db.hero.roles || ""; 
+                
+                const heroMottoEl = document.getElementById('ui-hero-motto');
+                if(heroMottoEl) heroMottoEl.innerText = window.db.hero.motto || ""; 
+                
+                const heroDescEl = document.getElementById('ui-hero-desc');
+                if(heroDescEl) heroDescEl.innerHTML = currentLang === 'en' ? (window.db.hero.descEN || "") : (window.db.hero.descID || ""); 
+                
+                const heroStatusEl = document.getElementById('ui-hero-status');
+                if(heroStatusEl) {
+                    if (window.db.hero.status) {
+                        heroStatusEl.innerHTML = `<span class="status-dot"></span> ${window.db.hero.status}`;
+                        heroStatusEl.style.display = 'flex';
+                    } else {
+                        heroStatusEl.style.display = 'none';
+                    }
+                }
+                
+                const cvBtn = document.getElementById('ui-hero-cv');
+                if(cvBtn) {
+                    if(window.db.hero.cvLink) {
+                        cvBtn.href = window.db.hero.cvLink;
+                        cvBtn.style.display = 'inline-flex';
+                    } else {
+                        cvBtn.style.display = 'none';
+                    }
+                }
+                
+                const heroImgEl = document.getElementById('ui-hero-img');
+                if(heroImgEl && window.db.hero.img) heroImgEl.src = window.db.hero.img;
             }
             if(window.db.about) { document.getElementById('ui-about-text').innerHTML = currentLang === 'en' ? (window.db.about.en || "") : (window.db.about.id || ""); }
             if(window.db.education) {
@@ -1242,7 +1325,11 @@
                 document.getElementById('ui-portfolio-filters').innerHTML = `<button class="filter-btn active interactive-scale" onclick="window.filterPortfolio('all', this)">${dict[currentLang].catAll}</button>${categories.map(c => `<button class="filter-btn interactive-scale" onclick="window.filterPortfolio('${c}', this)">${c}</button>`).join('')}`;
                 window.renderPortfolioGrid(window.db.portfolio);
             }
-            window.renderWritingsGrid();
+            if(window.db.writings) {
+                const wCats = [...new Set(window.db.writings.map(w => w.date))];
+                document.getElementById('ui-writings-filters').innerHTML = `<button class="filter-btn active interactive-scale" onclick="window.filterWritings('all', this)">${dict[currentLang].catAll}</button>${wCats.map(c => `<button class="filter-btn interactive-scale" onclick="window.filterWritings('${c}', this)">${c}</button>`).join('')}`;
+                window.renderWritingsGrid(window.db.writings);
+            }
             if(window.db.contacts) {
                 document.getElementById('ui-contact-list').innerHTML = window.db.contacts.map(c => `
                     <a href="${c.link}" target="_blank" rel="noopener noreferrer" class="contact-link-item interactive-scale">
@@ -1255,10 +1342,13 @@
         }
 
         window.renderPortfolioGrid = function(items) {
+            if(!items || items.length === 0) { document.getElementById('ui-portfolio-grid').innerHTML = `<p style="color:var(--text-muted); grid-column: 1/-1;">No projects available.</p>`; return; }
             document.getElementById('ui-portfolio-grid').innerHTML = items.map((p, index) => {
                 let thumbSrc = "https://placehold.co/600x400?text=No+Media";
                 if(p.media && p.media.length > 0) { 
-                    if(p.media[0].type === 'image') thumbSrc = p.media[0].src; else if(p.media[0].type === 'video') thumbSrc = "https://placehold.co/600x400?text=Video";
+                    if(p.media[0].type === 'image') thumbSrc = p.media[0].src; 
+                    else if(p.media[0].type === 'video') thumbSrc = "https://placehold.co/600x400?text=Video";
+                    else if(p.media[0].type === 'webgis') thumbSrc = "https://placehold.co/600x400?text=Interactive+Map";
                     else if(p.media[0].type === 'document') { 
                         if (p.media[0].src.includes('drive.google.com')) { const idMatch = p.media[0].src.match(/\/d\/([a-zA-Z0-9_-]+)/) || p.media[0].src.match(/id=([a-zA-Z0-9_-]+)/); thumbSrc = idMatch ? `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w600` : "https://placehold.co/600x400?text=Doc"; } else { thumbSrc = "https://placehold.co/600x400?text=Doc"; }
                     } 
@@ -1268,14 +1358,18 @@
             }).join('');
         }
 
-        window.filterPortfolio = function(cat, btnElement) { document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active')); btnElement.classList.add('active'); if (cat === 'all') window.renderPortfolioGrid(window.db.portfolio); else window.renderPortfolioGrid(window.db.portfolio.filter(p => p.cat === cat)); setTimeout(window.initObserver, 50); }
+        window.filterPortfolio = function(cat, btnElement) { document.querySelectorAll('#ui-portfolio-filters .filter-btn').forEach(btn => btn.classList.remove('active')); btnElement.classList.add('active'); if (cat === 'all') window.renderPortfolioGrid(window.db.portfolio); else window.renderPortfolioGrid(window.db.portfolio.filter(p => p.cat === cat)); setTimeout(window.initObserver, 50); }
 
-        window.renderWritingsGrid = function() {
-            if(!window.db.writings || window.db.writings.length === 0) { document.getElementById('ui-writings-grid').innerHTML = `<p style="color:var(--text-muted); grid-column: 1/-1;">No articles available.</p>`; return; }
-            document.getElementById('ui-writings-grid').innerHTML = window.db.writings.map((w, index) => {
+        window.filterWritings = function(cat, btnElement) { document.querySelectorAll('#ui-writings-filters .filter-btn').forEach(btn => btn.classList.remove('active')); btnElement.classList.add('active'); if (cat === 'all') window.renderWritingsGrid(window.db.writings); else window.renderWritingsGrid(window.db.writings.filter(w => w.date === cat)); setTimeout(window.initObserver, 50); }
+
+        window.renderWritingsGrid = function(items) {
+            if(!items || items.length === 0) { document.getElementById('ui-writings-grid').innerHTML = `<p style="color:var(--text-muted); grid-column: 1/-1;">No articles available.</p>`; return; }
+            document.getElementById('ui-writings-grid').innerHTML = items.map((w, index) => {
                 let thumbSrc = "https://placehold.co/600x400?text=Article";
                 if(w.media && w.media.length > 0) {
-                    if(w.media[0].type === 'image') thumbSrc = w.media[0].src; else if(w.media[0].type === 'video') thumbSrc = "https://placehold.co/600x400?text=Video";
+                    if(w.media[0].type === 'image') thumbSrc = w.media[0].src; 
+                    else if(w.media[0].type === 'video') thumbSrc = "https://placehold.co/600x400?text=Video";
+                    else if(w.media[0].type === 'webgis') thumbSrc = "https://placehold.co/600x400?text=Map/Web";
                     else if(w.media[0].type === 'document') { if (w.media[0].src.includes('drive.google.com')) { const idMatch = w.media[0].src.match(/\/d\/([a-zA-Z0-9_-]+)/) || w.media[0].src.match(/id=([a-zA-Z0-9_-]+)/); thumbSrc = idMatch ? `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w600` : "https://placehold.co/600x400?text=Doc"; } else { thumbSrc = "https://placehold.co/600x400?text=Doc"; } }
                 }
                 const descStr = currentLang === 'en' ? w.descEN : w.descID; const titleStr = currentLang === 'en' ? (w.titleEN || w.title || '') : (w.titleID || w.title || ''); const delayClass = index % 4 === 1 ? 'd-1' : index % 4 === 2 ? 'd-2' : index % 4 === 3 ? 'd-3' : '';
@@ -1325,6 +1419,7 @@
         window.openPortfolioModal = function(id) {
             document.body.classList.add('no-scroll'); 
             const p = window.db.portfolio.find(x => x.id === id); if(!p) return;
+            window.currentOpenModalId = id; window.currentOpenModalType = 'p'; history.replaceState(null, null, '#p-' + id);
             const titleStr = currentLang === 'en' ? (p.titleEN || p.title || '') : (p.titleID || p.title || '');
             document.getElementById('modal-title').innerText = titleStr; document.getElementById('modal-cat').innerText = p.cat; document.getElementById('modal-desc').innerHTML = currentLang === 'en' ? p.descEN : p.descID;
             const slider = document.getElementById('modal-slider'), dots = document.getElementById('modal-dots'), downloads = document.getElementById('modal-downloads');
@@ -1340,6 +1435,9 @@
                     else if (m.type === 'video') {
                         if(m.src.includes('drive.google.com')) mediaHtml = `<iframe src="${m.src}" allow="autoplay" allowfullscreen="true" loading="lazy"></iframe>`;
                         else mediaHtml = `<video controls loading="lazy"><source src="${m.src}"></video>`;
+                    } else if (m.type === 'webgis') {
+                        mediaHtml = `<iframe src="${m.src}" title="Interactive Map" allow="autoplay; geolocation" allowfullscreen="true" loading="lazy" style="width:100%; height:100%; min-height:50vh; border-radius:8px; border:none; background:#fff;"></iframe>`;
+                        downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open WebGIS / Link</a> `;
                     } else if (m.type === 'document') {
                         let viewerHtml = '';
                         if (m.src.includes('drive.google.com')) { viewerHtml = `<iframe src="${m.src.replace(/\/view.*$/, '/preview')}" title="PDF Viewer" allow="autoplay" allowfullscreen="true" loading="lazy"></iframe>`; } else if (m.src.startsWith('http') && !m.src.endsWith('.pdf')) { viewerHtml = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(m.src)}&embedded=true" allowfullscreen="true" loading="lazy"></iframe>`; } else { viewerHtml = `<iframe src="${m.src}#toolbar=1&navpanes=0&scrollbar=1&view=FitH" title="PDF Viewer" style="width:100%; height:100%; min-height:50vh; border-radius:8px; border:none; background:#fff;" allowfullscreen="true" loading="lazy"></iframe>`; }
@@ -1360,6 +1458,7 @@
         window.openWritingModal = function(id) {
             document.body.classList.add('no-scroll'); 
             const w = window.db.writings.find(x => x.id === id); if(!w) return;
+            window.currentOpenModalId = id; window.currentOpenModalType = 'w'; history.replaceState(null, null, '#w-' + id);
             const titleStr = currentLang === 'en' ? (w.titleEN || w.title || '') : (w.titleID || w.title || '');
             document.getElementById('w-modal-title').innerText = titleStr; document.getElementById('w-modal-date').innerText = w.date; document.getElementById('w-modal-content').innerHTML = currentLang === 'en' ? w.descEN : w.descID;
             const slider = document.getElementById('w-modal-slider'), dots = document.getElementById('w-modal-dots'), downloads = document.getElementById('w-modal-downloads');
@@ -1375,6 +1474,9 @@
                     else if (m.type === 'video') {
                         if(m.src.includes('drive.google.com')) mediaHtml = `<iframe src="${m.src}" allow="autoplay" allowfullscreen="true" loading="lazy"></iframe>`;
                         else mediaHtml = `<video controls loading="lazy"><source src="${m.src}"></video>`;
+                    } else if (m.type === 'webgis') {
+                        mediaHtml = `<iframe src="${m.src}" title="Interactive Map" allow="autoplay; geolocation" allowfullscreen="true" loading="lazy" style="width:100%; height:100%; min-height:50vh; border-radius:8px; border:none; background:#fff;"></iframe>`;
+                        downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Link</a> `;
                     } else if (m.type === 'document') {
                         let viewerHtml = '';
                         if (m.src.includes('drive.google.com')) { viewerHtml = `<iframe src="${m.src.replace(/\/view.*$/, '/preview')}" title="PDF Viewer" allow="autoplay" allowfullscreen="true" loading="lazy"></iframe>`; } else if (m.src.startsWith('http') && !m.src.endsWith('.pdf')) { viewerHtml = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(m.src)}&embedded=true" allowfullscreen="true" loading="lazy"></iframe>`; } else { viewerHtml = `<iframe src="${m.src}#toolbar=1&navpanes=0&scrollbar=1&view=FitH" title="PDF Viewer" style="width:100%; height:100%; min-height:50vh; border-radius:8px; border:none; background:#fff;" allowfullscreen="true" loading="lazy"></iframe>`; }
@@ -1393,8 +1495,8 @@
         }
 
         window.toggleMaximizeModal = function(modalId) { document.querySelector(`#${modalId} .modal-content`).classList.toggle('fullscreen'); }
-        window.closePortfolioModal = function() { document.body.classList.remove('no-scroll'); document.getElementById('portfolio-modal').classList.remove('active'); const slider = document.getElementById('modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } }
-        window.closeWritingModal = function() { document.body.classList.remove('no-scroll'); document.getElementById('writing-modal').classList.remove('active'); const slider = document.getElementById('w-modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } }
+        window.closePortfolioModal = function() { document.body.classList.remove('no-scroll'); document.getElementById('portfolio-modal').classList.remove('active'); const slider = document.getElementById('modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } window.currentOpenModalId = null; window.currentOpenModalType = null; history.replaceState(null, null, ' '); }
+        window.closeWritingModal = function() { document.body.classList.remove('no-scroll'); document.getElementById('writing-modal').classList.remove('active'); const slider = document.getElementById('w-modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } window.currentOpenModalId = null; window.currentOpenModalType = null; history.replaceState(null, null, ' '); }
         
         window.submitChat = async function() { 
             const name = document.getElementById('chat-name').value, contact = document.getElementById('chat-contact').value, msg = document.getElementById('chat-message').value; 
@@ -1422,9 +1524,21 @@
 
         window.populateAdminForms = function() {
             if(!window.db) return;
-            const heroImgStr = window.db.hero?.img || ''; document.getElementById('adm-hero-hidden-img').value = heroImgStr; document.getElementById('adm-hero-img-url').value = heroImgStr.startsWith('data:') ? '' : heroImgStr; document.getElementById('prev-hero-img').src = heroImgStr || 'https://placehold.co/50x50?text=Img';
-            document.getElementById('adm-hero-name').value = window.db.hero?.name || ''; document.getElementById('adm-hero-roles').value = window.db.hero?.roles || ''; document.getElementById('adm-hero-motto').value = window.db.hero?.motto || ''; document.getElementById('adm-hero-desc-en').innerHTML = window.db.hero?.descEN || ''; document.getElementById('adm-hero-desc-id').innerHTML = window.db.hero?.descID || ''; document.getElementById('adm-hero-status').value = window.db.hero?.status || '';
-            document.getElementById('adm-about-en').innerHTML = window.db.about?.en || ''; document.getElementById('adm-about-id').innerHTML = window.db.about?.id || '';
+            const heroImgStr = window.db.hero?.img || ''; 
+            const elHiddenImg = document.getElementById('adm-hero-hidden-img'); if(elHiddenImg) elHiddenImg.value = heroImgStr;
+            const elImgUrl = document.getElementById('adm-hero-img-url'); if(elImgUrl) elImgUrl.value = heroImgStr.startsWith('data:') ? '' : heroImgStr;
+            const elPrevImg = document.getElementById('prev-hero-img'); if(elPrevImg) elPrevImg.src = heroImgStr || 'https://placehold.co/50x50?text=Img';
+            
+            const elCv = document.getElementById('adm-hero-cv'); if(elCv) elCv.value = window.db.hero?.cvLink || '';
+            const elName = document.getElementById('adm-hero-name'); if(elName) elName.value = window.db.hero?.name || ''; 
+            const elRoles = document.getElementById('adm-hero-roles'); if(elRoles) elRoles.value = window.db.hero?.roles || ''; 
+            const elMotto = document.getElementById('adm-hero-motto'); if(elMotto) elMotto.value = window.db.hero?.motto || ''; 
+            const elDescEn = document.getElementById('adm-hero-desc-en'); if(elDescEn) elDescEn.innerHTML = window.db.hero?.descEN || ''; 
+            const elDescId = document.getElementById('adm-hero-desc-id'); if(elDescId) elDescId.innerHTML = window.db.hero?.descID || ''; 
+            const elStatus = document.getElementById('adm-hero-status'); if(elStatus) elStatus.value = window.db.hero?.status || '';
+            
+            const elAboutEn = document.getElementById('adm-about-en'); if(elAboutEn) elAboutEn.innerHTML = window.db.about?.en || ''; 
+            const elAboutId = document.getElementById('adm-about-id'); if(elAboutId) elAboutId.innerHTML = window.db.about?.id || '';
             
             window.renderAdminList('adm-edu-list', window.db.education || [], window.addEduRowHtml); window.renderAdminList('adm-expertise-list', window.db.expertise || [], window.addExpertiseRowHtml); window.renderAdminList('adm-tools-list', window.db.tools || [], window.addToolRowHtml); window.renderAdminList('adm-exp-list', window.db.experience || [], window.addExpRowHtml); window.renderAdminList('adm-contact-list', window.db.contacts || [], window.addContactRowHtml);
             window.populateAdminPortfolioList(); window.populateAdminWritingsList(); window.populateAdminInbox();
@@ -1436,8 +1550,23 @@
             try {
                 const btn = document.getElementById('btn-save-hero'); const origText = btn.innerText; btn.innerText = "Saving...";
                 if(!window.db.hero) window.db.hero = {};
-                const fileInput = document.getElementById('adm-hero-img-file'); let newImg = document.getElementById('adm-hero-img-url').value; const hiddenImg = document.getElementById('adm-hero-hidden-img').value; if (fileInput.files.length > 0) { try { newImg = await window.getBase64(fileInput.files[0]); } catch (e) {} } else if (!newImg && hiddenImg.startsWith('data:')) { newImg = hiddenImg; } if(newImg) window.db.hero.img = newImg; 
-                window.db.hero.name = document.getElementById('adm-hero-name').value || ""; window.db.hero.roles = document.getElementById('adm-hero-roles').value || ""; window.db.hero.motto = document.getElementById('adm-hero-motto').value || ""; window.db.hero.descEN = document.getElementById('adm-hero-desc-en').innerHTML || ""; window.db.hero.descID = document.getElementById('adm-hero-desc-id').innerHTML || ""; window.db.hero.status = document.getElementById('adm-hero-status').value || ""; 
+                
+                const fileInput = document.getElementById('adm-hero-img-file'); 
+                const elImgUrl = document.getElementById('adm-hero-img-url'); let newImg = elImgUrl ? elImgUrl.value : ''; 
+                const elHiddenImg = document.getElementById('adm-hero-hidden-img'); const hiddenImg = elHiddenImg ? elHiddenImg.value : ''; 
+                
+                if (fileInput && fileInput.files && fileInput.files.length > 0) { try { newImg = await window.getBase64(fileInput.files[0]); } catch (e) {} } 
+                else if (!newImg && hiddenImg.startsWith('data:')) { newImg = hiddenImg; } 
+                if(newImg) window.db.hero.img = newImg; 
+                
+                const elCv = document.getElementById('adm-hero-cv'); if(elCv) window.db.hero.cvLink = elCv.value || "";
+                const elName = document.getElementById('adm-hero-name'); if(elName) window.db.hero.name = elName.value || ""; 
+                const elRoles = document.getElementById('adm-hero-roles'); if(elRoles) window.db.hero.roles = elRoles.value || ""; 
+                const elMotto = document.getElementById('adm-hero-motto'); if(elMotto) window.db.hero.motto = elMotto.value || ""; 
+                const elDescEn = document.getElementById('adm-hero-desc-en'); if(elDescEn) window.db.hero.descEN = elDescEn.innerHTML || ""; 
+                const elDescId = document.getElementById('adm-hero-desc-id'); if(elDescId) window.db.hero.descID = elDescId.innerHTML || ""; 
+                const elStatus = document.getElementById('adm-hero-status'); if(elStatus) window.db.hero.status = elStatus.value || ""; 
+                
                 await window.saveDb(); window.populateAdminForms(); btn.innerText = origText; window.showToast("Profile Saved!"); 
             } catch(e) { window.showToast("System error.", true); }
         }
@@ -1504,9 +1633,9 @@
         window.editPortProject = function(id) { window.openPortEditor(id); }
         window.addPortMediaRow = function(m = {type:'image', src:''}) { 
             const rid = 'img-'+Math.random().toString(36).substr(2,5);
-            let displaySrc = m.src || 'https://placehold.co/50x50?text=Img'; if(m.type==='video') displaySrc = 'https://placehold.co/50x50?text=Vid'; if(m.type==='document') displaySrc = 'https://placehold.co/50x50?text=PDF';
+            let displaySrc = m.src || 'https://placehold.co/50x50?text=Img'; if(m.type==='video') displaySrc = 'https://placehold.co/50x50?text=Vid'; if(m.type==='document') displaySrc = 'https://placehold.co/50x50?text=PDF'; if(m.type==='webgis') displaySrc = 'https://placehold.co/50x50?text=Map';
             const div = document.createElement('div'); div.className = 'admin-row'; 
-            div.innerHTML = `<img id="${rid}" class="media-preview-box" src="${displaySrc}" onerror="this.src='https://placehold.co/50x50?text=Media'"><input type="hidden" class="port-media-hidden-src" value="${m.src||''}"><select class="admin-select port-media-type" style="width:auto; min-width:100px; padding:0.6rem;"><option value="image" ${m.type==='image'?'selected':''}>Image</option><option value="video" ${m.type==='video'?'selected':''}>Video</option><option value="document" ${m.type==='document'?'selected':''}>Doc/PDF</option></select><div style="flex:1; display:flex; flex-direction:column; gap:0.6rem; width:100%;"><input type="text" class="admin-input port-media-url" placeholder="Drive Link / Web URL" value="${(m.src||'').startsWith('data:') ? '' : (m.src||'')}" oninput="if(this.closest('.admin-row').querySelector('.port-media-type').value==='image') document.getElementById('${rid}').src=this.value"><div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;"><span style="font-size:0.75rem; color:var(--text-muted);">OR Local File:</span><input type="file" class="admin-input port-media-file" style="padding:0.4rem; flex:1;" onchange="if(this.closest('.admin-row').querySelector('.port-media-type').value==='image') window.updateLocalPreview(this, '${rid}')"></div></div>${window.getRowControls()}`; 
+            div.innerHTML = `<img id="${rid}" class="media-preview-box" src="${displaySrc}" onerror="this.src='https://placehold.co/50x50?text=Media'"><input type="hidden" class="port-media-hidden-src" value="${m.src||''}"><select class="admin-select port-media-type" style="width:auto; min-width:100px; padding:0.6rem;"><option value="image" ${m.type==='image'?'selected':''}>Image</option><option value="video" ${m.type==='video'?'selected':''}>Video</option><option value="document" ${m.type==='document'?'selected':''}>Doc/PDF</option><option value="webgis" ${m.type==='webgis'?'selected':''}>WebGIS/Link</option></select><div style="flex:1; display:flex; flex-direction:column; gap:0.6rem; width:100%;"><input type="text" class="admin-input port-media-url" placeholder="Drive Link / Web URL" value="${(m.src||'').startsWith('data:') ? '' : (m.src||'')}" oninput="if(this.closest('.admin-row').querySelector('.port-media-type').value==='image') document.getElementById('${rid}').src=this.value"><div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;"><span style="font-size:0.75rem; color:var(--text-muted);">OR Local File:</span><input type="file" class="admin-input port-media-file" style="padding:0.4rem; flex:1;" onchange="if(this.closest('.admin-row').querySelector('.port-media-type').value==='image') window.updateLocalPreview(this, '${rid}')"></div></div>${window.getRowControls()}`; 
             document.getElementById('adm-port-media-list').appendChild(div); 
         }
         
@@ -1561,9 +1690,9 @@
         
         window.addWritingMediaRow = function(m = {type:'image', src:''}) { 
             const rid = 'img-'+Math.random().toString(36).substr(2,5);
-            let displaySrc = m.src || 'https://placehold.co/50x50?text=Img'; if(m.type==='video') displaySrc = 'https://placehold.co/50x50?text=Vid'; if(m.type==='document') displaySrc = 'https://placehold.co/50x50?text=PDF';
+            let displaySrc = m.src || 'https://placehold.co/50x50?text=Img'; if(m.type==='video') displaySrc = 'https://placehold.co/50x50?text=Vid'; if(m.type==='document') displaySrc = 'https://placehold.co/50x50?text=PDF'; if(m.type==='webgis') displaySrc = 'https://placehold.co/50x50?text=Map';
             const div = document.createElement('div'); div.className = 'admin-row'; 
-            div.innerHTML = `<img id="${rid}" class="media-preview-box" src="${displaySrc}" onerror="this.src='https://placehold.co/50x50?text=Media'"><input type="hidden" class="writing-media-hidden-src" value="${m.src||''}"><select class="admin-select writing-media-type" style="width:auto; min-width:100px; padding:0.6rem;"><option value="image" ${m.type==='image'?'selected':''}>Image</option><option value="video" ${m.type==='video'?'selected':''}>Video</option><option value="document" ${m.type==='document'?'selected':''}>Doc/PDF</option></select><div style="flex:1; display:flex; flex-direction:column; gap:0.6rem; width:100%;"><input type="text" class="admin-input writing-media-url" placeholder="Drive Link / Web URL" value="${(m.src||'').startsWith('data:') ? '' : (m.src||'')}" oninput="if(this.closest('.admin-row').querySelector('.writing-media-type').value==='image') document.getElementById('${rid}').src=this.value"><div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;"><span style="font-size:0.75rem; color:var(--text-muted);">OR Local File:</span><input type="file" class="admin-input writing-media-file" style="padding:0.4rem; flex:1;" onchange="if(this.closest('.admin-row').querySelector('.writing-media-type').value==='image') window.updateLocalPreview(this, '${rid}')"></div></div>${window.getRowControls()}`; 
+            div.innerHTML = `<img id="${rid}" class="media-preview-box" src="${displaySrc}" onerror="this.src='https://placehold.co/50x50?text=Media'"><input type="hidden" class="writing-media-hidden-src" value="${m.src||''}"><select class="admin-select writing-media-type" style="width:auto; min-width:100px; padding:0.6rem;"><option value="image" ${m.type==='image'?'selected':''}>Image</option><option value="video" ${m.type==='video'?'selected':''}>Video</option><option value="document" ${m.type==='document'?'selected':''}>Doc/PDF</option><option value="webgis" ${m.type==='webgis'?'selected':''}>WebGIS/Link</option></select><div style="flex:1; display:flex; flex-direction:column; gap:0.6rem; width:100%;"><input type="text" class="admin-input writing-media-url" placeholder="Drive Link / Web URL" value="${(m.src||'').startsWith('data:') ? '' : (m.src||'')}" oninput="if(this.closest('.admin-row').querySelector('.writing-media-type').value==='image') document.getElementById('${rid}').src=this.value"><div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;"><span style="font-size:0.75rem; color:var(--text-muted);">OR Local File:</span><input type="file" class="admin-input writing-media-file" style="padding:0.4rem; flex:1;" onchange="if(this.closest('.admin-row').querySelector('.writing-media-type').value==='image') window.updateLocalPreview(this, '${rid}')"></div></div>${window.getRowControls()}`; 
             document.getElementById('adm-writing-media-list').appendChild(div); 
         }
 
