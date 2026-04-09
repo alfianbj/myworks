@@ -579,9 +579,14 @@
             .portfolio-card { break-inside: avoid; margin-bottom: 2rem; border: 1px solid #ccc; }
         }
     </style>
+
+    <!-- GOOGLE ANALYTICS (GA4) -->
+    <!-- Nanti, tempelkan kode skrip (gtag.js) dari Google Analytics Anda di bawah baris ini -->
+
 </head>
 <body>
 
+    <!-- UX IMPROVEMENT: Splash Screen Loader -->
     <div id="splash-screen">
         <div class="spinner">ABJ.</div>
     </div>
@@ -1238,7 +1243,10 @@
 
             window.renderAll();
 
-            setTimeout(() => { document.getElementById('splash-screen').classList.add('hidden'); }, 800);
+            setTimeout(() => { 
+                const splash = document.getElementById('splash-screen');
+                if (splash) splash.classList.add('hidden'); 
+            }, 800);
 
             try {
                 const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
@@ -1481,18 +1489,23 @@
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('backToTopBtn');
             const nav = document.getElementById('mainNav');
+            const scrollProgress = document.getElementById("scrollProgress");
             
             let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            if(height > 0) { document.getElementById("scrollProgress").style.width = (winScroll / height) * 100 + "%"; }
+            
+            // PERBAIKAN: Menambahkan validasi null pada scrollProgress
+            if(height > 0 && scrollProgress && scrollProgress.style) { 
+                scrollProgress.style.width = (winScroll / height) * 100 + "%"; 
+            }
             
             if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-                if (window.scrollY > 400) btn.classList.add('visible');
-                else btn.classList.remove('visible');
+                if(nav) nav.classList.add('scrolled');
+                if(btn && window.scrollY > 400) btn.classList.add('visible');
+                else if(btn) btn.classList.remove('visible');
             } else {
-                nav.classList.remove('scrolled');
-                btn.classList.remove('visible');
+                if(nav) nav.classList.remove('scrolled');
+                if(btn) btn.classList.remove('visible');
             }
 
             if (!isScrolling) {
@@ -1556,8 +1569,15 @@
             const slider = document.getElementById('modal-slider'), dots = document.getElementById('modal-dots'), downloads = document.getElementById('modal-downloads');
             slider.innerHTML = ''; dots.innerHTML = ''; downloads.innerHTML = '';
             
-            if (p.media && p.media.length > 1) { document.getElementById('modal-nav-prev').style.display = 'flex'; document.getElementById('modal-nav-next').style.display = 'flex';
-            } else { document.getElementById('modal-nav-prev').style.display = 'none'; document.getElementById('modal-nav-next').style.display = 'none'; }
+            const pNavPrev = document.getElementById('modal-nav-prev');
+            const pNavNext = document.getElementById('modal-nav-next');
+            if (p.media && p.media.length > 1) { 
+                if (pNavPrev) pNavPrev.style.display = 'flex'; 
+                if (pNavNext) pNavNext.style.display = 'flex';
+            } else { 
+                if (pNavPrev) pNavPrev.style.display = 'none'; 
+                if (pNavNext) pNavNext.style.display = 'none'; 
+            }
 
             if (p.media && p.media.length > 0) {
                 p.media.forEach((m, index) => {
@@ -1592,8 +1612,15 @@
             const slider = document.getElementById('w-modal-slider'), dots = document.getElementById('w-modal-dots'), downloads = document.getElementById('w-modal-downloads');
             slider.innerHTML = ''; dots.innerHTML = ''; downloads.innerHTML = '';
             
-            if (w.media && w.media.length > 1) { document.getElementById('w-modal-nav-prev').style.display = 'flex'; document.getElementById('w-modal-nav-next').style.display = 'flex';
-            } else { document.getElementById('w-modal-nav-prev').style.display = 'none'; document.getElementById('w-modal-nav-next').style.display = 'none'; }
+            const wNavPrev = document.getElementById('w-modal-nav-prev');
+            const wNavNext = document.getElementById('w-modal-nav-next');
+            if (w.media && w.media.length > 1) { 
+                if (wNavPrev) wNavPrev.style.display = 'flex'; 
+                if (wNavNext) wNavNext.style.display = 'flex';
+            } else { 
+                if (wNavPrev) wNavPrev.style.display = 'none'; 
+                if (wNavNext) wNavNext.style.display = 'none'; 
+            }
 
             if (w.media && w.media.length > 0) {
                 w.media.forEach((m, index) => {
@@ -1639,16 +1666,59 @@
         window.submitChat = async function() { 
             const name = document.getElementById('chat-name').value, contact = document.getElementById('chat-contact').value, msg = document.getElementById('chat-message').value; 
             if(!name || !msg) { window.showToast('Mohon lengkapi Nama dan Pesan.', true); return; } 
+            
+            // 1. Simpan ke Database Internal (Inbox Admin Panel)
             window.db.inbox.push({ date: new Date().toLocaleString(), name, contact, msg }); 
             await window.saveDb(); 
+            
+            // 2. Kirim Notifikasi Tembusan ke Email (menggunakan FormSubmit)
+            try {
+                const btn = document.querySelector('#contact .btn-primary');
+                const origText = btn.innerText;
+                btn.innerText = "⏳ Sending...";
+                
+                await fetch("https://formsubmit.co/ajax/alfianbharajuang@gmail.com", {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        Nama: name,
+                        Kontak_Info: contact,
+                        Isi_Pesan: msg,
+                        _subject: "🚀 Pesan Baru dari Web Portfolio!" // Subjek Email Anda
+                    })
+                });
+                
+                btn.innerText = origText;
+            } catch(e) { 
+                console.log("Pesan email ditahan, tapi aman tersimpan di database."); 
+            }
+
             document.getElementById('chat-name').value = ''; document.getElementById('chat-contact').value = ''; document.getElementById('chat-message').value = ''; 
             window.showToast("Pesan berhasil dikirim!");
             window.populateAdminInbox(); 
         }
 
         window.openPin = function() { document.body.classList.add('no-scroll'); document.getElementById('pin-overlay').classList.add('active'); document.getElementById('pin-input').focus(); }
-        window.closePin = function() { document.body.classList.remove('no-scroll'); document.getElementById('pin-overlay').classList.remove('active'); document.getElementById('pin-input').value = ''; document.getElementById('pin-error').style.display = 'none'; }
-        window.checkPin = function(e) { if(e.key === 'Enter' || e.target.value.length === 6) { if(e.target.value === window.db.pin) { window.closePin(); window.openAdmin(); } else { document.getElementById('pin-error').style.display = 'block'; e.target.value = ''; } } }
+        window.closePin = function() { 
+            document.body.classList.remove('no-scroll'); 
+            const pinOverlay = document.getElementById('pin-overlay');
+            if (pinOverlay) pinOverlay.classList.remove('active'); 
+            const pinInput = document.getElementById('pin-input');
+            if (pinInput) pinInput.value = ''; 
+            const pinError = document.getElementById('pin-error');
+            if (pinError) pinError.style.display = 'none'; 
+        }
+        window.checkPin = function(e) { 
+            if(e.key === 'Enter' || e.target.value.length === 6) { 
+                if(e.target.value === window.db.pin) { 
+                    window.closePin(); window.openAdmin(); 
+                } else { 
+                    const pinError = document.getElementById('pin-error');
+                    if (pinError) pinError.style.display = 'block'; 
+                    e.target.value = ''; 
+                } 
+            } 
+        }
         window.openAdmin = function() { document.body.classList.add('no-scroll'); document.getElementById('admin-dashboard').classList.add('active'); window.populateAdminForms(); }
         window.closeAdmin = function() { document.body.classList.remove('no-scroll'); document.getElementById('admin-dashboard').classList.remove('active'); }
         window.switchAdminTab = function(tabId, element) { document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active')); document.getElementById(tabId).classList.add('active'); }
@@ -1766,7 +1836,15 @@
         window.deletePortProject = async function(id) { if(confirm('Delete this project?')) { window.db.portfolio = window.db.portfolio.filter(p => p.id !== id); await window.saveDb(); window.populateAdminPortfolioList(); window.showToast("Project deleted!");} }
 
         window.openPortEditor = function(id = null) {
-            document.getElementById('adm-port-list').style.display = 'none'; document.getElementById('adm-port-editor').style.display = 'block'; document.querySelector('#tab-portfolio > .admin-btn-add').style.display = 'none'; document.getElementById('adm-port-media-list').innerHTML = '';
+            const admPortList = document.getElementById('adm-port-list');
+            const admPortEditor = document.getElementById('adm-port-editor');
+            const admPortAddBtn = document.querySelector('#tab-portfolio > .admin-btn-add');
+            const admPortMediaList = document.getElementById('adm-port-media-list');
+            
+            if (admPortList) admPortList.style.display = 'none'; 
+            if (admPortEditor) admPortEditor.style.display = 'block'; 
+            if (admPortAddBtn) admPortAddBtn.style.display = 'none'; 
+            if (admPortMediaList) admPortMediaList.innerHTML = '';
             
             const uniqueCats = [...new Set(window.db.portfolio.map(p => p.cat).filter(c => c))];
             document.getElementById('cat-options').innerHTML = uniqueCats.map(c => `<option value="${c}">`).join('');
@@ -1774,7 +1852,15 @@
             if (id) { const p = window.db.portfolio.find(x => x.id === id); document.getElementById('adm-port-id').value = p.id; document.getElementById('adm-port-title-en').value = p.titleEN || p.title || ''; document.getElementById('adm-port-title-id').value = p.titleID || p.title || ''; document.getElementById('adm-port-cat').value = p.cat; document.getElementById('adm-port-desc-en').innerHTML = p.descEN || ''; document.getElementById('adm-port-desc-id').innerHTML = p.descID || ''; if(p.media) { p.media.forEach(m => window.addPortMediaRow(m)); }
             } else { document.getElementById('adm-port-id').value = ""; document.getElementById('adm-port-title-en').value = ""; document.getElementById('adm-port-title-id').value = ""; document.getElementById('adm-port-cat').value = ""; document.getElementById('adm-port-desc-en').innerHTML = ""; document.getElementById('adm-port-desc-id').innerHTML = ""; window.addPortMediaRow(); }
         }
-        window.closePortEditor = function() { document.getElementById('adm-port-list').style.display = 'flex'; document.getElementById('adm-port-editor').style.display = 'none'; document.querySelector('#tab-portfolio > .admin-btn-add').style.display = 'block'; }
+        window.closePortEditor = function() { 
+            const admPortList = document.getElementById('adm-port-list');
+            const admPortEditor = document.getElementById('adm-port-editor');
+            const admPortAddBtn = document.querySelector('#tab-portfolio > .admin-btn-add');
+            
+            if (admPortList) admPortList.style.display = 'flex'; 
+            if (admPortEditor) admPortEditor.style.display = 'none'; 
+            if (admPortAddBtn) admPortAddBtn.style.display = 'block'; 
+        }
         window.editPortProject = function(id) { window.openPortEditor(id); }
         window.addPortMediaRow = function(m = {type:'image', src:''}) { 
             const srcStr = m.src || ''; 
@@ -1836,7 +1922,15 @@
         window.deleteWriting = async function(id) { if(confirm('Delete this article?')) { window.db.writings = window.db.writings.filter(w => w.id !== id); await window.saveDb(); window.populateAdminWritingsList(); window.showToast('Article deleted!');} }
 
         window.openWritingEditor = function(id = null) {
-            document.getElementById('adm-writings-list').style.display = 'none'; document.getElementById('adm-writing-editor').style.display = 'block'; document.querySelector('#tab-writings > .admin-btn-add').style.display = 'none'; document.getElementById('adm-writing-media-list').innerHTML = '';
+            const admWritingsList = document.getElementById('adm-writings-list');
+            const admWritingEditor = document.getElementById('adm-writing-editor');
+            const admWritingAddBtn = document.querySelector('#tab-writings > .admin-btn-add');
+            const admWritingMediaList = document.getElementById('adm-writing-media-list');
+            
+            if (admWritingsList) admWritingsList.style.display = 'none'; 
+            if (admWritingEditor) admWritingEditor.style.display = 'block'; 
+            if (admWritingAddBtn) admWritingAddBtn.style.display = 'none'; 
+            if (admWritingMediaList) admWritingMediaList.innerHTML = '';
             
             const uniqueDates = [...new Set(window.db.writings.map(w => w.date).filter(d => d))];
             document.getElementById('writing-cat-options').innerHTML = uniqueDates.map(d => `<option value="${d}">`).join('');
@@ -1860,7 +1954,15 @@
                 window.addWritingMediaRow();
             }
         }
-        window.closeWritingEditor = function() { document.getElementById('adm-writings-list').style.display = 'flex'; document.getElementById('adm-writing-editor').style.display = 'none'; document.querySelector('#tab-writings > .admin-btn-add').style.display = 'block'; }
+        window.closeWritingEditor = function() { 
+            const admWritingsList = document.getElementById('adm-writings-list');
+            const admWritingEditor = document.getElementById('adm-writing-editor');
+            const admWritingAddBtn = document.querySelector('#tab-writings > .admin-btn-add');
+            
+            if (admWritingsList) admWritingsList.style.display = 'flex'; 
+            if (admWritingEditor) admWritingEditor.style.display = 'none'; 
+            if (admWritingAddBtn) admWritingAddBtn.style.display = 'block'; 
+        }
         window.editWriting = function(id) { window.openWritingEditor(id); }
         
         window.addWritingMediaRow = function(m = {type:'image', src:''}) { 
@@ -1956,22 +2058,32 @@
         }
 
         // ========================== GEMINI AI ==========================
-        window.callGeminiAPI = async function(prompt, retries = 5) {
-            const apiKey = "AIzaSyDeo98AZxcmyje35gAMDBYDrTtIGquCvQU"; 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-            const payload = { contents: [{ parts: [{ text: prompt }] }] };
+        window.callGeminiAPI = async function(prompt, retries = 2) {
+            // Gunakan API Key Anda
+            const apiKey = "AIzaSyAkmd6eormK3e4ZKPGbL3qKcQvF2U6X0m4"; 
+            // UX FIX: Menggunakan gemini-1.5-flash yang jauh lebih cepat dan stabil
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            const payload = { 
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { temperature: 0.7 } // Membuat respons lebih natural dan terprediksi
+            };
 
             for (let i = 0; i < retries; i++) {
                 try {
                     const response = await fetch(url, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
                     });
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    if (!response.ok) {
+                        const errData = await response.json();
+                        throw new Error(errData.error?.message || `HTTP error! status: ${response.status}`);
+                    }
                     const data = await response.json();
                     return data.candidates[0].content.parts[0].text;
                 } catch (error) {
+                    console.error("Gemini API Error:", error.message);
                     if (i === retries - 1) throw error;
-                    await new Promise(res => setTimeout(res, Math.pow(2, i) * 1000));
+                    // UX FIX: Kurangi waktu tunggu menjadi hanya 1 detik agar tidak terasa macet
+                    await new Promise(res => setTimeout(res, 1000));
                 }
             }
         }
@@ -2000,7 +2112,7 @@
                 msgField.value = drafted.trim();
                 window.showToast("AI Draft Generated!");
             } catch (e) {
-                window.showToast('Gagal terhubung dengan Asisten AI Gemini.', true);
+                window.showToast('Gagal memuat AI. Kuota API mungkin habis atau sinyal terputus.', true);
             } finally {
                 btn.innerText = originalText;
                 btn.disabled = false;
@@ -2034,7 +2146,7 @@
                 }
                 window.showToast("Text Enhanced by AI!");
             } catch (e) {
-                window.showToast('Gagal menyempurnakan teks.', true);
+                window.showToast('Gagal AI. Cek koneksi atau coba lagi nanti.', true);
             } finally {
                 btn.innerText = origBtn;
                 btn.disabled = false;
