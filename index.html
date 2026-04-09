@@ -510,7 +510,7 @@
                         <div style="display:flex; justify-content:space-between; margin-bottom: 0.8rem; align-items:center;">
                             <label data-i18n="formMessage" style="margin-bottom:0;">Message</label>
                             <button id="draft-btn" type="button" class="ai-btn interactive-scale" onclick="window.autoDraftMessage()" title="Enhanced with AI">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path></svg>
                                 <span style="font-weight: 500;">AI Enhance</span>
                             </button>
                         </div>
@@ -1266,7 +1266,9 @@
         }
 
         window.renderAll = function() {
-            window.applyTranslations(); document.getElementById('currentYear').innerText = new Date().getFullYear();
+            window.applyTranslations(); 
+            const currYearEl = document.getElementById('currentYear');
+            if (currYearEl) currYearEl.innerText = new Date().getFullYear();
             
             if(window.db.hero) {
                 const heroNameEl = document.getElementById('ui-hero-name');
@@ -1284,7 +1286,7 @@
                 const heroStatusEl = document.getElementById('ui-hero-status');
                 if(heroStatusEl) {
                     if (window.db.hero.status) {
-                        heroStatusEl.innerHTML = `<span class="status-dot"></span> ${window.db.hero.status}`;
+                        heroStatusEl.innerText = window.db.hero.status;
                         heroStatusEl.style.display = 'flex';
                     } else {
                         heroStatusEl.style.display = 'none';
@@ -1304,46 +1306,76 @@
                 const heroImgEl = document.getElementById('ui-hero-img');
                 if(heroImgEl && window.db.hero.img) heroImgEl.src = window.db.hero.img;
             }
-            if(window.db.about) { document.getElementById('ui-about-text').innerHTML = currentLang === 'en' ? (window.db.about.en || "") : (window.db.about.id || ""); }
-            if(window.db.education) {
-                document.getElementById('ui-edu-container').innerHTML = window.db.education.map((e, index) => {
-                    const delayClass = index % 3 === 0 ? 'd-1' : index % 3 === 1 ? 'd-2' : 'd-3';
-                    const degreeStr = currentLang === 'en' ? (e.degreeEN || e.degree || '') : (e.degreeID || e.degree || '');
-                    return `<div class="glass reveal ${delayClass}" style="padding: 2rem;"><h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.4rem; font-weight:600;">${degreeStr}</h4><p style="font-weight: 500; font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--text-main);">${e.uni}</p><p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">${e.year}</p>${e.link ? `<a href="${e.link}" target="_blank" rel="noopener noreferrer" class="interactive-scale" style="font-size: 0.85rem; color: var(--text-main); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; display:inline-block;">View Credential →</a>` : ''}</div>`
-                }).join('');
+            if(window.db.about) { 
+                const aboutEl = document.getElementById('ui-about-text');
+                if (aboutEl) aboutEl.innerHTML = currentLang === 'en' ? (window.db.about.en || "") : (window.db.about.id || ""); 
             }
-            if(window.db.expertise) { document.getElementById('ui-expertise-list').innerHTML = window.db.expertise.map(x => `<div class="expertise-item"><span class="bullet">→</span><span>${currentLang === 'en' ? x.en : x.id}</span></div>`).join(''); }
-            if(window.db.tools) { document.getElementById('ui-tools-grid').innerHTML = window.db.tools.map(t => `<div class="tool-item interactive-scale"><img src="${t.icon}" onerror="this.src='https://placehold.co/45x45?text=Icon'" alt="${t.name}" class="tool-icon" loading="lazy" draggable="false"><span>${t.name}</span></div>`).join(''); }
+            if(window.db.education) {
+                const eduContainer = document.getElementById('ui-edu-container');
+                if (eduContainer) {
+                    eduContainer.innerHTML = window.db.education.map((e, index) => {
+                        const delayClass = index % 3 === 0 ? 'd-1' : index % 3 === 1 ? 'd-2' : 'd-3';
+                        const degreeStr = currentLang === 'en' ? (e.degreeEN || e.degree || '') : (e.degreeID || e.degree || '');
+                        return `<div class="glass reveal ${delayClass}" style="padding: 2rem;"><h4 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 0.4rem; font-weight:600;">${degreeStr}</h4><p style="font-weight: 500; font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--text-main);">${e.uni}</p><p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">${e.year}</p>${e.link ? `<a href="${e.link}" target="_blank" rel="noopener noreferrer" class="interactive-scale" style="font-size: 0.85rem; color: var(--text-main); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; display:inline-block;">View Credential →</a>` : ''}</div>`
+                    }).join('');
+                }
+            }
+            if(window.db.expertise) { 
+                const expList = document.getElementById('ui-expertise-list');
+                if (expList) {
+                    expList.innerHTML = window.db.expertise.map(x => `<div class="expertise-item"><span class="bullet">→</span><span>${currentLang === 'en' ? x.en : x.id}</span></div>`).join(''); 
+                }
+            }
+            if(window.db.tools) { 
+                const toolGrid = document.getElementById('ui-tools-grid');
+                if (toolGrid) {
+                    toolGrid.innerHTML = window.db.tools.map(t => `<div class="tool-item interactive-scale"><img src="${t.icon}" onerror="this.src='https://placehold.co/45x45?text=Icon'" alt="${t.name}" class="tool-icon" loading="lazy" draggable="false"><span>${t.name}</span></div>`).join(''); 
+                }
+            }
             if(window.db.experience) {
-                document.getElementById('ui-exp-container').innerHTML = window.db.experience.map((e, index) => {
-                    const delayClass = index === 0 ? 'd-1' : index === 1 ? 'd-2' : 'd-3';
-                    return `<div class="timeline-item reveal ${delayClass}"><div class="timeline-dot"></div><div class="timeline-date">${e.date}</div><div class="timeline-content glass"><h4>${e.role}</h4><div class="timeline-org">${e.org}</div><div class="timeline-desc rich-content">${currentLang === 'en' ? e.descEN : e.descID}</div></div></div>`;
-                }).join('');
+                const expContainer = document.getElementById('ui-exp-container');
+                if (expContainer) {
+                    expContainer.innerHTML = window.db.experience.map((e, index) => {
+                        const delayClass = index === 0 ? 'd-1' : index === 1 ? 'd-2' : 'd-3';
+                        return `<div class="timeline-item reveal ${delayClass}"><div class="timeline-dot"></div><div class="timeline-date">${e.date}</div><div class="timeline-content glass"><h4>${e.role}</h4><div class="timeline-org">${e.org}</div><div class="timeline-desc rich-content">${currentLang === 'en' ? e.descEN : e.descID}</div></div></div>`;
+                    }).join('');
+                }
             }
             if(window.db.portfolio) {
-                const categories = [...new Set(window.db.portfolio.map(p => p.cat))];
-                document.getElementById('ui-portfolio-filters').innerHTML = `<button class="filter-btn active interactive-scale" onclick="window.filterPortfolio('all', this)">${dict[currentLang].catAll}</button>${categories.map(c => `<button class="filter-btn interactive-scale" onclick="window.filterPortfolio('${c}', this)">${c}</button>`).join('')}`;
+                const pFilters = document.getElementById('ui-portfolio-filters');
+                if (pFilters) {
+                    const categories = [...new Set(window.db.portfolio.map(p => p.cat))];
+                    pFilters.innerHTML = `<button class="filter-btn active interactive-scale" onclick="window.filterPortfolio('all', this)">${dict[currentLang].catAll}</button>${categories.map(c => `<button class="filter-btn interactive-scale" onclick="window.filterPortfolio('${c}', this)">${c}</button>`).join('')}`;
+                }
                 window.renderPortfolioGrid(window.db.portfolio);
             }
             if(window.db.writings) {
-                const wCats = [...new Set(window.db.writings.map(w => w.date))];
-                document.getElementById('ui-writings-filters').innerHTML = `<button class="filter-btn active interactive-scale" onclick="window.filterWritings('all', this)">${dict[currentLang].catAll}</button>${wCats.map(c => `<button class="filter-btn interactive-scale" onclick="window.filterWritings('${c}', this)">${c}</button>`).join('')}`;
+                const wFilters = document.getElementById('ui-writings-filters');
+                if (wFilters) {
+                    const wCats = [...new Set(window.db.writings.map(w => w.date))];
+                    wFilters.innerHTML = `<button class="filter-btn active interactive-scale" onclick="window.filterWritings('all', this)">${dict[currentLang].catAll}</button>${wCats.map(c => `<button class="filter-btn interactive-scale" onclick="window.filterWritings('${c}', this)">${c}</button>`).join('')}`;
+                }
                 window.renderWritingsGrid(window.db.writings);
             }
             if(window.db.contacts) {
-                document.getElementById('ui-contact-list').innerHTML = window.db.contacts.map(c => `
-                    <a href="${c.link}" target="_blank" rel="noopener noreferrer" class="contact-link-item interactive-scale">
-                        <img src="${c.icon || 'https://placehold.co/24x24?text=' + c.label.charAt(0)}" alt="${c.label}" class="contact-icon-img" draggable="false" loading="lazy">
-                        <span>${c.label}</span>
-                    </a>
-                `).join('');
+                const contactList = document.getElementById('ui-contact-list');
+                if (contactList) {
+                    contactList.innerHTML = window.db.contacts.map(c => `
+                        <a href="${c.link}" target="_blank" rel="noopener noreferrer" class="contact-link-item interactive-scale">
+                            <img src="${c.icon || 'https://placehold.co/24x24?text=' + c.label.charAt(0)}" alt="${c.label}" class="contact-icon-img" draggable="false" loading="lazy">
+                            <span>${c.label}</span>
+                        </a>
+                    `).join('');
+                }
             }
             setTimeout(window.initObserver, 100);
         }
 
         window.renderPortfolioGrid = function(items) {
-            if(!items || items.length === 0) { document.getElementById('ui-portfolio-grid').innerHTML = `<p style="color:var(--text-muted); grid-column: 1/-1;">No projects available.</p>`; return; }
-            document.getElementById('ui-portfolio-grid').innerHTML = items.map((p, index) => {
+            const grid = document.getElementById('ui-portfolio-grid');
+            if(!grid) return;
+            if(!items || items.length === 0) { grid.innerHTML = `<p style="color:var(--text-muted); grid-column: 1/-1;">No projects available.</p>`; return; }
+            grid.innerHTML = items.map((p, index) => {
                 let thumbSrc = "https://placehold.co/600x400?text=No+Media";
                 if(p.media && p.media.length > 0) { 
                     if(p.media[0].type === 'image') thumbSrc = p.media[0].src; 
@@ -1363,8 +1395,10 @@
         window.filterWritings = function(cat, btnElement) { document.querySelectorAll('#ui-writings-filters .filter-btn').forEach(btn => btn.classList.remove('active')); btnElement.classList.add('active'); if (cat === 'all') window.renderWritingsGrid(window.db.writings); else window.renderWritingsGrid(window.db.writings.filter(w => w.date === cat)); setTimeout(window.initObserver, 50); }
 
         window.renderWritingsGrid = function(items) {
-            if(!items || items.length === 0) { document.getElementById('ui-writings-grid').innerHTML = `<p style="color:var(--text-muted); grid-column: 1/-1;">No articles available.</p>`; return; }
-            document.getElementById('ui-writings-grid').innerHTML = items.map((w, index) => {
+            const grid = document.getElementById('ui-writings-grid');
+            if(!grid) return;
+            if(!items || items.length === 0) { grid.innerHTML = `<p style="color:var(--text-muted); grid-column: 1/-1;">No articles available.</p>`; return; }
+            grid.innerHTML = items.map((w, index) => {
                 let thumbSrc = "https://placehold.co/600x400?text=Article";
                 if(w.media && w.media.length > 0) {
                     if(w.media[0].type === 'image') thumbSrc = w.media[0].src; 
@@ -1413,17 +1447,35 @@
         });
 
         /* ================= MODAL VIEWER LOGIC ================= */
-        window.slideNext = function(sliderId) { const slider = document.getElementById(sliderId); slider.scrollBy({ left: slider.offsetWidth, behavior: 'smooth' }); }
-        window.slidePrev = function(sliderId) { const slider = document.getElementById(sliderId); slider.scrollBy({ left: -slider.offsetWidth, behavior: 'smooth' }); }
+        window.slideNext = function(sliderId) { 
+            const slider = document.getElementById(sliderId); 
+            if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) {
+                slider.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                slider.scrollBy({ left: slider.offsetWidth, behavior: 'smooth' }); 
+            }
+        }
+        window.slidePrev = function(sliderId) { 
+            const slider = document.getElementById(sliderId); 
+            if (slider.scrollLeft <= 10) {
+                slider.scrollTo({ left: slider.scrollWidth, behavior: 'smooth' });
+            } else {
+                slider.scrollBy({ left: -slider.offsetWidth, behavior: 'smooth' }); 
+            }
+        }
 
         window.openPortfolioModal = function(id) {
             document.body.classList.add('no-scroll'); 
             const p = window.db.portfolio.find(x => x.id === id); if(!p) return;
             window.currentOpenModalId = id; window.currentOpenModalType = 'p'; history.replaceState(null, null, '#p-' + id);
             const titleStr = currentLang === 'en' ? (p.titleEN || p.title || '') : (p.titleID || p.title || '');
-            document.getElementById('modal-title').innerText = titleStr; document.getElementById('modal-cat').innerText = p.cat; document.getElementById('modal-desc').innerHTML = currentLang === 'en' ? p.descEN : p.descID;
+            
+            const titleEl = document.getElementById('modal-title'); if(titleEl) titleEl.innerText = titleStr; 
+            const catEl = document.getElementById('modal-cat'); if(catEl) catEl.innerText = p.cat; 
+            const descEl = document.getElementById('modal-desc'); if(descEl) descEl.innerHTML = currentLang === 'en' ? p.descEN : p.descID;
+            
             const slider = document.getElementById('modal-slider'), dots = document.getElementById('modal-dots'), downloads = document.getElementById('modal-downloads');
-            slider.innerHTML = ''; dots.innerHTML = ''; downloads.innerHTML = '';
+            if(slider) slider.innerHTML = ''; if(dots) dots.innerHTML = ''; if(downloads) downloads.innerHTML = '';
             
             const pNavPrev = document.getElementById('modal-nav-prev'); const pNavNext = document.getElementById('modal-nav-next');
             if (p.media && p.media.length > 1) { if (pNavPrev) pNavPrev.style.display = 'flex'; if (pNavNext) pNavNext.style.display = 'flex'; } else { if (pNavPrev) pNavPrev.style.display = 'none'; if (pNavNext) pNavNext.style.display = 'none'; }
@@ -1437,22 +1489,26 @@
                         else mediaHtml = `<video controls loading="lazy"><source src="${m.src}"></video>`;
                     } else if (m.type === 'webgis') {
                         mediaHtml = `<iframe src="${m.src}" title="Interactive Map" allow="autoplay; geolocation" allowfullscreen="true" loading="lazy" style="width:100%; height:100%; min-height:50vh; border-radius:8px; border:none; background:#fff;"></iframe>`;
-                        downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open WebGIS / Link</a> `;
+                        if(downloads) downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open WebGIS / Link</a> `;
                     } else if (m.type === 'document') {
                         let viewerHtml = '';
                         if (m.src.includes('drive.google.com')) { viewerHtml = `<iframe src="${m.src.replace(/\/view.*$/, '/preview')}" title="PDF Viewer" allow="autoplay" allowfullscreen="true" loading="lazy"></iframe>`; } else if (m.src.startsWith('http') && !m.src.endsWith('.pdf')) { viewerHtml = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(m.src)}&embedded=true" allowfullscreen="true" loading="lazy"></iframe>`; } else { viewerHtml = `<iframe src="${m.src}#toolbar=1&navpanes=0&scrollbar=1&view=FitH" title="PDF Viewer" style="width:100%; height:100%; min-height:50vh; border-radius:8px; border:none; background:#fff;" allowfullscreen="true" loading="lazy"></iframe>`; }
-                        mediaHtml = viewerHtml; downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;" download><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download File ${index+1}</a> `;
+                        mediaHtml = viewerHtml; 
+                        if(downloads) downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;" download><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download File ${index+1}</a> `;
                     }
-                    slider.innerHTML += `<div class="media-item" id="slide-${index}">${mediaHtml}</div>`;
-                    dots.innerHTML += `<div class="media-dot ${index===0?'active':''}" onclick="document.getElementById('slide-${index}').scrollIntoView({behavior:'smooth'})"></div>`;
+                    if(slider) slider.innerHTML += `<div class="media-item" id="slide-${index}">${mediaHtml}</div>`;
+                    if(dots) dots.innerHTML += `<div class="media-dot ${index===0?'active':''}" onclick="document.getElementById('slide-${index}').scrollIntoView({behavior:'smooth'})"></div>`;
                 });
-                slider.onscroll = () => { let index = Math.round(slider.scrollLeft / slider.offsetWidth); document.querySelectorAll('#modal-dots .media-dot').forEach((d, i) => { d.classList.toggle('active', i === index); }); };
-            } else { slider.innerHTML = `<div class="media-item"><p>No media.</p></div>`; }
+                if(slider) slider.onscroll = () => { let index = Math.round(slider.scrollLeft / slider.offsetWidth); document.querySelectorAll('#modal-dots .media-dot').forEach((d, i) => { d.classList.toggle('active', i === index); }); };
+            } else { if(slider) slider.innerHTML = `<div class="media-item"><p>No media.</p></div>`; }
             
-            document.querySelector('#portfolio-modal .modal-content').classList.remove('fullscreen'); 
-            document.getElementById('portfolio-modal').classList.add('active');
-            
-            setTimeout(() => { document.querySelector('#portfolio-modal .modal-content').scrollTop = 0; }, 50);
+            const modalEl = document.getElementById('portfolio-modal');
+            if(modalEl) {
+                const modalContent = modalEl.querySelector('.modal-content');
+                if(modalContent) modalContent.classList.remove('fullscreen'); 
+                modalEl.classList.add('active');
+                setTimeout(() => { if(modalContent) modalContent.scrollTop = 0; }, 50);
+            }
         }
 
         window.openWritingModal = function(id) {
@@ -1460,9 +1516,13 @@
             const w = window.db.writings.find(x => x.id === id); if(!w) return;
             window.currentOpenModalId = id; window.currentOpenModalType = 'w'; history.replaceState(null, null, '#w-' + id);
             const titleStr = currentLang === 'en' ? (w.titleEN || w.title || '') : (w.titleID || w.title || '');
-            document.getElementById('w-modal-title').innerText = titleStr; document.getElementById('w-modal-date').innerText = w.date; document.getElementById('w-modal-content').innerHTML = currentLang === 'en' ? w.descEN : w.descID;
+            
+            const titleEl = document.getElementById('w-modal-title'); if(titleEl) titleEl.innerText = titleStr; 
+            const dateEl = document.getElementById('w-modal-date'); if(dateEl) dateEl.innerText = w.date; 
+            const contentEl = document.getElementById('w-modal-content'); if(contentEl) contentEl.innerHTML = currentLang === 'en' ? w.descEN : w.descID;
+            
             const slider = document.getElementById('w-modal-slider'), dots = document.getElementById('w-modal-dots'), downloads = document.getElementById('w-modal-downloads');
-            slider.innerHTML = ''; dots.innerHTML = ''; downloads.innerHTML = '';
+            if(slider) slider.innerHTML = ''; if(dots) dots.innerHTML = ''; if(downloads) downloads.innerHTML = '';
             
             const wNavPrev = document.getElementById('w-modal-nav-prev'); const wNavNext = document.getElementById('w-modal-nav-next');
             if (w.media && w.media.length > 1) { if (wNavPrev) wNavPrev.style.display = 'flex'; if (wNavNext) wNavNext.style.display = 'flex'; } else { if (wNavPrev) wNavPrev.style.display = 'none'; if (wNavNext) wNavNext.style.display = 'none'; }
@@ -1476,51 +1536,62 @@
                         else mediaHtml = `<video controls loading="lazy"><source src="${m.src}"></video>`;
                     } else if (m.type === 'webgis') {
                         mediaHtml = `<iframe src="${m.src}" title="Interactive Map" allow="autoplay; geolocation" allowfullscreen="true" loading="lazy" style="width:100%; height:100%; min-height:50vh; border-radius:8px; border:none; background:#fff;"></iframe>`;
-                        downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Link</a> `;
+                        if(downloads) downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open WebGIS / Link</a> `;
                     } else if (m.type === 'document') {
                         let viewerHtml = '';
                         if (m.src.includes('drive.google.com')) { viewerHtml = `<iframe src="${m.src.replace(/\/view.*$/, '/preview')}" title="PDF Viewer" allow="autoplay" allowfullscreen="true" loading="lazy"></iframe>`; } else if (m.src.startsWith('http') && !m.src.endsWith('.pdf')) { viewerHtml = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(m.src)}&embedded=true" allowfullscreen="true" loading="lazy"></iframe>`; } else { viewerHtml = `<iframe src="${m.src}#toolbar=1&navpanes=0&scrollbar=1&view=FitH" title="PDF Viewer" style="width:100%; height:100%; min-height:50vh; border-radius:8px; border:none; background:#fff;" allowfullscreen="true" loading="lazy"></iframe>`; }
-                        mediaHtml = viewerHtml; downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;" download><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download File ${index+1}</a> `;
+                        mediaHtml = viewerHtml; 
+                        if(downloads) downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;" download><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download File ${index+1}</a> `;
                     }
-                    slider.innerHTML += `<div class="media-item" id="w-slide-${index}">${mediaHtml}</div>`;
-                    dots.innerHTML += `<div class="media-dot ${index===0?'active':''}" onclick="document.getElementById('w-slide-${index}').scrollIntoView({behavior:'smooth'})"></div>`;
+                    if(slider) slider.innerHTML += `<div class="media-item" id="slide-${index}">${mediaHtml}</div>`;
+                    if(dots) dots.innerHTML += `<div class="media-dot ${index===0?'active':''}" onclick="document.getElementById('slide-${index}').scrollIntoView({behavior:'smooth'})"></div>`;
                 });
-                slider.onscroll = () => { let index = Math.round(slider.scrollLeft / slider.offsetWidth); document.querySelectorAll('#w-modal-dots .media-dot').forEach((d, i) => { d.classList.toggle('active', i === index); }); };
-            } else { slider.innerHTML = `<div class="media-item"><p>No media.</p></div>`; }
+                if(slider) slider.onscroll = () => { let index = Math.round(slider.scrollLeft / slider.offsetWidth); document.querySelectorAll('#w-modal-dots .media-dot').forEach((d, i) => { d.classList.toggle('active', i === index); }); };
+            } else { if(slider) slider.innerHTML = `<div class="media-item"><p>No media.</p></div>`; }
             
-            document.querySelector('#writing-modal .modal-content').classList.remove('fullscreen'); 
-            document.getElementById('writing-modal').classList.add('active');
-
-            setTimeout(() => { document.querySelector('#writing-modal .modal-content').scrollTop = 0; }, 50);
+            const modalEl = document.getElementById('writing-modal');
+            if(modalEl) {
+                const modalContent = modalEl.querySelector('.modal-content');
+                if(modalContent) modalContent.classList.remove('fullscreen'); 
+                modalEl.classList.add('active');
+                setTimeout(() => { if(modalContent) modalContent.scrollTop = 0; }, 50);
+            }
         }
 
-        window.toggleMaximizeModal = function(modalId) { document.querySelector(`#${modalId} .modal-content`).classList.toggle('fullscreen'); }
-        window.closePortfolioModal = function() { document.body.classList.remove('no-scroll'); document.getElementById('portfolio-modal').classList.remove('active'); const slider = document.getElementById('modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } window.currentOpenModalId = null; window.currentOpenModalType = null; history.replaceState(null, null, ' '); }
-        window.closeWritingModal = function() { document.body.classList.remove('no-scroll'); document.getElementById('writing-modal').classList.remove('active'); const slider = document.getElementById('w-modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } window.currentOpenModalId = null; window.currentOpenModalType = null; history.replaceState(null, null, ' '); }
+        window.toggleMaximizeModal = function(modalId) { 
+            const modalEl = document.querySelector(`#${modalId} .modal-content`);
+            if(modalEl) modalEl.classList.toggle('fullscreen'); 
+        }
+        window.closePortfolioModal = function() { document.body.classList.remove('no-scroll'); const modalEl = document.getElementById('portfolio-modal'); if(modalEl) modalEl.classList.remove('active'); const slider = document.getElementById('modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } window.currentOpenModalId = null; window.currentOpenModalType = null; history.replaceState(null, null, ' '); }
+        window.closeWritingModal = function() { document.body.classList.remove('no-scroll'); const modalEl = document.getElementById('writing-modal'); if(modalEl) modalEl.classList.remove('active'); const slider = document.getElementById('w-modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } window.currentOpenModalId = null; window.currentOpenModalType = null; history.replaceState(null, null, ' '); }
         
         window.submitChat = async function() { 
-            const name = document.getElementById('chat-name').value, contact = document.getElementById('chat-contact').value, msg = document.getElementById('chat-message').value; 
+            const nameEl = document.getElementById('chat-name'); const contactEl = document.getElementById('chat-contact'); const msgEl = document.getElementById('chat-message');
+            if(!nameEl || !contactEl || !msgEl) return;
+            const name = nameEl.value, contact = contactEl.value, msg = msgEl.value; 
             if(!name || !msg) { window.showToast('Please fill Name and Message.', true); return; } 
             
             window.db.inbox.push({ date: new Date().toLocaleString(), name, contact, msg }); await window.saveDb(); 
             
             try {
-                const btn = document.querySelector('#contact .btn-primary'); const origText = btn.innerHTML; btn.innerText = "Sending...";
+                const btn = document.querySelector('#contact .btn-primary'); 
+                let origText = "";
+                if(btn) { origText = btn.innerHTML; btn.innerText = "Sending..."; }
                 await fetch("https://formsubmit.co/ajax/alfianbharajuang@gmail.com", { method: "POST", headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({ Nama: name, Kontak_Info: contact, Isi_Pesan: msg, _subject: "New Message from Portfolio" }) });
-                btn.innerHTML = origText;
+                if(btn) btn.innerHTML = origText;
             } catch(e) { console.log("Email deferred, saved to DB."); }
 
-            document.getElementById('chat-name').value = ''; document.getElementById('chat-contact').value = ''; document.getElementById('chat-message').value = ''; 
+            nameEl.value = ''; contactEl.value = ''; msgEl.value = ''; 
             window.showToast("Message Sent!"); window.populateAdminInbox(); 
         }
 
         /* ================= ADMIN & SETTINGS ================= */
-        window.openPin = function() { document.body.classList.add('no-scroll'); document.getElementById('pin-overlay').classList.add('active'); document.getElementById('pin-input').focus(); }
+        window.openPin = function() { document.body.classList.add('no-scroll'); const po = document.getElementById('pin-overlay'); if(po) po.classList.add('active'); const pi = document.getElementById('pin-input'); if(pi) pi.focus(); }
         window.closePin = function() { document.body.classList.remove('no-scroll'); const pinOverlay = document.getElementById('pin-overlay'); if (pinOverlay) pinOverlay.classList.remove('active'); const pinInput = document.getElementById('pin-input'); if (pinInput) pinInput.value = ''; const pinError = document.getElementById('pin-error'); if (pinError) pinError.style.display = 'none'; }
         window.checkPin = function(e) { if(e.key === 'Enter' || e.target.value.length === 6) { if(e.target.value === window.db.pin) { window.closePin(); window.openAdmin(); } else { const pinError = document.getElementById('pin-error'); if (pinError) pinError.style.display = 'block'; e.target.value = ''; } } }
-        window.openAdmin = function() { document.body.classList.add('no-scroll'); document.getElementById('admin-dashboard').classList.add('active'); window.populateAdminForms(); }
-        window.closeAdmin = function() { document.body.classList.remove('no-scroll'); document.getElementById('admin-dashboard').classList.remove('active'); }
-        window.switchAdminTab = function(tabId, element) { document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active')); document.getElementById(tabId).classList.add('active'); }
+        window.openAdmin = function() { document.body.classList.add('no-scroll'); const ad = document.getElementById('admin-dashboard'); if(ad) ad.classList.add('active'); window.populateAdminForms(); }
+        window.closeAdmin = function() { document.body.classList.remove('no-scroll'); const ad = document.getElementById('admin-dashboard'); if(ad) ad.classList.remove('active'); }
+        window.switchAdminTab = function(tabId, element) { document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active')); if(element) element.classList.add('active'); document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active')); const tid = document.getElementById(tabId); if(tid) tid.classList.add('active'); }
 
         window.populateAdminForms = function() {
             if(!window.db) return;
@@ -1544,11 +1615,13 @@
             window.populateAdminPortfolioList(); window.populateAdminWritingsList(); window.populateAdminInbox();
         }
         
-        window.renderAdminList = function(containerId, dataArray, htmlGenerator) { const container = document.getElementById(containerId); container.innerHTML = ''; dataArray.forEach(item => { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = htmlGenerator(item); container.appendChild(div); }); }
+        window.renderAdminList = function(containerId, dataArray, htmlGenerator) { const container = document.getElementById(containerId); if(!container) return; container.innerHTML = ''; dataArray.forEach(item => { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = htmlGenerator(item); container.appendChild(div); }); }
         
         window.saveHero = async function() { 
             try {
-                const btn = document.getElementById('btn-save-hero'); const origText = btn.innerText; btn.innerText = "Saving...";
+                const btn = document.getElementById('btn-save-hero'); 
+                let origText = "";
+                if(btn) { origText = btn.innerText; btn.innerText = "Saving..."; }
                 if(!window.db.hero) window.db.hero = {};
                 
                 const fileInput = document.getElementById('adm-hero-img-file'); 
@@ -1557,7 +1630,10 @@
                 
                 if (fileInput && fileInput.files && fileInput.files.length > 0) { try { newImg = await window.getBase64(fileInput.files[0]); } catch (e) {} } 
                 else if (!newImg && hiddenImg.startsWith('data:')) { newImg = hiddenImg; } 
-                if(newImg) window.db.hero.img = newImg; 
+                
+                if(newImg) newImg = window.makeDriveLink(newImg, 'image');
+                
+                window.db.hero.img = newImg || ""; 
                 
                 const elCv = document.getElementById('adm-hero-cv'); if(elCv) window.db.hero.cvLink = elCv.value || "";
                 const elName = document.getElementById('adm-hero-name'); if(elName) window.db.hero.name = elName.value || ""; 
@@ -1567,38 +1643,63 @@
                 const elDescId = document.getElementById('adm-hero-desc-id'); if(elDescId) window.db.hero.descID = elDescId.innerHTML || ""; 
                 const elStatus = document.getElementById('adm-hero-status'); if(elStatus) window.db.hero.status = elStatus.value || ""; 
                 
-                await window.saveDb(); window.populateAdminForms(); btn.innerText = origText; window.showToast("Profile Saved!"); 
+                await window.saveDb(); window.populateAdminForms(); if(btn) btn.innerText = origText; window.showToast("Profile Saved!"); 
             } catch(e) { window.showToast("System error.", true); }
         }
         
-        window.addEduRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addEduRowHtml(); document.getElementById('adm-edu-list').appendChild(div); }
+        window.addEduRow = function() { const container = document.getElementById('adm-edu-list'); if(!container) return; const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addEduRowHtml(); container.appendChild(div); }
         window.saveAboutEdu = async function() { 
             try {
-                const btn = document.getElementById('btn-save-about'); const origText = btn.innerText; btn.innerText = "Saving...";
-                if(!window.db.about) window.db.about = {}; window.db.about.en = document.getElementById('adm-about-en').innerHTML || ""; window.db.about.id = document.getElementById('adm-about-id').innerHTML || ""; 
-                window.db.education = Array.from(document.getElementById('adm-edu-list').children).map(row => ({ id: 'e' + Date.now() + Math.random(), degreeEN: row.querySelector('.edu-deg-en').value || "", degreeID: row.querySelector('.edu-deg-id').value || "", uni: row.querySelector('.edu-uni').value || "", year: row.querySelector('.edu-year').value || "", link: row.querySelector('.edu-link').value || "" })).filter(e => e.degreeEN !== '' || e.degreeID !== ''); 
-                await window.saveDb(); window.populateAdminForms(); btn.innerText = origText; window.showToast("Education Saved!"); 
+                const btn = document.getElementById('btn-save-about'); 
+                let origText = "";
+                if(btn) { origText = btn.innerText; btn.innerText = "Saving..."; }
+                if(!window.db.about) window.db.about = {}; 
+                const elAboutEn = document.getElementById('adm-about-en'); if(elAboutEn) window.db.about.en = elAboutEn.innerHTML || ""; 
+                const elAboutId = document.getElementById('adm-about-id'); if(elAboutId) window.db.about.id = elAboutId.innerHTML || ""; 
+                
+                const eduListEl = document.getElementById('adm-edu-list');
+                if(eduListEl) {
+                    window.db.education = Array.from(eduListEl.children).map(row => ({ id: 'e' + Date.now() + Math.random(), degreeEN: row.querySelector('.edu-deg-en').value || "", degreeID: row.querySelector('.edu-deg-id').value || "", uni: row.querySelector('.edu-uni').value || "", year: row.querySelector('.edu-year').value || "", link: row.querySelector('.edu-link').value || "" })).filter(e => e.degreeEN !== '' || e.degreeID !== ''); 
+                }
+                await window.saveDb(); window.populateAdminForms(); if(btn) btn.innerText = origText; window.showToast("Education Saved!"); 
             } catch(e) { window.showToast("System error.", true); }
         }
 
-        window.addExpertiseRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addExpertiseRowHtml(); document.getElementById('adm-expertise-list').appendChild(div); }
-        window.addToolRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addToolRowHtml(); document.getElementById('adm-tools-list').appendChild(div); }
+        window.addExpertiseRow = function() { const container = document.getElementById('adm-expertise-list'); if(!container) return; const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addExpertiseRowHtml(); container.appendChild(div); }
+        window.addToolRow = function() { const container = document.getElementById('adm-tools-list'); if(!container) return; const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addToolRowHtml(); container.appendChild(div); }
         window.saveSkills = async function() { 
             try {
-                const btn = document.getElementById('btn-save-skills'); const origText = btn.innerText; btn.innerText = "Saving...";
-                window.db.expertise = Array.from(document.getElementById('adm-expertise-list').children).map(row => ({ id: 'x' + Date.now() + Math.random(), en: row.querySelector('.exp-en').value || "", id: row.querySelector('.exp-id').value || "" })).filter(x => x.en !== ''); 
-                const toolRows = Array.from(document.getElementById('adm-tools-list').children); let newTools = []; 
-                for (let row of toolRows) { let name = row.querySelector('.tool-name').value || ""; if (!name) continue; let iconUrl = row.querySelector('.tool-url').value || ""; const hiddenSrc = row.querySelector('.tool-hidden-src').value || ""; const fileInput = row.querySelector('.tool-file'); if (fileInput && fileInput.files.length > 0) { try { iconUrl = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!iconUrl && hiddenSrc.startsWith('data:')) { iconUrl = hiddenSrc; } newTools.push({ id: 't' + Date.now() + Math.random(), name, icon: iconUrl || "" }); } 
-                window.db.tools = newTools; await window.saveDb(); window.populateAdminForms(); btn.innerText = origText; window.showToast("Skills Saved!"); 
+                const btn = document.getElementById('btn-save-skills'); 
+                let origText = "";
+                if(btn) { origText = btn.innerText; btn.innerText = "Saving..."; }
+                
+                const expListEl = document.getElementById('adm-expertise-list');
+                if(expListEl) {
+                    window.db.expertise = Array.from(expListEl.children).map(row => ({ id: 'x' + Date.now() + Math.random(), en: row.querySelector('.exp-en').value || "", id: row.querySelector('.exp-id').value || "" })).filter(x => x.en !== ''); 
+                }
+                
+                const toolListEl = document.getElementById('adm-tools-list');
+                if(toolListEl) {
+                    const toolRows = Array.from(toolListEl.children); let newTools = []; 
+                    for (let row of toolRows) { let name = row.querySelector('.tool-name').value || ""; if (!name) continue; let iconUrl = row.querySelector('.tool-url').value || ""; const hiddenSrc = row.querySelector('.tool-hidden-src').value || ""; const fileInput = row.querySelector('.tool-file'); if (fileInput && fileInput.files.length > 0) { try { iconUrl = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!iconUrl && hiddenSrc.startsWith('data:')) { iconUrl = hiddenSrc; } newTools.push({ id: 't' + Date.now() + Math.random(), name, icon: iconUrl || "" }); } 
+                    window.db.tools = newTools; 
+                }
+                await window.saveDb(); window.populateAdminForms(); if(btn) btn.innerText = origText; window.showToast("Skills Saved!"); 
             } catch(e) { window.showToast("System error.", true); }
         }
 
-        window.addExpRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addExpRowHtml(); document.getElementById('adm-exp-list').appendChild(div); }
+        window.addExpRow = function() { const container = document.getElementById('adm-exp-list'); if(!container) return; const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addExpRowHtml(); container.appendChild(div); }
         window.saveExp = async function() { 
             try {
-                const btn = document.getElementById('btn-save-exp'); const origText = btn.innerText; btn.innerText = "Saving...";
-                window.db.experience = Array.from(document.getElementById('adm-exp-list').children).map(row => ({ id: 'exp' + Date.now() + Math.random(), role: row.querySelector('.exp-role').value || "", org: row.querySelector('.exp-org').value || "", date: row.querySelector('.exp-date').value || "", descEN: row.querySelector('.exp-den').innerHTML || "", descID: row.querySelector('.exp-did').innerHTML || "" })).filter(e => e.role !== ''); 
-                await window.saveDb(); window.populateAdminForms(); btn.innerText = origText; window.showToast("Experience Saved!"); 
+                const btn = document.getElementById('btn-save-exp'); 
+                let origText = "";
+                if(btn) { origText = btn.innerText; btn.innerText = "Saving..."; }
+                
+                const expListEl = document.getElementById('adm-exp-list');
+                if(expListEl) {
+                    window.db.experience = Array.from(expListEl.children).map(row => ({ id: 'exp' + Date.now() + Math.random(), role: row.querySelector('.exp-role').value || "", org: row.querySelector('.exp-org').value || "", date: row.querySelector('.exp-date').value || "", descEN: row.querySelector('.exp-den').innerHTML || "", descID: row.querySelector('.exp-did').innerHTML || "" })).filter(e => e.role !== ''); 
+                }
+                await window.saveDb(); window.populateAdminForms(); if(btn) btn.innerText = origText; window.showToast("Experience Saved!"); 
             } catch(e) { window.showToast("System error.", true); }
         }
 
@@ -1607,7 +1708,9 @@
         window.movePortDown = async function(index) { if(index < window.db.portfolio.length - 1) { const temp = window.db.portfolio[index]; window.db.portfolio[index] = window.db.portfolio[index+1]; window.db.portfolio[index+1] = temp; await window.saveDb(); window.populateAdminPortfolioList(); } };
 
         window.populateAdminPortfolioList = function() { 
-            document.getElementById('adm-port-list').innerHTML = window.db.portfolio.map((p, i) => `
+            const admPortList = document.getElementById('adm-port-list');
+            if(!admPortList) return;
+            admPortList.innerHTML = window.db.portfolio.map((p, i) => `
             <div class="admin-row" style="padding:1.2rem 1.5rem; justify-content:space-between; align-items:center; margin-bottom: 0.5rem; gap: 1rem; flex-wrap:wrap;">
                 <div style="flex:1; min-width:200px;"><strong style="font-size:1.05rem; display:block; margin-bottom:0.2rem; font-weight:600;">${p.titleEN || p.title || 'Untitled'}</strong> <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">${p.cat}</span></div>
                 <div style="display:flex; gap:0.5rem; align-items:center;">
@@ -1626,8 +1729,38 @@
         window.openPortEditor = function(id = null) {
             const admPortList = document.getElementById('adm-port-list'); const admPortEditor = document.getElementById('adm-port-editor'); const admPortAddBtn = document.querySelector('#tab-portfolio > div > button'); const admPortMediaList = document.getElementById('adm-port-media-list');
             if (admPortList) admPortList.style.display = 'none'; if (admPortEditor) admPortEditor.style.display = 'block'; if (admPortAddBtn) admPortAddBtn.style.display = 'none'; if (admPortMediaList) admPortMediaList.innerHTML = '';
-            const uniqueCats = [...new Set(window.db.portfolio.map(p => p.cat).filter(c => c))]; document.getElementById('cat-options').innerHTML = uniqueCats.map(c => `<option value="${c}">`).join('');
-            if (id) { const p = window.db.portfolio.find(x => x.id === id); document.getElementById('adm-port-id').value = p.id; document.getElementById('adm-port-title-en').value = p.titleEN || p.title || ''; document.getElementById('adm-port-title-id').value = p.titleID || p.title || ''; document.getElementById('adm-port-cat').value = p.cat; document.getElementById('adm-port-desc-en').innerHTML = p.descEN || ''; document.getElementById('adm-port-desc-id').innerHTML = p.descID || ''; if(p.media) { p.media.forEach(m => window.addPortMediaRow(m)); } } else { document.getElementById('adm-port-id').value = ""; document.getElementById('adm-port-title-en').value = ""; document.getElementById('adm-port-title-id').value = ""; document.getElementById('adm-port-cat').value = ""; document.getElementById('adm-port-desc-en').innerHTML = ""; document.getElementById('adm-port-desc-id').innerHTML = ""; window.addPortMediaRow(); }
+            
+            const catOptsEl = document.getElementById('cat-options');
+            if(catOptsEl) {
+                const uniqueCats = [...new Set(window.db.portfolio.map(p => p.cat).filter(c => c))]; 
+                catOptsEl.innerHTML = uniqueCats.map(c => `<option value="${c}">`).join('');
+            }
+            
+            const elId = document.getElementById('adm-port-id');
+            const elTitleEn = document.getElementById('adm-port-title-en');
+            const elTitleId = document.getElementById('adm-port-title-id');
+            const elCat = document.getElementById('adm-port-cat');
+            const elDescEn = document.getElementById('adm-port-desc-en');
+            const elDescId = document.getElementById('adm-port-desc-id');
+
+            if (id) { 
+                const p = window.db.portfolio.find(x => x.id === id); 
+                if(elId) elId.value = p.id; 
+                if(elTitleEn) elTitleEn.value = p.titleEN || p.title || ''; 
+                if(elTitleId) elTitleId.value = p.titleID || p.title || ''; 
+                if(elCat) elCat.value = p.cat; 
+                if(elDescEn) elDescEn.innerHTML = p.descEN || ''; 
+                if(elDescId) elDescId.innerHTML = p.descID || ''; 
+                if(p.media) { p.media.forEach(m => window.addPortMediaRow(m)); } 
+            } else { 
+                if(elId) elId.value = ""; 
+                if(elTitleEn) elTitleEn.value = ""; 
+                if(elTitleId) elTitleId.value = ""; 
+                if(elCat) elCat.value = ""; 
+                if(elDescEn) elDescEn.innerHTML = ""; 
+                if(elDescId) elDescId.innerHTML = ""; 
+                window.addPortMediaRow(); 
+            }
         }
         window.closePortEditor = function() { const admPortList = document.getElementById('adm-port-list'); const admPortEditor = document.getElementById('adm-port-editor'); const admPortAddBtn = document.querySelector('#tab-portfolio > div > button'); if (admPortList) admPortList.style.display = 'flex'; if (admPortEditor) admPortEditor.style.display = 'none'; if (admPortAddBtn) admPortAddBtn.style.display = 'block'; }
         window.editPortProject = function(id) { window.openPortEditor(id); }
@@ -1636,24 +1769,43 @@
             let displaySrc = m.src || 'https://placehold.co/50x50?text=Img'; if(m.type==='video') displaySrc = 'https://placehold.co/50x50?text=Vid'; if(m.type==='document') displaySrc = 'https://placehold.co/50x50?text=PDF'; if(m.type==='webgis') displaySrc = 'https://placehold.co/50x50?text=Map';
             const div = document.createElement('div'); div.className = 'admin-row'; 
             div.innerHTML = `<img id="${rid}" class="media-preview-box" src="${displaySrc}" onerror="this.src='https://placehold.co/50x50?text=Media'"><input type="hidden" class="port-media-hidden-src" value="${m.src||''}"><select class="admin-select port-media-type" style="width:auto; min-width:100px; padding:0.6rem;"><option value="image" ${m.type==='image'?'selected':''}>Image</option><option value="video" ${m.type==='video'?'selected':''}>Video</option><option value="document" ${m.type==='document'?'selected':''}>Doc/PDF</option><option value="webgis" ${m.type==='webgis'?'selected':''}>WebGIS/Link</option></select><div style="flex:1; display:flex; flex-direction:column; gap:0.6rem; width:100%;"><input type="text" class="admin-input port-media-url" placeholder="Drive Link / Web URL" value="${(m.src||'').startsWith('data:') ? '' : (m.src||'')}" oninput="if(this.closest('.admin-row').querySelector('.port-media-type').value==='image') document.getElementById('${rid}').src=this.value"><div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;"><span style="font-size:0.75rem; color:var(--text-muted);">OR Local File:</span><input type="file" class="admin-input port-media-file" style="padding:0.4rem; flex:1;" onchange="if(this.closest('.admin-row').querySelector('.port-media-type').value==='image') window.updateLocalPreview(this, '${rid}')"></div></div>${window.getRowControls()}`; 
-            document.getElementById('adm-port-media-list').appendChild(div); 
+            const mediaList = document.getElementById('adm-port-media-list');
+            if(mediaList) mediaList.appendChild(div); 
         }
         
         window.savePortProject = async function() { 
             try {
-                const btn = document.getElementById('btn-save-port'); const origText = btn.innerText; btn.innerText = "Saving...";
+                const btn = document.getElementById('btn-save-port'); 
+                let origText = "";
+                if(btn) { origText = btn.innerText; btn.innerText = "Saving..."; }
+                
                 if(!window.db.portfolio) window.db.portfolio = [];
-                const id = document.getElementById('adm-port-id').value || 'p' + Date.now(); const titleEN = document.getElementById('adm-port-title-en').value; const titleID = document.getElementById('adm-port-title-id').value; 
-                if(!titleEN && !titleID) { window.showToast('Title is required', true); btn.innerText = origText; return; } 
-                let mediaArr = []; const rows = Array.from(document.getElementById('adm-port-media-list').children); 
-                for(let row of rows) { 
-                    const type = row.querySelector('.port-media-type').value || "image"; let src = row.querySelector('.port-media-url').value || ""; const hiddenSrc = row.querySelector('.port-media-hidden-src').value || ""; const fileInput = row.querySelector('.port-media-file'); 
-                    if (fileInput && fileInput.files.length > 0) { try { src = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } 
-                    if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } 
-                } 
-                const newProject = { id, titleEN, titleID, title: titleEN || titleID, cat: document.getElementById('adm-port-cat').value || "Other", descEN: document.getElementById('adm-port-desc-en').innerHTML || "", descID: document.getElementById('adm-port-desc-id').innerHTML || "", media: mediaArr }; 
+                
+                const elId = document.getElementById('adm-port-id'); const id = elId ? elId.value || 'p' + Date.now() : 'p' + Date.now(); 
+                const elTitleEn = document.getElementById('adm-port-title-en'); const titleEN = elTitleEn ? elTitleEn.value : ""; 
+                const elTitleId = document.getElementById('adm-port-title-id'); const titleID = elTitleId ? elTitleId.value : ""; 
+                
+                if(!titleEN && !titleID) { window.showToast('Title is required', true); if(btn) btn.innerText = origText; return; } 
+                
+                let mediaArr = []; 
+                const mediaListEl = document.getElementById('adm-port-media-list');
+                if(mediaListEl) {
+                    const rows = Array.from(mediaListEl.children); 
+                    for(let row of rows) { 
+                        const type = row.querySelector('.port-media-type').value || "image"; let src = row.querySelector('.port-media-url').value || ""; const hiddenSrc = row.querySelector('.port-media-hidden-src').value || ""; const fileInput = row.querySelector('.port-media-file'); 
+                        if (fileInput && fileInput.files.length > 0) { try { src = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } 
+                        if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } 
+                    } 
+                }
+                
+                const elCat = document.getElementById('adm-port-cat');
+                const elDescEn = document.getElementById('adm-port-desc-en');
+                const elDescId = document.getElementById('adm-port-desc-id');
+                
+                const newProject = { id, titleEN, titleID, title: titleEN || titleID, cat: elCat ? elCat.value || "Other" : "Other", descEN: elDescEn ? elDescEn.innerHTML || "" : "", descID: elDescId ? elDescId.innerHTML || "" : "", media: mediaArr }; 
                 const existingIndex = window.db.portfolio.findIndex(p => p.id === id); if (existingIndex >= 0) window.db.portfolio[existingIndex] = newProject; else window.db.portfolio.push(newProject); 
-                await window.saveDb(); window.closePortEditor(); window.populateAdminPortfolioList(); btn.innerText = origText; window.showToast('Project Saved!'); 
+                
+                await window.saveDb(); window.closePortEditor(); window.populateAdminPortfolioList(); if(btn) btn.innerText = origText; window.showToast('Project Saved!'); 
             } catch(e) { window.showToast("System error.", true); }
         }
 
@@ -1662,8 +1814,10 @@
         window.moveWritingDown = async function(index) { if(index < window.db.writings.length - 1) { const temp = window.db.writings[index]; window.db.writings[index] = window.db.writings[index+1]; window.db.writings[index+1] = temp; await window.saveDb(); window.populateAdminWritingsList(); } };
 
         window.populateAdminWritingsList = function() { 
+            const admWritingsList = document.getElementById('adm-writings-list');
+            if(!admWritingsList) return;
             if(!window.db.writings) window.db.writings = [];
-            document.getElementById('adm-writings-list').innerHTML = window.db.writings.map((w, i) => `
+            admWritingsList.innerHTML = window.db.writings.map((w, i) => `
             <div class="admin-row" style="padding:1.2rem 1.5rem; justify-content:space-between; align-items:center; margin-bottom: 0.5rem; gap: 1rem; flex-wrap:wrap;">
                 <div style="flex:1; min-width:200px;"><strong style="font-size:1.05rem; display:block; margin-bottom:0.2rem; font-weight:600;">${w.titleEN || w.title || 'Untitled'}</strong> <span style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">${w.date}</span></div>
                 <div style="display:flex; gap:0.5rem; align-items:center;">
@@ -1682,8 +1836,38 @@
         window.openWritingEditor = function(id = null) {
             const admWritingsList = document.getElementById('adm-writings-list'); const admWritingEditor = document.getElementById('adm-writing-editor'); const admWritingAddBtn = document.querySelector('#tab-writings > div > button'); const admWritingMediaList = document.getElementById('adm-writing-media-list');
             if (admWritingsList) admWritingsList.style.display = 'none'; if (admWritingEditor) admWritingEditor.style.display = 'block'; if (admWritingAddBtn) admWritingAddBtn.style.display = 'none'; if (admWritingMediaList) admWritingMediaList.innerHTML = '';
-            const uniqueDates = [...new Set(window.db.writings.map(w => w.date).filter(d => d))]; document.getElementById('writing-cat-options').innerHTML = uniqueDates.map(d => `<option value="${d}">`).join('');
-            if (id) { const w = window.db.writings.find(x => x.id === id); document.getElementById('adm-writing-id').value = w.id; document.getElementById('adm-writing-title-en').value = w.titleEN || w.title || ''; document.getElementById('adm-writing-title-id').value = w.titleID || w.title || ''; document.getElementById('adm-writing-date').value = w.date || ''; document.getElementById('adm-writing-desc-en').innerHTML = w.descEN || ''; document.getElementById('adm-writing-desc-id').innerHTML = w.descID || ''; if(w.media) { w.media.forEach(m => window.addWritingMediaRow(m)); } } else { document.getElementById('adm-writing-id').value = ""; document.getElementById('adm-writing-title-en').value = ""; document.getElementById('adm-writing-title-id').value = ""; document.getElementById('adm-writing-date').value = ""; document.getElementById('adm-writing-desc-en').innerHTML = ""; document.getElementById('adm-writing-desc-id').innerHTML = ""; window.addWritingMediaRow(); }
+            
+            const wCatOpts = document.getElementById('writing-cat-options');
+            if(wCatOpts) {
+                const uniqueDates = [...new Set(window.db.writings.map(w => w.date).filter(d => d))]; 
+                wCatOpts.innerHTML = uniqueDates.map(d => `<option value="${d}">`).join('');
+            }
+            
+            const elId = document.getElementById('adm-writing-id');
+            const elTitleEn = document.getElementById('adm-writing-title-en');
+            const elTitleId = document.getElementById('adm-writing-title-id');
+            const elDate = document.getElementById('adm-writing-date');
+            const elDescEn = document.getElementById('adm-writing-desc-en');
+            const elDescId = document.getElementById('adm-writing-desc-id');
+
+            if (id) { 
+                const w = window.db.writings.find(x => x.id === id); 
+                if(elId) elId.value = w.id; 
+                if(elTitleEn) elTitleEn.value = w.titleEN || w.title || ''; 
+                if(elTitleId) elTitleId.value = w.titleID || w.title || ''; 
+                if(elDate) elDate.value = w.date || ''; 
+                if(elDescEn) elDescEn.innerHTML = w.descEN || ''; 
+                if(elDescId) elDescId.innerHTML = w.descID || ''; 
+                if(w.media) { w.media.forEach(m => window.addWritingMediaRow(m)); } 
+            } else { 
+                if(elId) elId.value = ""; 
+                if(elTitleEn) elTitleEn.value = ""; 
+                if(elTitleId) elTitleId.value = ""; 
+                if(elDate) elDate.value = ""; 
+                if(elDescEn) elDescEn.innerHTML = ""; 
+                if(elDescId) elDescId.innerHTML = ""; 
+                window.addWritingMediaRow(); 
+            }
         }
         window.closeWritingEditor = function() { const admWritingsList = document.getElementById('adm-writings-list'); const admWritingEditor = document.getElementById('adm-writing-editor'); const admWritingAddBtn = document.querySelector('#tab-writings > div > button'); if (admWritingsList) admWritingsList.style.display = 'flex'; if (admWritingEditor) admWritingEditor.style.display = 'none'; if (admWritingAddBtn) admWritingAddBtn.style.display = 'block'; }
         window.editWriting = function(id) { window.openWritingEditor(id); }
@@ -1693,52 +1877,84 @@
             let displaySrc = m.src || 'https://placehold.co/50x50?text=Img'; if(m.type==='video') displaySrc = 'https://placehold.co/50x50?text=Vid'; if(m.type==='document') displaySrc = 'https://placehold.co/50x50?text=PDF'; if(m.type==='webgis') displaySrc = 'https://placehold.co/50x50?text=Map';
             const div = document.createElement('div'); div.className = 'admin-row'; 
             div.innerHTML = `<img id="${rid}" class="media-preview-box" src="${displaySrc}" onerror="this.src='https://placehold.co/50x50?text=Media'"><input type="hidden" class="writing-media-hidden-src" value="${m.src||''}"><select class="admin-select writing-media-type" style="width:auto; min-width:100px; padding:0.6rem;"><option value="image" ${m.type==='image'?'selected':''}>Image</option><option value="video" ${m.type==='video'?'selected':''}>Video</option><option value="document" ${m.type==='document'?'selected':''}>Doc/PDF</option><option value="webgis" ${m.type==='webgis'?'selected':''}>WebGIS/Link</option></select><div style="flex:1; display:flex; flex-direction:column; gap:0.6rem; width:100%;"><input type="text" class="admin-input writing-media-url" placeholder="Drive Link / Web URL" value="${(m.src||'').startsWith('data:') ? '' : (m.src||'')}" oninput="if(this.closest('.admin-row').querySelector('.writing-media-type').value==='image') document.getElementById('${rid}').src=this.value"><div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;"><span style="font-size:0.75rem; color:var(--text-muted);">OR Local File:</span><input type="file" class="admin-input writing-media-file" style="padding:0.4rem; flex:1;" onchange="if(this.closest('.admin-row').querySelector('.writing-media-type').value==='image') window.updateLocalPreview(this, '${rid}')"></div></div>${window.getRowControls()}`; 
-            document.getElementById('adm-writing-media-list').appendChild(div); 
+            const mediaList = document.getElementById('adm-writing-media-list');
+            if(mediaList) mediaList.appendChild(div); 
         }
 
         window.saveWriting = async function() { 
             try {
-                const btn = document.getElementById('btn-save-writing'); const origText = btn.innerText; btn.innerText = "Saving...";
+                const btn = document.getElementById('btn-save-writing'); 
+                let origText = "";
+                if(btn) { origText = btn.innerText; btn.innerText = "Saving..."; }
+                
                 if(!window.db.writings) window.db.writings = [];
-                const id = document.getElementById('adm-writing-id').value || 'w' + Date.now(); const titleEN = document.getElementById('adm-writing-title-en').value; const titleID = document.getElementById('adm-writing-title-id').value; 
-                if(!titleEN && !titleID) { window.showToast('Title is required', true); btn.innerText = origText; return; } 
+                
+                const elId = document.getElementById('adm-writing-id'); const id = elId ? elId.value || 'w' + Date.now() : 'w' + Date.now(); 
+                const elTitleEn = document.getElementById('adm-writing-title-en'); const titleEN = elTitleEn ? elTitleEn.value : ""; 
+                const elTitleId = document.getElementById('adm-writing-title-id'); const titleID = elTitleId ? elTitleId.value : ""; 
+                
+                if(!titleEN && !titleID) { window.showToast('Title is required', true); if(btn) btn.innerText = origText; return; } 
 
-                let mediaArr = []; const rows = Array.from(document.getElementById('adm-writing-media-list').children); 
-                for(let row of rows) { 
-                    const type = row.querySelector('.writing-media-type').value || "image"; let src = row.querySelector('.writing-media-url').value || ""; const hiddenSrc = row.querySelector('.writing-media-hidden-src').value || ""; const fileInput = row.querySelector('.writing-media-file'); 
-                    if (fileInput && fileInput.files.length > 0) { try { src = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } 
-                    if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } 
+                let mediaArr = []; 
+                const mediaListEl = document.getElementById('adm-writing-media-list');
+                if(mediaListEl) {
+                    const rows = Array.from(mediaListEl.children); 
+                    for(let row of rows) { 
+                        const type = row.querySelector('.writing-media-type').value || "image"; let src = row.querySelector('.writing-media-url').value || ""; const hiddenSrc = row.querySelector('.writing-media-hidden-src').value || ""; const fileInput = row.querySelector('.writing-media-file'); 
+                        if (fileInput && fileInput.files.length > 0) { try { src = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!src && hiddenSrc.startsWith('data:')) { src = hiddenSrc; } 
+                        if(src) { src = window.makeDriveLink(src, type); mediaArr.push({ type, src }); } 
+                    }
                 }
-                const newWriting = { id, titleEN, titleID, title: titleEN || titleID, date: document.getElementById('adm-writing-date').value || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }), descEN: document.getElementById('adm-writing-desc-en').innerHTML || "", descID: document.getElementById('adm-writing-desc-id').innerHTML || "", media: mediaArr }; 
+                
+                const elDate = document.getElementById('adm-writing-date');
+                const elDescEn = document.getElementById('adm-writing-desc-en');
+                const elDescId = document.getElementById('adm-writing-desc-id');
+                
+                const newWriting = { id, titleEN, titleID, title: titleEN || titleID, date: elDate ? elDate.value || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : "", descEN: elDescEn ? elDescEn.innerHTML || "" : "", descID: elDescId ? elDescId.innerHTML || "" : "", media: mediaArr }; 
                 const existingIndex = window.db.writings.findIndex(w => w.id === id); if (existingIndex >= 0) window.db.writings[existingIndex] = newWriting; else window.db.writings.push(newWriting); 
-                await window.saveDb(); window.closeWritingEditor(); window.populateAdminWritingsList(); btn.innerText = origText; window.showToast('Article Saved!'); 
+                
+                await window.saveDb(); window.closeWritingEditor(); window.populateAdminWritingsList(); if(btn) btn.innerText = origText; window.showToast('Article Saved!'); 
             } catch(e) { window.showToast("System error.", true); }
         }
 
-        window.populateAdminInbox = function() { document.getElementById('inbox-count').innerText = window.db.inbox.length; const list = document.getElementById('adm-inbox-list'); if(window.db.inbox.length === 0) { list.innerHTML = "<p style='color:var(--text-muted); font-size:0.9rem;'>No messages yet.</p>"; return; } list.innerHTML = window.db.inbox.slice().reverse().map((msg, i) => `<div class="admin-row" style="padding: 1.5rem; border-left: 3px solid var(--text-main); flex-direction:column; gap:0.5rem;"><div style="display:flex; justify-content:space-between; width:100%; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;"><strong style="font-size:1.05rem;">${msg.name}</strong><span style="font-size:0.75rem; color:var(--text-muted);">${msg.date}</span></div><div style="font-weight:500; font-size:0.85rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:8px; color:var(--text-main); opacity:0.8;">Contact: ${msg.contact}</div><p style="white-space: pre-wrap; line-height:1.6; font-size:0.95rem; margin:0;">${msg.msg}</p></div>`).join(''); }
+        window.populateAdminInbox = function() { 
+            const inboxCount = document.getElementById('inbox-count'); if(inboxCount) inboxCount.innerText = window.db.inbox.length; 
+            const list = document.getElementById('adm-inbox-list'); 
+            if(!list) return;
+            if(window.db.inbox.length === 0) { list.innerHTML = "<p style='color:var(--text-muted); font-size:0.9rem;'>No messages yet.</p>"; return; } 
+            list.innerHTML = window.db.inbox.slice().reverse().map((msg, i) => `<div class="admin-row" style="padding: 1.5rem; border-left: 3px solid var(--text-main); flex-direction:column; gap:0.5rem;"><div style="display:flex; justify-content:space-between; width:100%; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem;"><strong style="font-size:1.05rem;">${msg.name}</strong><span style="font-size:0.75rem; color:var(--text-muted);">${msg.date}</span></div><div style="font-weight:500; font-size:0.85rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:8px; color:var(--text-main); opacity:0.8;">Contact: ${msg.contact}</div><p style="white-space: pre-wrap; line-height:1.6; font-size:0.95rem; margin:0;">${msg.msg}</p></div>`).join(''); 
+        }
         window.clearInbox = async function() { if(confirm("Clear all inbox messages? Cannot be undone.")) { window.db.inbox = []; await window.saveDb(); window.populateAdminInbox(); window.showToast('Inbox Cleared');} }
 
         /* CONTACT LINKS LOGIC */
-        window.addContactRow = function() { const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addContactRowHtml(); document.getElementById('adm-contact-list').appendChild(div); }
+        window.addContactRow = function() { const container = document.getElementById('adm-contact-list'); if(!container) return; const div = document.createElement('div'); div.className = 'admin-row'; div.innerHTML = window.addContactRowHtml(); container.appendChild(div); }
 
         window.exportBackup = async function() { try { const dataStr = JSON.stringify(window.db, null, 2); const blob = new Blob([dataStr], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; const date = new Date().toISOString().slice(0,10); a.download = `ABJ_Portfolio_Backup_${date}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); window.showToast('Backup File Downloaded');} catch (e) { alert("Failed to export."); } }
         window.importBackup = function(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = async (e) => { try { const importedData = JSON.parse(e.target.result); if (importedData && importedData.hero && importedData.portfolio) { if(confirm("WARNING: Overwrite current data with backup file?")) { window.db = importedData; window.db.lastUpdated = Date.now(); await window.saveDb(); alert("Data restored! Reloading..."); location.reload(); } } else { alert("Invalid JSON file."); } } catch (error) { alert("Failed to read JSON."); } }; reader.readAsText(file); }
         
         window.saveSettings = async function() { 
             try {
-                const btn = document.getElementById('btn-save-settings'); const origText = btn.innerText; btn.innerText = "Saving...";
-                if(!window.db.contacts) window.db.contacts = [];
-                const newPin = document.getElementById('adm-set-pin').value; 
-                if(newPin) { if(newPin.length === 6 && !isNaN(newPin)) { window.db.pin = newPin; document.getElementById('adm-set-pin').value = ''; } else { window.showToast("PIN must be 6 numbers.", true); btn.innerText = origText; return; } } 
+                const btn = document.getElementById('btn-save-settings'); 
+                let origText = "";
+                if(btn) { origText = btn.innerText; btn.innerText = "Saving..."; }
                 
-                const rows = Array.from(document.getElementById('adm-contact-list').children); let newContacts = [];
-                for (let row of rows) {
-                    let label = row.querySelector('.contact-label').value || ""; let link = row.querySelector('.contact-link').value || ""; if (!label) continue;
-                    let iconUrl = row.querySelector('.contact-url').value || ""; const hiddenSrc = row.querySelector('.contact-hidden-src').value || ""; const fileInput = row.querySelector('.contact-file');
-                    if (fileInput && fileInput.files.length > 0) { try { iconUrl = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!iconUrl && hiddenSrc.startsWith('data:')) { iconUrl = hiddenSrc; }
-                    newContacts.push({ id: 'c' + Date.now() + Math.random(), label, link, icon: iconUrl || "" });
+                if(!window.db.contacts) window.db.contacts = [];
+                const elPin = document.getElementById('adm-set-pin'); const newPin = elPin ? elPin.value : ''; 
+                if(newPin) { if(newPin.length === 6 && !isNaN(newPin)) { window.db.pin = newPin; if(elPin) elPin.value = ''; } else { window.showToast("PIN must be 6 numbers.", true); if(btn) btn.innerText = origText; return; } } 
+                
+                const contactListEl = document.getElementById('adm-contact-list');
+                if(contactListEl) {
+                    const rows = Array.from(contactListEl.children); let newContacts = [];
+                    for (let row of rows) {
+                        let label = row.querySelector('.contact-label').value || ""; let link = row.querySelector('.contact-link').value || ""; if (!label) continue;
+                        let iconUrl = row.querySelector('.contact-url').value || ""; const hiddenSrc = row.querySelector('.contact-hidden-src').value || ""; const fileInput = row.querySelector('.contact-file');
+                        if (fileInput && fileInput.files.length > 0) { try { iconUrl = await window.getBase64(fileInput.files[0]); } catch(e){} } else if (!iconUrl && hiddenSrc.startsWith('data:')) { iconUrl = hiddenSrc; }
+                        newContacts.push({ id: 'c' + Date.now() + Math.random(), label, link, icon: iconUrl || "" });
+                    }
+                    window.db.contacts = newContacts; 
                 }
-                window.db.contacts = newContacts; await window.saveDb(); btn.innerText = origText; window.showToast("Settings Saved!"); 
+                
+                await window.saveDb(); if(btn) btn.innerText = origText; window.showToast("Settings Saved!"); 
             } catch(e) { window.showToast("System error.", true); }
         }
 
@@ -1767,26 +1983,36 @@
         }
 
         window.autoDraftMessage = async function() {
-            const msgField = document.getElementById('chat-message'); const intent = msgField.value.trim();
+            const msgField = document.getElementById('chat-message'); if(!msgField) return;
+            const intent = msgField.value.trim();
             if (!intent) { window.showToast(currentLang === 'en' ? 'Please write your intent briefly first.' : 'Ketik maksud Anda terlebih dahulu.', true); return; }
 
-            const btn = document.getElementById('draft-btn'); const originalText = btn.innerHTML; 
-            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> <span>Drafting...</span>`; 
-            btn.disabled = true;
+            const btn = document.getElementById('draft-btn'); 
+            let originalText = "";
+            if(btn) {
+                originalText = btn.innerHTML; 
+                btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> <span>Drafting...</span>`; 
+                btn.disabled = true;
+            }
             
             const prompt = `Anda adalah asisten AI yang membantu klien menulis pesan profesional kepada Urban Planner bernama Alfian Bhara. Maksud klien: "${intent}". Tulis ulang kalimat tersebut menjadi pesan penawaran atau diskusi yang sopan, formal, dan profesional. Gunakan bahasa yang sama dengan maksud asli. TIDAK PERLU menuliskan salam pembuka atau tempat tanggal, HANYA isi pesannya saja.`;
 
             try { const drafted = await window.callGeminiAPI(prompt); msgField.value = drafted.trim(); window.showToast("Draft generated!"); } 
-            catch (e) { window.showToast('AI Error: ' + e.message, true); } finally { btn.innerHTML = originalText; btn.disabled = false; }
+            catch (e) { window.showToast('AI Error: ' + e.message, true); } finally { if(btn) { btn.innerHTML = originalText; btn.disabled = false; } }
         }
 
         window.enhanceAdminText = async function(elementId, lang) {
-            const el = document.getElementById(elementId); const text = el.innerText || el.value; 
+            const el = document.getElementById(elementId); if(!el) return;
+            const text = el.innerText || el.value; 
             if (!text.trim()) { window.showToast('Tuliskan draf kasarnya terlebih dahulu.', true); return; }
 
-            const btn = document.getElementById('btn-' + elementId); const origBtn = btn.innerHTML; 
-            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> <span>...</span>`; 
-            btn.disabled = true;
+            const btn = document.getElementById('btn-' + elementId); 
+            let origBtn = "";
+            if(btn) {
+                origBtn = btn.innerHTML; 
+                btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> <span>...</span>`; 
+                btn.disabled = true;
+            }
             
             const prompt = `Anda adalah copywriter untuk Urban Planner Alfian Bhara. Poles kualitas bahasa dari teks ini agar lebih berdampak, rapi, dan terstruktur. Bahasa: ${lang === 'en' ? 'Inggris' : 'Indonesia'}. Boleh gunakan tag HTML dasar (<b>, <i>, <ul>) jika ada poin-poin. Jangan ada kata pengantar, langsung teks hasilnya. Teks asli: "${text}"`;
 
@@ -1794,7 +2020,7 @@
                 const enhanced = await window.callGeminiAPI(prompt);
                 if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') el.value = enhanced.trim(); else el.innerHTML = enhanced.trim(); 
                 window.showToast("Teks dipoles!");
-            } catch (e) { window.showToast('AI Error: ' + e.message, true); } finally { btn.innerHTML = origBtn; btn.disabled = false; }
+            } catch (e) { window.showToast('AI Error: ' + e.message, true); } finally { if(btn) { btn.innerHTML = origBtn; btn.disabled = false; } }
         }
 
         // ========================== START APP ==========================
