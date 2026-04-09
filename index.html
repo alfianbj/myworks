@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
+    <!-- GOOGLE SEARCH CONSOLE VERIFICATION -->
+    <meta name="google-site-verification" content="BR-meWg_5rvZXtjKgRTlFOpL0Iu5ZeY47LChR4Z9HNU" />
+    
     <!-- SEO & Social Media Card (Open Graph) -->
     <title>Alfian Bhara Juang TA — Urban Planner & GIS Specialist</title>
     <meta name="description" content="Portfolio of Alfian Bhara Juang TA, Certified Junior Urban Planner & GIS Specialist.">
+    <!-- UX & SEO IMPROVEMENT: Meta Keywords (Membantu pencarian spesifik) -->
+    <meta name="keywords" content="Alfian Bhara Juang TA, Urban Planner, GIS Specialist, Perencana Wilayah dan Kota, Ahli GIS, KLHS, RDTR, Spatial Data">
     <meta property="og:title" content="Alfian Bhara Juang TA — Urban Planner & GIS Specialist">
     <meta property="og:description" content="Building Better Cities Through Spatial Insight and Sustainable Vision. Explore my works in Spatial Planning, GIS Mapping, and Environmental Assessment.">
     <meta property="og:type" content="website">
@@ -14,6 +19,20 @@
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌍</text></svg>">
     
+    <!-- UX & SEO IMPROVEMENT: JSON-LD Schema Markup (Membantu Google memahami profil Anda dengan cepat) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Alfian Bhara Juang TA",
+      "jobTitle": "Urban Planner & GIS Specialist",
+      "url": "https://alfianbharajuang.github.io", 
+      "image": "https://ui-avatars.com/api/?background=10b981&color=fff&size=400&name=Alfian+Bhara",
+      "description": "Certified Junior Urban Planner with experience in Geographic Information Systems (GIS), sustainable urban development, and environmental analysis.",
+      "knowsAbout": ["Urban Planning", "Geographic Information Systems", "Strategic Environmental Assessment", "Spatial Data Analysis"]
+    }
+    </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <style>
         /* ================= VARIABLES & THEMING ================= */
@@ -95,7 +114,6 @@
             will-change: width;
         }
 
-        /* UX IMPROVEMENT: Anti-Flickering Reveal Animation with TranslateZ */
         .reveal {
             opacity: 0; transform: translateY(20px) translateZ(0);
             transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
@@ -201,18 +219,8 @@
         /* ================= HERO SECTION ================= */
         .hero { display: flex; align-items: center; min-height: 100vh; padding-top: 5rem; }
         .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-        
-        /* UX IMPROVEMENT: text-wrap balance untuk mencegah nama terpotong jelek di baris baru */
-        .hero-content h1 { 
-            font-size: clamp(2.8rem, 5vw, 4.5rem); 
-            line-height: 1.15; 
-            margin-bottom: 1rem; 
-            text-wrap: balance; 
-        }
-        
-        /* UX IMPROVEMENT: Ukuran font dinamis agar proporsional di HP maupun Desktop */
+        .hero-content h1 { font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: 1.15; margin-bottom: 1rem; text-wrap: balance; }
         .hero-roles { color: var(--accent); font-size: clamp(0.9rem, 2vw, 1.05rem); font-weight: 500; margin-bottom: 1.5rem; letter-spacing: 0.5px; line-height: 1.6; }
-
         .hero-motto { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem; border-left: 3px solid var(--accent); padding-left: 1rem; font-style: italic;}
         .hero-btns { display: flex; gap: 1rem; }
         
@@ -288,7 +296,6 @@
         
         .timeline-date { font-size: 0.9rem; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; }
         
-        /* UX IMPROVEMENT: Anti-Aliasing Teks untuk memuluskan animasi */
         .timeline-content { 
             padding: 1.5rem; 
             -webkit-font-smoothing: antialiased; 
@@ -561,7 +568,6 @@
             .modal { padding: 1rem; }
         }
 
-        /* UX IMPROVEMENT: Print-Ready Layout */
         @media print {
             nav, .hero-btns, .controls, .back-to-top, .admin-trigger, .modal, .toast-notification, .scroll-progress, #splash-screen { display: none !important; }
             body { background: #fff !important; color: #000 !important; }
@@ -576,7 +582,6 @@
 </head>
 <body>
 
-    <!-- UX IMPROVEMENT: Splash Screen Loader -->
     <div id="splash-screen">
         <div class="spinner">ABJ.</div>
     </div>
@@ -1233,7 +1238,6 @@
 
             window.renderAll();
 
-            // Sembunyikan splash screen setelah render pertama
             setTimeout(() => { document.getElementById('splash-screen').classList.add('hidden'); }, 800);
 
             try {
@@ -1386,7 +1390,6 @@
                 document.getElementById('ui-tools-grid').innerHTML = window.db.tools.map(t => `<div class="tool-item"><img src="${t.icon}" alt="${t.name}" class="tool-icon" draggable="false"><span>${t.name}</span></div>`).join('');
             }
 
-            /* UX FIX: Staggered animation delay on Experience to prevent lag */
             if(window.db.experience) {
                 document.getElementById('ui-exp-container').innerHTML = window.db.experience.map((e, index) => {
                     const delayClass = index === 0 ? 'd-1' : index === 1 ? 'd-2' : 'd-3';
@@ -1492,7 +1495,6 @@
                 btn.classList.remove('visible');
             }
 
-            /* UX FIX: Throttling Scroll Spy dengan requestAnimationFrame agar tetap 60fps saat gulir */
             if (!isScrolling) {
                 window.requestAnimationFrame(() => {
                     let current = '';
@@ -2039,14 +2041,18 @@
             }
         }
 
-        // Jalankan inisialisasi awal
-        window.onload = () => {
-            initApp();
-            setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                if (splash) splash.classList.add('hidden');
-            }, 800);
-        };
+        // PERBAIKAN BUG SPLASH SCREEN:
+        // Jalankan inisialisasi secara langsung tanpa menunggu seluruh gambar selesai di-download
+        initApp();
+
+        // Jaring pengaman (failsafe): Pastikan layar loading pasti tertutup maksimal dalam 2 detik apa pun yang terjadi
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            if (splash && !splash.classList.contains('hidden')) {
+                splash.classList.add('hidden');
+            }
+        }, 2000);
+
     </script>
 </body>
 </html>
