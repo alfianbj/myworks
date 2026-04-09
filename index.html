@@ -113,6 +113,31 @@
         [data-theme="light"] .glass { box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 1); }
         [data-theme="light"] .glass:hover { border-color: rgba(0,0,0,0.1); }
 
+        /* ================= MICRO-INTERACTIONS (TOPO & GIS) ================= */
+        .topo-bg {
+            position: fixed; top: -20%; left: -20%; width: 140%; height: 140%;
+            background-image: 
+                repeating-radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.04) 0, transparent 2px, transparent 60px),
+                repeating-radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.02) 0, transparent 2px, transparent 80px);
+            pointer-events: none; z-index: 0;
+            transform: translate(calc(var(--x, 50vw) * -0.015), calc(var(--y, 50vh) * -0.015));
+            will-change: transform;
+        }
+        [data-theme="light"] .topo-bg {
+            background-image: 
+                repeating-radial-gradient(circle at 20% 30%, rgba(5, 150, 105, 0.05) 0, transparent 2px, transparent 60px),
+                repeating-radial-gradient(circle at 80% 70%, rgba(0, 0, 0, 0.02) 0, transparent 2px, transparent 80px);
+        }
+
+        .gis-tracker {
+            position: fixed; bottom: 2rem; left: 5.5rem; z-index: 90;
+            font-family: 'Inter', monospace; font-size: 0.65rem; color: var(--text-muted);
+            letter-spacing: 1px; pointer-events: none; opacity: 0.6;
+            display: flex; flex-direction: column; gap: 3px;
+        }
+        .gis-tracker span { color: var(--accent); font-weight: 600; }
+        @media (max-width: 768px) { .gis-tracker { display: none; } }
+
         /* ================= LAYOUT ================= */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 max(2rem, env(safe-area-inset-right)) 0 max(2rem, env(safe-area-inset-left)); }
         section { padding: 7rem 0; position: relative; z-index: 1; }
@@ -367,7 +392,7 @@
 
         /* PRINT MODE PERFECTED */
         @media print {
-            nav, .hero-btns, .controls, .back-to-top, .admin-trigger, .modal, .toast-notification, .scroll-progress, #splash-screen, .slider-nav, .media-dots, .ai-btn, .admin-dashboard, .pin-overlay, footer, .portfolio-filters { display: none !important; }
+            nav, .hero-btns, .controls, .back-to-top, .admin-trigger, .modal, .toast-notification, .scroll-progress, #splash-screen, .slider-nav, .media-dots, .ai-btn, .admin-dashboard, .pin-overlay, footer, .portfolio-filters, .topo-bg, .gis-tracker { display: none !important; }
             body { background: #ffffff !important; color: #000000 !important; background-image: none !important;}
             .glass { box-shadow: none !important; border: 1px solid #e5e7eb !important; background: transparent !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; transform: none !important; }
             * { color: #000000 !important; text-shadow: none !important; }
@@ -382,6 +407,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Latar Belakang Garis Topografi (Parallax) -->
+    <div class="topo-bg"></div>
 
     <div id="splash-screen">
         <div class="spinner">ABJ.</div>
@@ -610,6 +638,13 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
     </button>
 
+    <!-- GIS HUD TRACKER -->
+    <div class="gis-tracker">
+        <div>LAT: <span id="gis-lat">5.8000° N</span></div>
+        <div>LNG: <span id="gis-lng">95.3000° E</span></div>
+        <div style="font-size:0.55rem; opacity:0.7; margin-top:2px;">ELEV: <span id="gis-elv">14m</span> ASL</div>
+    </div>
+
     <!-- ADMIN PIN -->
     <div class="pin-overlay" id="pin-overlay">
         <div class="pin-box glass">
@@ -669,7 +704,7 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
                         <label style="margin:0;">Description (EN)</label>
                         <button class="ai-btn interactive-scale" id="btn-adm-hero-desc-en" onclick="window.enhanceAdminText('adm-hero-desc-en', 'en')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path></svg>
                             <span style="font-weight: 500;">AI Enhance</span>
                         </button>
                     </div>
@@ -679,7 +714,7 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
                         <label style="margin:0;">Description (ID)</label>
                         <button class="ai-btn interactive-scale" id="btn-adm-hero-desc-id" onclick="window.enhanceAdminText('adm-hero-desc-id', 'id')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path></svg>
                             <span style="font-weight: 500;">AI Enhance</span>
                         </button>
                     </div>
@@ -907,7 +942,11 @@
                             canvas.width = w; canvas.height = h;
                             const ctx = canvas.getContext('2d');
                             ctx.drawImage(img, 0, 0, w, h);
-                            resolve(canvas.toDataURL('image/jpeg', 0.7)); 
+                            
+                            // PERBAIKAN: Jika file asli adalah PNG, simpan sebagai PNG agar background tidak jadi hitam.
+                            const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+                            const quality = mimeType === 'image/jpeg' ? 0.75 : undefined;
+                            resolve(canvas.toDataURL(mimeType, quality)); 
                         };
                         img.onerror = () => resolve(result); 
                     } else {
@@ -1129,42 +1168,57 @@
         let firestoreDb = null; let currentUser = null;
         
         async function initApp() {
+            // ANTI-STUCK: Pastikan splash screen selalu tertutup walaupun ada error di latar belakang
+            setTimeout(() => { 
+                const splash = document.getElementById('splash-screen'); if (splash) splash.classList.add('hidden'); 
+                try {
+                    // DEEP LINKING CHECK ON LOAD
+                    const hash = window.location.hash;
+                    if (hash.startsWith('#p-')) {
+                        const id = hash.replace('#p-', '');
+                        if(window.db.portfolio && Array.isArray(window.db.portfolio) && window.db.portfolio.find(x => x.id === id)) window.openPortfolioModal(id);
+                    } else if (hash.startsWith('#w-')) {
+                        const id = hash.replace('#w-', '');
+                        if(window.db.writings && Array.isArray(window.db.writings) && window.db.writings.find(x => x.id === id)) window.openWritingModal(id);
+                    }
+                } catch(e) { console.warn("Deep linking failed:", e); }
+            }, 500);
+
             window.scrollTo(0, 0); if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
             updateTime();
 
             document.querySelectorAll('.rt-toolbar-placeholder').forEach(el => { el.outerHTML = window.getToolbarStr(); });
             
-            const localRaw = localStorage.getItem('abj_db_live_final');
-            if (localRaw) { try { window.db = JSON.parse(localRaw); } catch(e) { window.db = JSON.parse(JSON.stringify(FACTORY_DATA)); } } 
-            else { window.db = JSON.parse(JSON.stringify(FACTORY_DATA)); }
+            try {
+                const localRaw = localStorage.getItem('abj_db_live_final');
+                if (localRaw) { try { window.db = JSON.parse(localRaw); } catch(e) { window.db = JSON.parse(JSON.stringify(FACTORY_DATA)); } } 
+                else { window.db = JSON.parse(JSON.stringify(FACTORY_DATA)); }
+            } catch(e) { window.db = JSON.parse(JSON.stringify(FACTORY_DATA)); }
 
             if(!window.db) window.db = {};
             if(!window.db.lastUpdated) window.db.lastUpdated = 0;
             if(!window.db.hero) window.db.hero = JSON.parse(JSON.stringify(FACTORY_DATA.hero));
             if(!window.db.about) window.db.about = {en: "", id: ""};
-            if(!window.db.education) window.db.education = [];
-            if(!window.db.expertise) window.db.expertise = [];
-            if(!window.db.tools) window.db.tools = [];
-            if(!window.db.experience) window.db.experience = [];
-            if(!window.db.portfolio) window.db.portfolio = [];
-            if(!window.db.writings) window.db.writings = [];
-            if(!window.db.contacts) window.db.contacts = JSON.parse(JSON.stringify(FACTORY_DATA.contacts));
-            if(!window.db.inbox) window.db.inbox = [];
-
-            window.renderAll();
-
-            setTimeout(() => { 
-                const splash = document.getElementById('splash-screen'); if (splash) splash.classList.add('hidden'); 
-                // DEEP LINKING CHECK ON LOAD
-                const hash = window.location.hash;
-                if (hash.startsWith('#p-')) {
-                    const id = hash.replace('#p-', '');
-                    if(window.db.portfolio.find(x => x.id === id)) window.openPortfolioModal(id);
-                } else if (hash.startsWith('#w-')) {
-                    const id = hash.replace('#w-', '');
-                    if(window.db.writings.find(x => x.id === id)) window.openWritingModal(id);
-                }
-            }, 500);
+            
+            // VALIDASI ARRAY: Mencegah crash jika memori lokal menyimpan data korup
+            const arrFields = ['education', 'expertise', 'tools', 'experience', 'portfolio', 'writings', 'inbox'];
+            arrFields.forEach(f => { if(!Array.isArray(window.db[f])) window.db[f] = []; });
+            
+            // SMART INJECTION: Pastikan ikon GitHub muncul tanpa error
+            if(!Array.isArray(window.db.contacts) || window.db.contacts.length === 0) { 
+                window.db.contacts = JSON.parse(JSON.stringify(FACTORY_DATA.contacts)); 
+            } else {
+                try {
+                    const hasGithub = window.db.contacts.some(c => c.link && c.link.toLowerCase().includes('github'));
+                    if (!hasGithub) {
+                        const ghContact = FACTORY_DATA.contacts.find(c => c.link && c.link.includes('github'));
+                        if(ghContact) window.db.contacts.push(JSON.parse(JSON.stringify(ghContact)));
+                    }
+                } catch(e) {}
+            }
+            
+            // Render UI dengan keamanan Try-Catch
+            try { window.renderAll(); } catch(e) { console.error("Render Error:", e); }
 
             try {
                 const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
@@ -1412,6 +1466,25 @@
         }
 
         /* ================= UX / INTERACTION LISTENERS ================= */
+        // Mouse Tracker for Parallax Topo & GIS Coordinates
+        document.addEventListener('mousemove', (e) => {
+            document.body.style.setProperty('--x', e.clientX + 'px');
+            document.body.style.setProperty('--y', e.clientY + 'px');
+
+            const latEl = document.getElementById('gis-lat');
+            const lngEl = document.getElementById('gis-lng');
+            const elvEl = document.getElementById('gis-elv');
+            if(latEl && lngEl) {
+                // Base coordinates (Sabang, Aceh region)
+                const latBase = 5.8000; const lngBase = 95.3000;
+                const latOffset = (e.clientY / window.innerHeight) * 0.05;
+                const lngOffset = (e.clientX / window.innerWidth) * 0.05;
+                latEl.innerText = (latBase - latOffset).toFixed(4) + '° N';
+                lngEl.innerText = (lngBase + lngOffset).toFixed(4) + '° E';
+                if(elvEl) elvEl.innerText = Math.round(14 + (e.clientY / window.innerHeight) * 45) + 'm';
+            }
+        });
+
         let isScrolling = false;
         window.addEventListener('scroll', () => {
             const btn = document.getElementById('backToTopBtn'); const nav = document.getElementById('mainNav'); const scrollProgress = document.getElementById("scrollProgress");
@@ -1467,7 +1540,8 @@
         window.openPortfolioModal = function(id) {
             document.body.classList.add('no-scroll'); 
             const p = window.db.portfolio.find(x => x.id === id); if(!p) return;
-            window.currentOpenModalId = id; window.currentOpenModalType = 'p'; history.replaceState(null, null, '#p-' + id);
+            window.currentOpenModalId = id; window.currentOpenModalType = 'p'; 
+            try { history.replaceState(null, null, '#p-' + id); } catch(e) {}
             const titleStr = currentLang === 'en' ? (p.titleEN || p.title || '') : (p.titleID || p.title || '');
             
             const titleEl = document.getElementById('modal-title'); if(titleEl) titleEl.innerText = titleStr; 
@@ -1514,7 +1588,8 @@
         window.openWritingModal = function(id) {
             document.body.classList.add('no-scroll'); 
             const w = window.db.writings.find(x => x.id === id); if(!w) return;
-            window.currentOpenModalId = id; window.currentOpenModalType = 'w'; history.replaceState(null, null, '#w-' + id);
+            window.currentOpenModalId = id; window.currentOpenModalType = 'w'; 
+            try { history.replaceState(null, null, '#w-' + id); } catch(e) {}
             const titleStr = currentLang === 'en' ? (w.titleEN || w.title || '') : (w.titleID || w.title || '');
             
             const titleEl = document.getElementById('w-modal-title'); if(titleEl) titleEl.innerText = titleStr; 
@@ -1536,15 +1611,15 @@
                         else mediaHtml = `<video controls loading="lazy"><source src="${m.src}"></video>`;
                     } else if (m.type === 'webgis') {
                         mediaHtml = `<iframe src="${m.src}" title="Interactive Map" allow="autoplay; geolocation" allowfullscreen="true" loading="lazy" style="width:100%; height:100%; min-height:50vh; border-radius:8px; border:none; background:#fff;"></iframe>`;
-                        if(downloads) downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open WebGIS / Link</a> `;
+                        if(downloads) downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Link</a> `;
                     } else if (m.type === 'document') {
                         let viewerHtml = '';
                         if (m.src.includes('drive.google.com')) { viewerHtml = `<iframe src="${m.src.replace(/\/view.*$/, '/preview')}" title="PDF Viewer" allow="autoplay" allowfullscreen="true" loading="lazy"></iframe>`; } else if (m.src.startsWith('http') && !m.src.endsWith('.pdf')) { viewerHtml = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(m.src)}&embedded=true" allowfullscreen="true" loading="lazy"></iframe>`; } else { viewerHtml = `<iframe src="${m.src}#toolbar=1&navpanes=0&scrollbar=1&view=FitH" title="PDF Viewer" style="width:100%; height:100%; min-height:50vh; border-radius:8px; border:none; background:#fff;" allowfullscreen="true" loading="lazy"></iframe>`; }
                         mediaHtml = viewerHtml; 
                         if(downloads) downloads.innerHTML += `<a href="${m.src}" target="_blank" rel="noopener noreferrer" class="btn-secondary interactive-scale" style="font-size:0.85rem;" download><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download File ${index+1}</a> `;
                     }
-                    if(slider) slider.innerHTML += `<div class="media-item" id="slide-${index}">${mediaHtml}</div>`;
-                    if(dots) dots.innerHTML += `<div class="media-dot ${index===0?'active':''}" onclick="document.getElementById('slide-${index}').scrollIntoView({behavior:'smooth'})"></div>`;
+                    if(slider) slider.innerHTML += `<div class="media-item" id="w-slide-${index}">${mediaHtml}</div>`;
+                    if(dots) dots.innerHTML += `<div class="media-dot ${index===0?'active':''}" onclick="document.getElementById('w-slide-${index}').scrollIntoView({behavior:'smooth'})"></div>`;
                 });
                 if(slider) slider.onscroll = () => { let index = Math.round(slider.scrollLeft / slider.offsetWidth); document.querySelectorAll('#w-modal-dots .media-dot').forEach((d, i) => { d.classList.toggle('active', i === index); }); };
             } else { if(slider) slider.innerHTML = `<div class="media-item"><p>No media.</p></div>`; }
@@ -1562,8 +1637,8 @@
             const modalEl = document.querySelector(`#${modalId} .modal-content`);
             if(modalEl) modalEl.classList.toggle('fullscreen'); 
         }
-        window.closePortfolioModal = function() { document.body.classList.remove('no-scroll'); const modalEl = document.getElementById('portfolio-modal'); if(modalEl) modalEl.classList.remove('active'); const slider = document.getElementById('modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } window.currentOpenModalId = null; window.currentOpenModalType = null; history.replaceState(null, null, ' '); }
-        window.closeWritingModal = function() { document.body.classList.remove('no-scroll'); const modalEl = document.getElementById('writing-modal'); if(modalEl) modalEl.classList.remove('active'); const slider = document.getElementById('w-modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } window.currentOpenModalId = null; window.currentOpenModalType = null; history.replaceState(null, null, ' '); }
+        window.closePortfolioModal = function() { document.body.classList.remove('no-scroll'); const modalEl = document.getElementById('portfolio-modal'); if(modalEl) modalEl.classList.remove('active'); const slider = document.getElementById('modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } window.currentOpenModalId = null; window.currentOpenModalType = null; try { history.replaceState(null, null, window.location.pathname + window.location.search); } catch(e) {} }
+        window.closeWritingModal = function() { document.body.classList.remove('no-scroll'); const modalEl = document.getElementById('writing-modal'); if(modalEl) modalEl.classList.remove('active'); const slider = document.getElementById('w-modal-slider'); if(slider) { slider.scrollLeft = 0; slider.innerHTML = ''; } window.currentOpenModalId = null; window.currentOpenModalType = null; try { history.replaceState(null, null, window.location.pathname + window.location.search); } catch(e) {} }
         
         window.submitChat = async function() { 
             const nameEl = document.getElementById('chat-name'); const contactEl = document.getElementById('chat-contact'); const msgEl = document.getElementById('chat-message');
@@ -1581,7 +1656,7 @@
                 if(btn) btn.innerHTML = origText;
             } catch(e) { console.log("Email deferred, saved to DB."); }
 
-            nameEl.value = ''; contactEl.value = ''; msgEl.value = ''; 
+            if(nameEl) nameEl.value = ''; if(contactEl) contactEl.value = ''; if(msgEl) msgEl.value = ''; 
             window.showToast("Message Sent!"); window.populateAdminInbox(); 
         }
 
@@ -1958,28 +2033,32 @@
             } catch(e) { window.showToast("System error.", true); }
         }
 
-        // ========================== GEMINI AI (ROBUST) ==========================
+        // ========================== GEMINI AI (ROBUST AUTO-FALLBACK) ==========================
         window.callGeminiAPI = async function(prompt, retries = 1) {
-            const apiKey = "AIzaSyAkmd6eormK3e4ZKPGbL3qKcQvF2U6X0m4"; 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7 } };
+            const apiKey = "AIzaSyCFvetDh_5HZVbtaL5xW820BpXrZ15GKmw"; 
+            const models = ["gemini-2.5-flash-preview-09-2025", "gemini-1.5-flash", "gemini-pro"];
+            let lastError = null;
 
-            for (let i = 0; i <= retries; i++) {
-                const controller = new AbortController(); const timeoutId = setTimeout(() => controller.abort(), 10000);
-                try {
-                    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: controller.signal });
-                    clearTimeout(timeoutId);
-                    if (!response.ok) { const errData = await response.json(); throw new Error(errData.error?.message || `HTTP ${response.status}`); }
-                    const data = await response.json(); return data.candidates[0].content.parts[0].text;
-                } catch (error) {
-                    clearTimeout(timeoutId); console.error(`Gemini Attempt ${i+1} Failed:`, error.message);
-                    if (i === retries) {
-                        if (error.name === 'AbortError') throw new Error("Connection Timeout (10s).");
-                        throw error;
+            for (const model of models) {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+                const payload = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7 } };
+
+                for (let i = 0; i <= retries; i++) {
+                    const controller = new AbortController(); const timeoutId = setTimeout(() => controller.abort(), 10000);
+                    try {
+                        const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: controller.signal });
+                        clearTimeout(timeoutId);
+                        if (!response.ok) { const errData = await response.json(); throw new Error(errData.error?.message || `HTTP ${response.status}`); }
+                        const data = await response.json(); return data.candidates[0].content.parts[0].text;
+                    } catch (error) {
+                        clearTimeout(timeoutId); lastError = error;
+                        if (error.message.includes("not found") || error.message.includes("not supported")) break; 
+                        if (i === retries) { if (error.name === 'AbortError') throw new Error("Connection Timeout (10s)."); }
+                        await new Promise(res => setTimeout(res, 1000));
                     }
-                    await new Promise(res => setTimeout(res, 1000));
                 }
             }
+            throw lastError || new Error("Semua sistem AI sedang sibuk atau tidak diizinkan.");
         }
 
         window.autoDraftMessage = async function() {
