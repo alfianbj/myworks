@@ -1251,7 +1251,7 @@
             try {
                 const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
                 const { getAuth, signInAnonymously, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
-                const { getFirestore, doc, setDoc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+                const { getFirestore, initializeFirestore, doc, setDoc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
 
                 const firebaseConfig = {
                     apiKey: "AIzaSyCU5jBwUjsYtmeaagZxj5vTOn-y0biKMEI",
@@ -1264,7 +1264,13 @@
 
                 const app = initializeApp(firebaseConfig);
                 const auth = getAuth(app);
-                firestoreDb = getFirestore(app);
+                
+                // PERBAIKAN: Menggunakan metode Long Polling agar koneksi database tidak terblokir / timeout
+                try {
+                    firestoreDb = initializeFirestore(app, { experimentalForceLongPolling: true });
+                } catch (e) {
+                    firestoreDb = getFirestore(app);
+                }
                 
                 window.firebaseSetDoc = setDoc;
                 window.firebaseDoc = doc;
@@ -2112,7 +2118,8 @@
                 msgField.value = drafted.trim();
                 window.showToast("AI Draft Generated!");
             } catch (e) {
-                window.showToast('Gagal memuat AI. Kuota API mungkin habis atau sinyal terputus.', true);
+                console.error("AI Error:", e);
+                window.showToast('Error AI: ' + (e.message || 'Koneksi terputus'), true);
             } finally {
                 btn.innerText = originalText;
                 btn.disabled = false;
@@ -2146,7 +2153,8 @@
                 }
                 window.showToast("Text Enhanced by AI!");
             } catch (e) {
-                window.showToast('Gagal AI. Cek koneksi atau coba lagi nanti.', true);
+                console.error("AI Error:", e);
+                window.showToast('Error AI: ' + (e.message || 'Koneksi terputus'), true);
             } finally {
                 btn.innerText = origBtn;
                 btn.disabled = false;
